@@ -1,0 +1,35 @@
+<table id="table_charts" style="width:100%;"
+       layoutH="64"
+       idField="chartName"
+       border="false"
+       editable="true"
+       pagination="false"
+       toolbar=".temp-toolbar_charts">
+    <thead data-options="frozen:true">
+    <tr>
+        <th width="80px" data-options="field:'chartName',editor:{type:'textbox',options:{required: true}}"  >chartName</th>
+        <th width="80px" data-options="field:'chartType',formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '折线图';
+			  	if(value=='0')return '折线图';
+			  	if(value=='1')return '柱状图';
+			  	if(value=='2')return '饼图';
+			  }
+			,editor:{ type:'combobox',
+			  options:{valueField:'value',textField:'label',
+				data:[
+				{value:'0',label:'折线图'},
+				{value:'1',label:'柱状图'},
+				{value:'2',label:'饼图'}
+					]
+			  }
+			}"   width="100px">chartType</th>
+        <th width="80px" data-options="field:'isShow',editor:{type:'textbox'}"  >isShow</th>
+    </tr>
+    </thead>
+</table>
+<div class="temp-toolbar_charts">
+    <a iconCls="icon-add" trigger="none"
+       target="custom" rel="chart_add" title="新增数据库" width="320" height="420" btnValue="添加">新增</a>
+    <a iconCls="icon-base icon-base-ban" trigger="single"
+       target="confirm" rel="chart_remove" title="是否确定删除 ？">删除</a>
+</div>

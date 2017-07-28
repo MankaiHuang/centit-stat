@@ -1,0 +1,73 @@
+
+<div class="easyui-panel search-body" cls="search" style="width: 100%; border-bottom: 1px solid #95B8E7;" border="false">
+	<form>
+		<div class="search-item">
+			<label>模板编码</label>
+			<input type="text" class="easyui-textbox" name="s_modelName" />
+		</div>
+		<div class="search-item">
+			<label>模板名称</label>
+			<input type="text" class="easyui-textbox" name="s_formNameFormat" />
+		</div>
+		<div class="search-item">
+			<label>返回页面</label>
+			<input type="text" class="easyui-textbox" name="s_resultName" />
+		</div>
+		<a class="easyui-linkbutton btn-search" iconCls="icon-search">搜索</a>
+	</form>
+</div>
+<table url="service/stat/querymodel?_search=true&field=modelName&field=modelType&field=formNameFormat
+&field=resultName&field=databaseCode&field=databaseName&field=queryDesc"
+	id="quermodelTable"
+	layoutH=".search"
+	width="100%"
+	search=".search"
+	toolbar=".temp-toolbar"
+	border="false">
+	<thead data-options="frozen:true">
+		<tr>
+			<th data-options="field:'modelName'"  sortable="true" width="20%">模板编码</th>
+			<th data-options="field:'modelType',
+			 formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '';
+			  	if(value=='2')return '普通二维表';
+			  	if(value=='3')return '同比分析';
+			  	if(value=='4')return '环比分析';
+			  	if(value=='5')return '交叉制表';
+			  }" sortable="true" align="center" width="10%">模板类型</th>
+			<th data-options="field:'formNameFormat'"  sortable="true" width="20%">模板名称</th>
+			<th data-options="field:'resultName'"  sortable="true" align="center" width="10%">返回页面</th>
+			<th data-options="field:'databaseCode'"  hidden="true" width="10%">数据库id</th>
+			<th data-options="field:'databaseName'"  sortable="true" align="center" width="10%">数据库</th>
+			<th data-options="field:'queryDesc'"  sortable="true" align="center">查询描述</th>
+		</tr>
+	</thead>
+</table>
+
+<div class="temp-toolbar">
+	<a iconCls="icon-add" href="/product-stat/modules/stat/querymodel/querymodel-info.html" trigger="none"
+		target="tab" rel="querymodel_add" title="新增统计查询" width="320" height="420" >新增</a>
+		
+	<a iconCls="icon-edit" href="/product-stat/modules/stat/querymodel/querymodel-info.html" trigger="single"
+		target="tab" rel="querymodel_edit" title="编辑 {{modelName}}" width="800" height="600" >编辑</a>
+		
+	<hr>
+	
+	<a iconCls="icon-base icon-base-ban" trigger="single"
+		target="confirm" rel="querymodel_remove" title="是否确定删除 {{modelName}}？">删除</a>
+		
+	<a iconCls="icon-base icon-base-info" href="/product-stat/modules/stat/querymodel/twodimenform.html" trigger="single"
+		target="custom" rel="querymodel_view" title="预览{{modelName}}" width="800" height="600" >预览</a>
+</div>
+</div>
+<script>
+	$.parser.onComplete = function(panel) {
+		$.parser.onComplete = $.noop;
+		requirejs([
+		           '../modules/stat/querymodel/ctrl/querymodel',
+					'css!../modules/stat/querymodel/querymodel.css'
+		          ], function(QueryModel) {
+			new QueryModel('querymodel', panel).load(panel);
+		});
+	};
+</script>

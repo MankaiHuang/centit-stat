@@ -1,0 +1,106 @@
+<table id="table_queryconditions" style="width:100%"
+       idField="condName"
+       editable="true"
+       layoutH="64"
+       border="false"
+       pagination="false"
+       toolbar=".temp-toolbar_queryconditions">
+    <thead data-options="frozen:true">
+    <tr>
+        <th width="10%" data-options="field:'condName',editor:{type:'textbox',options:{required: true}}"  >参数编码</th>
+        <th width="10%" data-options="field:'condLabel',editor:{type:'textbox',options:{required: true}}"  >参数名称</th>
+        <th width="10%" data-options="field:'condDisplayStyle',formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '普通';
+			  	if(value=='N')return '普通';
+			  	if(value=='H')return '隐藏';
+			  	if(value=='R')return '只读';
+			  }
+			,editor:{ type:'combobox',
+			  options:{valueField:'value',textField:'label',
+				data:[
+
+				{value:'N',label:'普通'},
+				{value:'H',label:'隐藏'},
+				{value:'R',label:'只读'}
+					]
+			  }
+			}">参数显示样式</th>
+        <th width="10%" data-options="field:'paramType',
+			formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '无';
+			  	if(value=='')return '无';else
+			  	if(value=='S')return '文本';else
+			  	if(value=='N')return '数字';else
+			  	if(value=='D')return '日期';else
+			  	if(value=='T')return '时间戳';
+
+			  }
+			,editor:{ type:'combobox',
+			  options:{valueField:'value',textField:'label',
+				data:[
+				{value:'',label:'无'},
+				{value:'S',label:'文本'},
+				{value:'N',label:'数字'},
+				{value:'D',label:'日期'},
+				{value:'T',label:'时间戳'}
+					]
+			  }
+			}" >参数类型</th>
+
+        <th width="10%" data-options="field:'paramReferenceType',
+			formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '无';else
+			  	if(value=='0')return '无';else
+				if(value=='D')return '日期';else
+			  	if(value=='1')return '数据字典';else
+			  	if(value=='2')return 'JSON表达式';else
+			  	if(value=='3')return 'sql语句';else
+			  	if(value=='Y')return '年份';else
+			  	if(value=='M')return '月份';
+
+			  }
+			,editor:{ type:'combobox',
+			  options:{valueField:'value',textField:'label',
+				data:[
+				{value:'0',label:'无'},
+				{value:'1',label:'数据字典 '},
+				{value:'2',label:'JSON表达式 '},
+				{value:'3',label:'sql语句'},
+				{value:'Y',label:'年份'},
+				{value:'M',label:'月份'},
+				{value:'D',label:'日期'}
+					]
+					}
+					}"  >参数应用类型</th>
+        <th width="10%" data-options="field:'compareType',
+			formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '无';
+			  	if(value=='')return '无';
+			  	if(value=='3')return '同比分析';
+			  	if(value=='4')return '环比分析';
+			  }
+			,editor:{ type:'combobox',
+			  options:{valueField:'value',textField:'label',
+				data:[
+				{value:'',label:'无'},
+				{value:'3',label:'同比分析'},
+				{value:'4',label:'环比分析'},
+					]
+			  }
+			}" >对比时间</th>
+        <th width="10%" data-options="field:'paramReferenceData',editor:{type:'textbox'}" >参数应用数据</th>
+        <th width="8%" data-options="field:'paramValidateRegex',editor:{type:'textbox'}"  >参数约束表达式</th>
+        <th width="8%" data-options="field:'paramValidateInfo',editor:{type:'textbox'}"   >参数约束提示</th>
+        <th width="8%" data-options="field:'paramDefaultValue',editor:{type:'textbox'}"   align="center">默认值</th>
+        <th data-options="field:'condOrder',editor:{type:'textbox'}"  >顺序</th>
+
+    </tr>
+    </thead>
+</table>
+
+<div class="temp-toolbar_queryconditions">
+    <a iconCls="icon-add" trigger="none"
+       target="custom" rel="querycondition_add" title="新增数据库" width="320" height="420" btnValue="添加">新增</a>
+    <a iconCls="icon-base icon-base-ban" trigger="single"
+       target="confirm" rel="querycondition_remove" title="是否确定删除 ？">删除</a>
+</div>

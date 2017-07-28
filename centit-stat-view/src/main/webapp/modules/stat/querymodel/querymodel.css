@@ -1,0 +1,30 @@
+.querymodel-detail .CodeMirror {
+    border: 1px solid #95B8E7;
+    border-radius: 5px;
+}
+.querymodel-detail label .easyui-linkbutton {
+    position: absolute;
+    top: -8px;
+    right: 10px;
+}
+#columnSql .CodeMirror {
+    height: 110px;
+}
+
+/* 底部按钮 */
+.querymodel-info-bt {
+    position: absolute;
+    min-width: 200px;
+    z-index: 9;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+.querymodel-info-bt:hover {
+    background: #fff;
+    border: 1px solid #cdcdcd;
+    cursor: move;
+}

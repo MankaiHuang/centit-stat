@@ -1,0 +1,55 @@
+<form class="centit form querymodel-detail" novalidate="true" >
+    <div class="fields three">
+        <div class="field">
+            <label>模板类型</label>
+            <select name="modelType" class="easyui-combobox" id="databaseType">
+                <option value="2">普通二维表</option>
+                <option value="3">同比分析</option>
+                <option value="4">环比分析</option>
+                <option value="5">交叉制表</option>
+            </select>
+        </div>
+        <div class="field required">
+            <label>数据库选择</label>
+            <input class="easyui-combobox" name="databaseCode" required
+                   url="system/environment/databaseinfos" method="get"
+                   data-options="valueField:'databaseCode',textField:'databaseName',loadFilter:function(data){return data.objList;}">
+        </div>
+        <div class="field required">
+            <label>模板编码</label>
+            <input type="text" class="easyui-textbox" name="modelName" required/>
+        </div>
+    </div>
+
+    <div class="fields three">
+        <div class="field required">
+            <label>模板名称</label>
+            <input type="text" class="easyui-textbox" name="formNameFormat" required/>
+        </div>
+        <div class="field">
+            <label>查询描述</label>
+            <input type="text" class="easyui-textbox" name="queryDesc" />
+        </div>
+        <div class="field">
+            <label>返回页面</label>
+            <input type="text" class="easyui-textbox" name="resultName"/>
+        </div>
+    </div>
+
+    <div class="fields three">
+        <div class="field">
+            <label>链接地址</label>
+            <input type="text" class="easyui-textbox" name="dataDesc"/>
+        </div>
+    </div>
+
+    <div class="field required" id="querySql">
+        <label>查询语句 <a class="easyui-linkbutton" iconCls="icon-black icon-black-full_screen" plain="true"></a></label>
+        <textarea name="querySql" id="querySqlText"></textarea>
+    </div>
+
+    <div class="field" id="columnSql" class="querymodel-details">
+        <label>列查询语句 <a class="easyui-linkbutton" iconCls="icon-black icon-black-full_screen" plain="true"></a></label>
+        <textarea name="columnSql" id="columnSqlText"></textarea>
+    </div>
+</form>

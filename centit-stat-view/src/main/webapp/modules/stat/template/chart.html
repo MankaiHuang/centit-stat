@@ -1,0 +1,41 @@
+<div style='width:100%;float:left;border:1px solid grey'>
+	<input type="button" ng-click="removeChart(statchart)" value="删除此图表"/><br>
+<div style='height:450px;width:80%;float:left;overflow:scroll;'>
+	<div id='canvas' style='height:430px;width:100%;'></div>
+</div>
+<div style='width:20%;float:left;' ng-if="statchart.charttype=='xy'">
+<input type="button" ng-click="addSeries()" value="添加统计"/><br>
+<label>x轴：</label>
+<select style='width:100px;' ng-model='chartData.xaxis' ng-options='col as col.name for col in _chartcols'>
+<option value=''>---请选择---</option>
+</select><br>
+<div ng-repeat='series in chartData.series'>
+	<label>统计数据{{$index}}：</label>
+	<select style='width:100px;' 
+		ng-model="chartData.series[$index]"
+		ng-options='col as col.name for col in _chartcols'>
+		<option value=''>---请选择---</option>
+	</select><br>
+	<label>显示形态{{$index}}：</label>
+	<select style='width:50px;' 
+		ng-model="chartData.series[$index].type"
+		ng-options="obj.value as obj.key for obj in [{key:'折线',value:'line'},{key:'柱形',value:'bar'}]">
+		<option value=''>---请选择---</option>
+	</select>
+	<input type="button" value="删除统计{{$index}}" ng-click='deleteSeries($index)'>
+</div>
+<br>
+</div>
+<div style='width:20%;float:left;' ng-if="statchart.charttype=='pie'">
+<label>分饼依据：</label>
+<select style='width:100px;' ng-model='chartData.legend' ng-options='col as col.name for col in _chartcols'>
+<option value=''>---请选择---</option>
+</select><br>
+<label>分饼数据：</label>
+<select style='width:100px;' ng-model='chartData.series' ng-options='col as col.name for col in _chartcols'>
+<option value=''>---请选择---</option>
+</select><br>
+<br>
+</div>
+<img class='chartimg' style='width:100%'></img>
+</div>

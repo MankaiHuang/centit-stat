@@ -1,0 +1,5 @@
+<div style="border:1px solid grey;float:left;width:100%;">
+	<input type="button" ng-click="addXYChart()" value="新增二维图表"/>
+	<input type="button" ng-click="addPieChart()" value="新增饼状图表"/>
+	<stat-chart ng-repeat="statchart in statcharts" chartcols="chartcols" charttype='statchart.charttype' ></stat-chart>
+</div>

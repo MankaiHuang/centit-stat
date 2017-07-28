@@ -1,0 +1,110 @@
+<table id="table_querycolumns" style="width:100%"
+       idField="colName"
+       border="false"
+       layoutH="64"
+       pagination="false"
+       editable="true"
+       toolbar=".temp-toolbar_querycolumns">
+    <thead data-options="frozen:true" >
+    <tr>
+        <th width="8%" data-options="field:'colName',editor:{type:'textbox',options:{required: true}}"  >字段名称</th>
+        <th width="8%" data-options="field:'showType',
+			 formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '数据';
+			  	if(value=='D')return '数据';
+			  	if(value=='R')return '行头';
+			  	if(value=='C')return '列头';
+			  }
+			,editor:{
+			  type:'combobox',
+			  options:{valueField:'showType',textField:'label',
+				data:[
+				{showType:'D',label:'数据'},
+				{showType:'R',label:'行头'},
+				{showType:'C',label:'列头'}
+					]
+			  }
+			}"  align="center">显示类别</th>
+        <th width="8%" data-options="field:'optType',
+			formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '无操作';
+			  	if(value=='0')return '无操作';
+			  	if(value=='1')return '合计';
+			  	if(value=='2')return '平均';
+			  	if(value=='3')return '平均&合计';
+			  }
+			,editor:{
+			  type:'combobox',
+			  options:{valueField:'value',textField:'label',
+				data:[
+				{value:'0',label:'无操作'},
+				{value:'1',label:'合计'},
+				{value:'2',label:'平均'},
+				{value:'3',label:'平均&合计'},
+					]
+			  }
+			}"  align="center">数据操作</th>
+        <!--<th width="8%" data-options="field:'drawChart',-->
+			<!--formatter:function(value, rowData, rowIndex){-->
+			  	<!--if(value==undefined)return '不画图';-->
+			  	<!--if(value=='T')return '画图';-->
+			  	<!--if(value=='F')return '不画图';-->
+			  <!--}-->
+			<!--,editor:{ type:'combobox',-->
+			  <!--options:{valueField:'value',textField:'label',-->
+				<!--data:[-->
+				<!--{value:'T',label:'画图'},-->
+				<!--{value:'F',label:'不画图'}-->
+					<!--]-->
+			  <!--}-->
+			<!--}"   align="center">是否画图</th>-->
+        <th width="8%" data-options="field:'colType',formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '字符串';
+			  	if(value=='S')return '字符串';
+			  	if(value=='N')return '数字';
+			  	if(value=='P')return '百分比';
+			  	if(value=='C')return '货币';
+			  	if(value=='D')return '日期';
+			  }
+			,editor:{ type:'combobox',
+			  options:{valueField:'value',textField:'label',
+				data:[
+				{value:'S',label:'字符串'},
+				{value:'N',label:'数字'},
+				{value:'P',label:'百分比'},
+				{value:'C',label:'货币'},
+				{value:'D',label:'日期'}
+					]
+			  }
+			}"   align="center">数据类型</th>
+        <th width="8%" data-options="field:'colFormat',editor:{type:'textbox'}"   align="center">数据格式</th>
+        <th width="8%" data-options="field:'cssStyle',editor:{type:'textbox'}"   align="center">单元格样式</th>
+        <th width="8%" data-options="field:'catalogCode',editor:{type:'textbox'}"   align="center">数据字典</th>
+        <th width="8%" data-options="field:'colLogic',editor:{type:'textbox'}"   align="center">链接地址</th>
+        <th width="8%" data-options="field:'linkType',editor:{type:'textbox'}"   align="center">链接类型</th>
+        <th width="8%" data-options="field:'colOrder',editor:{type:'textbox'}"   align="center">顺序</th>
+        <th data-options="field:'isShow' ,
+			formatter:function(value, rowData, rowIndex){
+			  	if(value==undefined)return '显示';
+			  	if(value=='T')return '显示';
+			  	if(value=='F')return '不显示';
+			  }
+			,editor:{
+			  type:'combobox',
+			  options:{valueField:'value',textField:'label',
+				data:[
+				{value:'T',label:'显示'},
+				{value:'F',label:'不显示'}
+					]
+			  }
+			}" align="center">是否显示</th>
+    </tr>
+    </thead>
+</table>
+
+<div class="temp-toolbar_querycolumns">
+    <a iconCls="icon-add" trigger="none"
+       target="custom" rel="querycolumn_add" title="" width="320" height="420" btnValue="添加">新增</a>
+    <a iconCls="icon-base icon-base-ban" trigger="single"
+       target="confirm" rel="querycolumn_remove" title="是否确定删除？">删除</a>
+</div>

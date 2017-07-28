@@ -1,0 +1,80 @@
+    body{
+    	font-size:12;
+    }
+    .searchboxs{
+    	border:1px solid  grey;
+    	float:left;
+    	width:100%;
+    }
+    .searchboxs div{
+    	width:30%;
+    	float:left;
+    	text-align:center;
+    }
+    .pagination{
+		float:left;
+		width:49%;
+		height:22px;
+		
+	}
+	.pagination p{
+		height:22px;
+	}
+    table {
+    table-layout: fixed;
+    width:100%;
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+	text-align:center;
+	}
+	.tableHead {
+		background-color:lightgrey;
+	}
+	table th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+	}
+	table td {
+	white-space: nowrap;text-overflow: ellipsis;overflow: hidden;
+	border-width: 1px;
+	height:22px;
+	width:80px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+	}
+	table tr:hover{
+	background-color:lightblue;
+	}
+	table tr:hover td{
+	background:none;
+	}
+	table td:hover{
+	 overflow:visible;
+     white-space:normal;
+	 word-wrap: break-word;
+	}
+	
+	.btnbox{
+		text-align:right;
+		width:50%;
+		float:right;
+		height:22px;
+	}
+	.print{
+		width:100%;
+		float:left;
+	}
+	.tableTitle{
+		width:100%;
+		text-align:center;
+	}
+	
