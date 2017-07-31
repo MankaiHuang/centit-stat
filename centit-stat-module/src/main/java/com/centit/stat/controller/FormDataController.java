@@ -21,8 +21,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -124,8 +123,8 @@ public class FormDataController extends BaseController {
 	private HSSFWorkbook exportToExcel(FormDataModel fdm) {
 		List<CTableLine> headLines = fdm.getTablePanel().getThead().getLines();
 		List<CTableLine> bodyLines = fdm.getTablePanel().getTbody().getLines();
-		TwoDimen resHead = convertLinesToTwodimen(headLines);
-		TwoDimen resBody = convertLinesToTwodimen(bodyLines);
+		TwoDimen resHead = convertLinesToTwoDimen(headLines);
+		TwoDimen resBody = convertLinesToTwoDimen(bodyLines);
 		return HSSFWorkbookOpt.exportToWorkbook(resHead.getTwodimen(),
 				resHead.getNeedCombine(), resBody.getTwodimen(),
 				resBody.getNeedCombine());
@@ -342,7 +341,7 @@ public class FormDataController extends BaseController {
 	}
 
 	
-	public TwoDimen convertLinesToTwodimen(List<CTableLine> lines) {
+	public TwoDimen convertLinesToTwoDimen(List<CTableLine> lines) {
 		int xlen = 0;
 		for (int i = 0; i < lines.get(0).getCells().size(); i++) {
 			CTableCell cell = lines.get(0).getCells().get(i);
@@ -436,22 +435,22 @@ public class FormDataController extends BaseController {
 			HSSFSheet sheet = workbook.createSheet();// excel表
 			sheet.setDefaultColumnWidth(20);
 			HSSFCellStyle cellStyleHead = workbook.createCellStyle();// 表头单元格样式
-			cellStyleHead.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+			cellStyleHead.setAlignment(HorizontalAlignment.CENTER);
 			cellStyleHead.setWrapText(true);// 单元格包围文本
-			cellStyleHead.setFillPattern(HSSFCellStyle.FINE_DOTS);
-			cellStyleHead.setFillForegroundColor(new HSSFColor.YELLOW()
+			cellStyleHead.setFillPattern(FillPatternType.FINE_DOTS);
+			cellStyleHead.setFillForegroundColor(HSSFColor.HSSFColorPredefined.YELLOW
 					.getIndex());// excel表头颜色，前景色和背景色要同事设置
-			cellStyleHead.setFillBackgroundColor(new HSSFColor.YELLOW()
+			cellStyleHead.setFillBackgroundColor(HSSFColor.HSSFColorPredefined.YELLOW
 					.getIndex());
-			cellStyleHead.setBorderBottom((short) 1);// excel表头边框
-			cellStyleHead.setBorderTop((short) 1);
-			cellStyleHead.setBorderLeft((short) 1);
-			cellStyleHead.setBorderRight((short) 1);
+			cellStyleHead.setBorderBottom(BorderStyle.THIN);// excel表头边框
+			cellStyleHead.setBorderTop(BorderStyle.THIN);
+			cellStyleHead.setBorderLeft(BorderStyle.THIN);
+			cellStyleHead.setBorderRight(BorderStyle.THIN);
 			HSSFCellStyle cellStyleBody = workbook.createCellStyle();// 表数据单元格样式
-			cellStyleBody.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+			cellStyleBody.setAlignment(HorizontalAlignment.LEFT);
 			cellStyleBody.setWrapText(true);
-			cellStyleBody.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-			cellStyleBody.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+			cellStyleBody.setAlignment(HorizontalAlignment.CENTER);
+			cellStyleBody.setVerticalAlignment(VerticalAlignment.CENTER);
 
 			int endIndex = addTwodimen(sheet, twodimenHead, 0, cellStyleHead,
 					headCombine);
@@ -463,12 +462,12 @@ public class FormDataController extends BaseController {
 		
 		/**
 		 * 
-		 * @param sheet
-		 * @param twodimen
-		 * @param startIndex
-		 * @param cellStyle
-		 * @param combine
-		 * @return
+		 * @param sheet 表格
+		 * @param twodimen 二位数组
+		 * @param startIndex int
+		 * @param cellStyle 表格样式
+		 * @param combine 合计数据
+		 * @return int 结束行
 		 */
 		static int addTwodimen(HSSFSheet sheet, Object[][] twodimen,
 				int startIndex, HSSFCellStyle cellStyle, List<int[]> combine) {
@@ -488,14 +487,14 @@ public class FormDataController extends BaseController {
 					}
 					// 这里把数字型的都按Number保存，避免单元格出现左上角箭头
 					if (value instanceof Integer) {
-						cell.setCellType(0);// 0:Number 1:String ...
+						cell.setCellType(CellType.NUMERIC);// 0:Number 1:String ...
 						cell.setCellValue((Integer) value);
 					} else if (value instanceof Double
 							|| value instanceof Float) {
-						cell.setCellType(0);// 0:Number 1:String ...
+						cell.setCellType(CellType.NUMERIC);// 0:Number 1:String ...
 						cell.setCellValue((Double) value);
 					} else if (value instanceof BigDecimal) {
-						cell.setCellType(0);// 0:Number 1:String ...
+						cell.setCellType(CellType.NUMERIC);// 0:Number 1:String ...
 						cell.setCellValue(((BigDecimal) value).doubleValue());
 					} else {
 						cell.setCellValue((String) value);
