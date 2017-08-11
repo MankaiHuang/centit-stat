@@ -16,8 +16,8 @@
 
         <dependency>
             <groupId>com.centit.support</groupId>
-            <artifactId>centit-office</artifactId>
-            <version>${centit.commons.version}</version>
+            <artifactId>centit-report-utils</artifactId>
+            <version>${centit.stat.version}</version>
         </dependency>
 
         <dependency>

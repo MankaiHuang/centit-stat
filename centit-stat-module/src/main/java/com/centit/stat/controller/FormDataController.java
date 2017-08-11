@@ -156,7 +156,7 @@ public class FormDataController extends BaseController {
 								formObj.getDbinfo(), sql,
 								cond.getParamReferenceData());
 						for (Object[] data : datas) {
-							Map<String, Object> map = new HashMap<String, Object>();
+							Map<String, Object> map = new HashMap<>();
 							map.put("key", data[0]);
 							map.put("value", data[1]);
 							cond.getComboValues().add(map);
@@ -169,7 +169,7 @@ public class FormDataController extends BaseController {
 							.parseObject(cond.getParamReferenceData());
 					if (json != null) {
 						for (Map.Entry<String, Object> ent : json.entrySet()) {
-							Map<String, Object> map = new HashMap<String, Object>();
+							Map<String, Object> map = new HashMap<>();
 							map.put("key", ent.getKey());
 							map.put("value", ent.getValue());
 							cond.getComboValues().add(map);
@@ -184,7 +184,7 @@ public class FormDataController extends BaseController {
 						List<Object[]> datas = DBCPDao.findObjectsBySql(
 								formObj.getDbinfo(), sql);
 						for (Object[] data : datas) {
-							Map<String, Object> map = new HashMap<String, Object>();
+							Map<String, Object> map = new HashMap<>();
 							map.put("key", data[0]);
 							map.put("value", data[1]);
 							cond.getComboValues().add(map);

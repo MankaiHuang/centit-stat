@@ -13,13 +13,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <centit.stat.version>2.0.1-SNAPSHOT</centit.stat.version>
         <jdk.version>1.8</jdk.version>
-
         <centit.commons.version>2.2.1</centit.commons.version>
         <centit.framework.version>4.0.0-SNAPSHOT</centit.framework.version>
         <centit.ui.version>3.0.1-SNAPSHOT</centit.ui.version>
         <centit.ip.version>0.0.2-SNAPSHOT</centit.ip.version>
         <servlet-api.version>3.1.0</servlet-api.version>
-
+        <xdocreport.version>2.0.1</xdocreport.version>
+        <apache.poi.version>3.16</apache.poi.version>
         <ojdbc6.version>11.2.0.4</ojdbc6.version>
         <junit.version>4.12</junit.version>
         <mysql.version>6.0.6</mysql.version>
@@ -84,6 +84,7 @@
         <module>centit-stat-view</module>
         <module>centit-stat-web</module>
         <module>centit-stat-client</module>
+        <module>centit-report-utils</module>
     </modules>
 
 
