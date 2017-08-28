@@ -177,11 +177,9 @@ public class ExcelReportUtil {
         cell.setCellStyle(getDefaultCellStyle(wb));
     }
 
-    /**
+    /*
      * 设置单元格默认样式
      *
-     * @param wb
-     * @return
      */
     private static HSSFCellStyle getDefaultCellStyle(HSSFWorkbook wb) {
         HSSFCellStyle cellStyle = wb.createCellStyle();
@@ -205,10 +203,7 @@ public class ExcelReportUtil {
 
     private HSSFWorkbook wb = null;
     private HSSFSheet sheet = null;
-    /**
-     * @param wb
-     * @param sheet
-     */
+
     private ExcelReportUtil(HSSFWorkbook wb, HSSFSheet sheet) {
         this.wb = wb;
         this.sheet = sheet;

@@ -8,12 +8,10 @@ import java.util.Map;
 
 import com.centit.framework.core.dao.PageDesc;
 import com.centit.framework.ip.po.DatabaseInfo;
-import com.centit.support.database.DBConnect;
-import com.centit.support.database.DataSourceDescription;
-import com.centit.support.database.DatabaseAccess;
-import com.centit.support.database.DbcpConnect;
-import com.centit.support.database.DbcpConnectPools;
-import com.centit.support.database.QueryAndNamedParams;
+import com.centit.support.database.utils.DataSourceDescription;
+import com.centit.support.database.utils.DatabaseAccess;
+import com.centit.support.database.utils.DbcpConnectPools;
+import com.centit.support.database.utils.QueryAndNamedParams;
 import com.centit.support.security.DESSecurityUtils;
 
 public class DBCPDao {
@@ -114,7 +112,7 @@ public class DBCPDao {
 	/**
 	 * 从连接池中获取链接
 	 */
-	private static DbcpConnect getConn(DatabaseInfo dbinfo) throws Exception {
+	private static Connection getConn(DatabaseInfo dbinfo) throws Exception {
 		   DataSourceDescription desc=new DataSourceDescription();
 		   desc.setConnUrl(dbinfo.getDatabaseUrl());
 		   desc.setUsername(dbinfo.getUsername());
@@ -144,7 +142,7 @@ public class DBCPDao {
 
 		if(null==dbinfo)
 			throw new RuntimeException("未配置数据源！");
-		try(DBConnect conn= getConn(dbinfo)) {
+		try(Connection conn= getConn(dbinfo)) {
     		currDatas = DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize());
     		//long totalRows=DatabaseAccess.queryTotalRows(conn, qap.getQuery(), qap.getParams());
     		long totalRows=DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams()).size();

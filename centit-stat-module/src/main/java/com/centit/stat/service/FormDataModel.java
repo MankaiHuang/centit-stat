@@ -19,8 +19,8 @@ import com.centit.support.algorithm.DatetimeOpt;
 import com.centit.support.algorithm.StringBaseOpt;
 import com.centit.support.algorithm.StringRegularOpt;
 import com.centit.support.compiler.Lexer;
-import com.centit.support.database.QueryAndNamedParams;
-import com.centit.support.database.QueryUtils;
+import com.centit.support.database.utils.QueryAndNamedParams;
+import com.centit.support.database.utils.QueryUtils;
 import com.centit.support.json.JSONOpt;
 
 public class FormDataModel implements java.io.Serializable {

@@ -29,7 +29,7 @@ import com.centit.support.algorithm.ListOpt;
 import com.centit.support.algorithm.ListOpt.ParentChild;
 import com.centit.support.algorithm.ReflectionOpt;
 import com.centit.support.algorithm.StringBaseOpt;
-import com.centit.support.database.QueryAndNamedParams;
+import com.centit.support.database.utils.QueryAndNamedParams;
 
 @Service
 public class FormDataManagerImpl implements FormDataManager {

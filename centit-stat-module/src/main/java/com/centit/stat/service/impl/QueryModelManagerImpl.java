@@ -15,7 +15,7 @@ import com.centit.stat.po.QueryModel;
 import com.centit.stat.po.QueryCondition;
 
 import com.centit.stat.service.QueryModelManager;
-import com.centit.support.database.QueryUtils;
+import com.centit.support.database.utils.QueryUtils;
 
 @Service
 @Transactional

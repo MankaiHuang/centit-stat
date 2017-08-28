@@ -1,6 +1,6 @@
 package com.centit.stat.service;
 
-import com.centit.framework.core.service.BaseEntityManager;
+import com.centit.framework.hibernate.service.BaseEntityManager;
 import com.centit.stat.po.QueryModel;
 
 import java.util.List;
