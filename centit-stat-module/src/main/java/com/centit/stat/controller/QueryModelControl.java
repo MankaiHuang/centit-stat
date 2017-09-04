@@ -78,9 +78,9 @@ public class QueryModelControl extends BaseController{
 		JsonResultUtils.writeSingleDataJson(dbqm, response);
 	}
 
-	/**
-	 * 前端暂时将+号和&替换为<plussign>和<andsign>，然后进行了特殊字符转义，这个方法用来先反转义，再反替换
-	 */
+
+	//前端暂时将+号和&替换为<plussign>和<andsign>，然后进行了特殊字符转义，这个方法用来先反转义，再反替换
+
 	public String dealPlusAndAnd(String str){
 		str=HtmlUtils.htmlUnescape(str);
 		return str.replaceAll("<plussign>", "+").replaceAll("<andsign>", "&");
@@ -88,8 +88,8 @@ public class QueryModelControl extends BaseController{
 	
 	/**
 	 * 根据sql获取列名和查询参数名
-	 * @param sql
-	 * @param response
+	 * @param sql 查询sql
+	 * @param response HttpServletResponse
 	 */
 	@RequestMapping(value="/colandcond",method={RequestMethod.POST})
 	public void generateColAndConByQM(@RequestParam String sql, HttpServletResponse response){

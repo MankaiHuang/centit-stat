@@ -22,6 +22,7 @@ public interface StatClient {
      * @param pageNo 分页信息
      * @param pageSize 分页信息
      * @return String json
+     * @throws Exception Exception
      */
     String getStatData(CloseableHttpClient httpclient, String modelName,
                               Map<String,Object> params, int pageNo, int pageSize) throws Exception;
@@ -32,6 +33,7 @@ public interface StatClient {
      * @param modelName     统计模块代码
      * @param params    查询参数
      * @return String json
+     * @throws Exception Exception
      */
     String getStatData(CloseableHttpClient httpclient, String modelName,
                               Map<String,Object> params) throws Exception;
@@ -43,6 +45,7 @@ public interface StatClient {
      * @param pageNo 分页信息
      * @param pageSize 分页信息
      * @return String json
+     * @throws Exception Exception
      */
     String getStatData(String modelName,
                               Map<String,Object> params,  int pageNo, int pageSize)throws Exception;
@@ -51,6 +54,7 @@ public interface StatClient {
      * @param modelName     统计模块代码
      * @param params    查询参数
      * @return String json
+     * @throws Exception Exception
      */
     String getStatData(String modelName,Map<String,Object> params)throws Exception;
 }

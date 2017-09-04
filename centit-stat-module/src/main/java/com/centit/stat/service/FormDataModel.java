@@ -263,7 +263,7 @@ public class FormDataModel implements java.io.Serializable {
     
     /**
      * 根据查询目录生成sql语句
-     * @return
+     * @return QueryAndNamedParams
      */
     public QueryAndNamedParams makeStatQuery() {
         return makeQuery(this.querySql);
@@ -296,7 +296,7 @@ public class FormDataModel implements java.io.Serializable {
  
     /**
      * 根据查询目录生成sql语句,添加分页信息 
-     * @return
+     * @return QueryAndNamedParams
      */
     public QueryAndNamedParams makeColumnQuery() {
         return makeQuery(this.columnSql);
@@ -306,7 +306,8 @@ public class FormDataModel implements java.io.Serializable {
      * 
      * 根据查询目录生成对比分析语句
      * @param compareType   3 同比分析  4 环比分析 0 其他
-     * @return
+     * @param offset int
+     * @return 时间
      */
     public String makeCondCompareValue(String compareType, int offset)  {
         String dateStr = "";
@@ -352,9 +353,9 @@ public class FormDataModel implements java.io.Serializable {
     /**
      * 添加排序
      * 
-     * @param sql
-     * @param params
-     * @return
+     * @param sql sql
+     * @param params 参数
+     * @return 拼接后的sql
      */
     private static String addOrderParam(String sql, Map<String, Object> params) {
         String sqlSen=sql;
@@ -389,7 +390,7 @@ public class FormDataModel implements java.io.Serializable {
     }
     /**
      * 是否按行 T 画统计图 F 不画
-     * @param rowDarwChart
+     * @param rowDarwChart 是否按行
      */
     public void setRowDrawChart(String rowDarwChart) {
         this.rowDrawChart = rowDarwChart;
@@ -416,7 +417,7 @@ public class FormDataModel implements java.io.Serializable {
     }
     /**
      * 0 : 没有  1 合计  2 均值  3 合计 和 均值
-     * @param additionRow
+     * @param additionRow 类型
      */
     public void setAdditionRow(String additionRow) {
         this.additionRow = additionRow;
@@ -646,14 +647,14 @@ public class FormDataModel implements java.io.Serializable {
     }
     /**
      * 2 ： 二维表  3 ：同比分析 4：环比分析 5：交叉制表
-     * @return
+     * @return String
      */
     public String getModelType() {
         return modelType;
     }
     /**
      * 2 ： 二维表  3 ：同比分析 4：环比分析 5：交叉制表
-     * @param modelType
+     * @param modelType 模型种类
      */
     public void setModelType(String modelType) {
         this.modelType = modelType;

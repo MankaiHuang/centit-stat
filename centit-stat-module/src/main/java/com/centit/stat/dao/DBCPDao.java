@@ -18,9 +18,9 @@ public class DBCPDao {
 	
 	/**
 	 * 这里的params必须和queryString里面的？一一对应。
-	 * @param dbinfo
-	 * @param queryString
-	 * @return
+	 * @param dbinfo 数据库连接信息
+	 * @param queryString 查询sql
+	 * @return 查询结果集
 	 */
 	public static List<Object[]> findObjectsBySql(DatabaseInfo dbinfo, String queryString){
 		List<Object[]> currDatas=new ArrayList<Object[]>();
@@ -43,10 +43,10 @@ public class DBCPDao {
 	
 	/**
 	 * 这里的params必须和queryString里面的？一一对应。
-	 * @param dbinfo
-	 * @param queryString
-	 * @param params
-	 * @return
+	 * @param dbinfo 数据库连接信息
+	 * @param queryString 查询sql
+	 * @param params 查询参数
+	 * @return 返回结果集
 	 */
 	public static List<Object[]> findObjectsBySql(DatabaseInfo dbinfo,String queryString,List<Object> params){
 		List<Object[]> currDatas=new ArrayList<Object[]>();
@@ -109,9 +109,8 @@ public class DBCPDao {
 		}
 		return currDatas;
 	}
-	/**
-	 * 从连接池中获取链接
-	 */
+
+	// 从连接池中获取链接
 	private static Connection getConn(DatabaseInfo dbinfo) throws Exception {
 		   DataSourceDescription desc=new DataSourceDescription();
 		   desc.setConnUrl(dbinfo.getDatabaseUrl());

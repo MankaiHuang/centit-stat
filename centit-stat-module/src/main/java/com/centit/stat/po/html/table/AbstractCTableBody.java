@@ -8,9 +8,8 @@ import com.centit.stat.po.html.AbstractCHtmlComponent;
 /**
  * 表格内容组件
  * 
- * @author zk
- * @create 2013-6-8
- * @version 
+ * @author zk 2013-6-8
+ *
  */
 public abstract class AbstractCTableBody extends AbstractCHtmlComponent{
     
@@ -23,7 +22,7 @@ public abstract class AbstractCTableBody extends AbstractCHtmlComponent{
     /**
      * 添加单元格
      * 
-     * @param cell
+     * @param cell 单元格
      */
     public void addCell(CTableCell cell) {
     	if (getLines().size()<1) {

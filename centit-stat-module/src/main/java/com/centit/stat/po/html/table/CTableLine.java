@@ -10,9 +10,7 @@ import com.centit.stat.po.html.AbstractCHtmlComponent;
 /**
  * 表格行组件，后台数据和表格TR之间的转换
  * 
- * @author zk
- * @create 2013-6-8
- * @version 
+ * @author zk 2013-6-8
  */
 public class CTableLine extends AbstractCHtmlComponent {
     public static final String TABLE_LINE_MODEL = "<tr${id}${class}${style}>${cells}</tr>";
@@ -31,7 +29,7 @@ public class CTableLine extends AbstractCHtmlComponent {
     /**
      * 添加单元格
      * 
-     * @param cell
+     * @param cell 列
      */
     public void addCell(CTableCell cell) {
         getCells().add(cell);

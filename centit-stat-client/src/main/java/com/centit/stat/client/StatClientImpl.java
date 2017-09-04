@@ -38,6 +38,7 @@ public class StatClientImpl implements StatClient{
      * @param pageNo 分页信息
      * @param pageSize 分页信息
      * @return String json
+     * @throws Exception Exception
      */
     public String getStatData(CloseableHttpClient httpClient, String modelName,
                               Map<String,Object> params, int pageNo, int pageSize)throws Exception{
@@ -61,7 +62,8 @@ public class StatClientImpl implements StatClient{
      * @param httpclient    http客户段链接
      * @param modelName     统计模块代码
      * @param params    查询参数
-     * @return
+     * @return String
+     * @throws Exception Exception
      */
     public String getStatData(CloseableHttpClient httpclient, String modelName,
                               Map<String,Object> params) throws Exception{
@@ -75,6 +77,7 @@ public class StatClientImpl implements StatClient{
      * @param pageNo 分页信息
      * @param pageSize 分页信息
      * @return String json
+     * @throws Exception Exception
      */
     public String getStatData(String modelName,
                               Map<String,Object> params, int pageNo, int pageSize)throws Exception{
@@ -88,7 +91,8 @@ public class StatClientImpl implements StatClient{
      * 获得统计数据
      * @param modelName     统计模块代码
      * @param params    查询参数
-     * @return
+     * @return json
+     * @throws Exception Exception
      */
     @Override
     public String getStatData(String modelName,Map<String, Object> params) throws Exception{

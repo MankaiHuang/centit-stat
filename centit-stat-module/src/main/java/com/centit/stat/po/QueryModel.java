@@ -96,13 +96,11 @@ public class QueryModel implements java.io.Serializable {
 	private List<QueryCondition> queryConditions = null;// new ArrayList<QueryConditon>();
 
 	// Constructors
-	/** default constructor */
 	public QueryModel() {
 		this.drawChartBeginCol= 0;  
 		this.drawChartEndCol= 0;  
 	}
 	
-	/** minimal constructor */
 	public QueryModel(
 		String modelName		
 		) {
@@ -129,7 +127,7 @@ public class QueryModel implements java.io.Serializable {
 	public void setIsTree(String isTree) {
 		this.isTree = isTree;
 	}
-/** full constructor */
+
 	public QueryModel(
 	 String modelName		
 	,String  modelType,String  ownerType,String  ownerCode,String  querySql
@@ -189,14 +187,14 @@ public class QueryModel implements java.io.Serializable {
   
 	/**
      * 2 ： 二维表  3 ：同比分析 4：环比分析 5：交叉制表
-	 * @return
+	 * @return 模型类型
 	 */
 	public String getModelType() {
 		return this.modelType;
 	}
 	/**
 	 * 2 ： 二维表  3 ：同比分析 4：环比分析 5：交叉制表
-	 * @param modelType
+	 * @param modelType 模型类型
 	 */
 	public void setModelType(String modelType) {
 		this.modelType = modelType;
@@ -334,10 +332,9 @@ public class QueryModel implements java.io.Serializable {
 
 		return res;
 	}
-	/**
-	 * 替换子类对象数组，这个函数主要是考虑hibernate中的对象的状态，以避免对象状态不一致的问题
-	 * 
-	 */
+
+	//替换子类对象数组，这个函数主要是考虑hibernate中的对象的状态，以避免对象状态不一致的问题
+
 	public void replaceQueryColumns(List<QueryColumn> queryColumns) {
 		List<QueryColumn> newObjs = new ArrayList<QueryColumn>();
 		for(QueryColumn p :queryColumns){
@@ -415,7 +412,7 @@ public class QueryModel implements java.io.Serializable {
 	}
 	/**
 	 * 替换子类对象数组，这个函数主要是考虑hibernate中的对象的状态，以避免对象状态不一致的问题
-	 * 
+	 * @param queryConditons 查询条件
 	 */
 	public void replaceQueryConditions(List<QueryCondition> queryConditons) {
 		List<QueryCondition> newObjs = new ArrayList<QueryCondition>();
