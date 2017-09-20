@@ -5,6 +5,8 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,8 +24,13 @@ import java.util.Map;
  * 2013-6-25
  */
 @SuppressWarnings("unused")
-public class ExcelReportUtil {
+public abstract class ExcelReportUtil {
 
+    private ExcelReportUtil() {
+        throw new IllegalAccessError("Utility class");
+    }
+
+    protected static final Logger logger = LoggerFactory.getLogger(ExcelReportUtil.class);
 
     public static InputStream generateExcel(List<? extends Object> objLists) {
         return generateExcel(objLists,null,null);
@@ -40,7 +47,10 @@ public class ExcelReportUtil {
      */
     public static InputStream generateExcel(List<? extends Object> objLists, String[] header, String[] property) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        HSSFSheet sheet = ExcelReportUtil.createDefaultSheet();
+
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet();
+
         if(header!=null && header.length>0) {
             generateHeader(sheet, header);
         }
@@ -54,7 +64,7 @@ public class ExcelReportUtil {
             sheet.getWorkbook().write(baos);
         } catch (IOException | InvocationTargetException | NoSuchMethodException
                 | IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
+            throw new StatReportException(e);
         }
 
         return new ByteArrayInputStream(baos.toByteArray());
@@ -82,14 +92,16 @@ public class ExcelReportUtil {
     public static InputStream generateExcel(List<Object[]> objLists, String[] header) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        HSSFSheet sheet = ExcelReportUtil.createDefaultSheet();
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet();
+
         generateHeader(sheet, header);
         generateText(sheet, objLists);
 
         try {
             sheet.getWorkbook().write(baos);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new StatReportException(e);
         }
 
         return new ByteArrayInputStream(baos.toByteArray());
@@ -97,12 +109,7 @@ public class ExcelReportUtil {
     }
 
 
-    private static HSSFSheet createDefaultSheet() {
-        HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFSheet sheet = wb.createSheet();
 
-        return new ExcelReportUtil(wb, sheet).getSheet();
-    }
 
 
     private static void generateHeader(HSSFSheet sheet, String[] header) {
@@ -199,43 +206,5 @@ public class ExcelReportUtil {
 
         return cellStyle;
     }
-
-
-    private HSSFWorkbook wb = null;
-    private HSSFSheet sheet = null;
-
-    private ExcelReportUtil(HSSFWorkbook wb, HSSFSheet sheet) {
-        this.wb = wb;
-        this.sheet = sheet;
-    }
-
-    /**
-     * @return the sheet
-     */
-    public HSSFSheet getSheet() {
-        return sheet;
-    }
-
-    /**
-     * @param sheet the sheet to set
-     */
-    public void setSheet(HSSFSheet sheet) {
-        this.sheet = sheet;
-    }
-
-    /**
-     * @return the wb
-     */
-    public HSSFWorkbook getWb() {
-        return wb;
-    }
-
-    /**
-     * @param wb the wb to set
-     */
-    public void setWb(HSSFWorkbook wb) {
-        this.wb = wb;
-    }
-
 
 }

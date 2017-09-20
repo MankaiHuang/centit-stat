@@ -3,6 +3,8 @@ package com.centit.support.report;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +19,12 @@ import java.io.OutputStream;
 
 @SuppressWarnings("unused")
 public abstract class WordReportUtil {
+
+    private WordReportUtil() {
+        throw new IllegalAccessError("Utility class");
+    }
+
+    protected static final Logger logger = LoggerFactory.getLogger(WordReportUtil.class);
 
     /**
      * 这个可以在linux运行，缺点是转换的不完美 自动编号的转换会有错误，并且只能转换Docx，就是xml格式的我让的文档
