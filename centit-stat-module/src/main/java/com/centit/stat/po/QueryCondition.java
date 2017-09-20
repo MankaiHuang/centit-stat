@@ -77,18 +77,11 @@ public class QueryCondition implements java.io.Serializable {
 	@Transient
 	private List<Map<String,Object>> comboValues;
     // Constructors
-	/** default constructor */
 	public QueryCondition() {
 	    clearProperties();
 	}
-	
-   /**
-     * 正常变量的构造函数
-     * @param condName
-     * @param condLabel
-     * @param paramReferenceData
-     * @param condValue
-     */
+
+    // 正常变量的构造函数
     public QueryCondition(String modelName, String condName,String condLabel,String paramReferenceData,String condValue){
         this.cid = new QueryConditionId(modelName,condName);
         this.condLabel= condLabel;  
@@ -98,18 +91,13 @@ public class QueryCondition implements java.io.Serializable {
         this.compareType= "0";  
     }
     
-    /**
-     * 异常变量的构造函数
-     * @param condName
-     * @param condDisplayStyle //N:普通 nomal H 隐藏 hide R 只读 readonly
-     * @param condValue
-     */
+     //异常变量的构造函数
+     // condDisplayStyle N:普通 nomal H 隐藏 hide R 只读 readonly
     public QueryCondition(String modelName, String condName,String condDisplayStyle, String condValue){
         this(condName,condName,condDisplayStyle,null,condValue);
     }
 
     
-	/** minimal constructor */
 	public QueryCondition(QueryConditionId id,String  condLabel,String  condDisplayStyle) {
 		this.cid = id; 
 			
@@ -118,15 +106,6 @@ public class QueryCondition implements java.io.Serializable {
 		this.condDisplayStyle= condDisplayStyle; 		
 	}
 
-/** full constructor 
- * @param paramReferenceData 
- * @param paramType 
- * @param paramValidateRegex 
- * @param paramReferenceType 
- * @param condDisplayStyle 
- * @param compareType 
- * @param condOrder 
- * @param paramValidateInfo */
 	public QueryCondition(QueryConditionId id
 			,String condLabel, String paramReferenceData, String paramType, String paramValidateRegex, String paramReferenceType, String condDisplayStyle, String compareType, Integer condOrder, String paramValidateInfo) {
 		this.cid = id; 
@@ -243,15 +222,13 @@ public class QueryCondition implements java.io.Serializable {
 
 	/**
     * N:普通 nomal H 隐藏 hide R 只读 readonly
-    * @return
+    * @return String
     */
 	public String getCondDisplayStyle() {
 		return this.condDisplayStyle;
 	}
-	/**
-	 * N:普通 nomal H 隐藏 hide R 只读 readonly
-	 * @param condDisplayStyle
-	 */
+
+
 	public void setCondDisplayStyle(String condDisplayStyle) {
 		this.condDisplayStyle = condDisplayStyle;
 	}
@@ -330,15 +307,13 @@ public class QueryCondition implements java.io.Serializable {
 	}
 	/**
 	 * 必需是时间字段， 3 同比分析  4 环比分析 0 其他
-	 * @return
+	 * @return String
 	 */
     public String getCompareType() {
         return compareType;
     }
-    /**
-     * 必需是时间字段， 3 同比分析  4 环比分析 0 其他
-     * @param compareType
-     */
+
+
     public void setCompareType(String compareType) {
         this.compareType = compareType;
     }

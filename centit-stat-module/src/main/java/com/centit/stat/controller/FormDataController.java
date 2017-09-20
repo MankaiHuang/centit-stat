@@ -64,9 +64,11 @@ public class FormDataController extends BaseController {
 	}
 
 	/**
-	 * 统计入口 modelName 传入统计模块代码，返回包装好的FormDataModel对象 page 分页信息，交叉表不支持分页，会自动忽略
-	 * 
-	 * @return
+	 * 统计入口，返回包装好的FormDataModel对象
+	 * @param modelName 传入统计模块代码
+	 * @param page 分页信息，交叉表不支持分页，会自动忽略
+	 * @param request HttpServletRequest
+	 * @param response HttpServletResponse
 	 */
 	@RequestMapping(value = "/{modelName}", method = RequestMethod.GET)
 	public void doStat(@PathVariable String modelName, PageDesc page,
@@ -81,9 +83,11 @@ public class FormDataController extends BaseController {
 
 	/**
 	 * formdatamodel对象导入excel并推送至页面下载
-	 * 
-	 * @param request
-	 * @param response
+	 * @param request HttpServletRequest
+	 * @param modelName 传入统计模块代码
+	 * @param paging 是否分页
+	 * @param page 分页信息
+	 * @param response HttpServletResponse
 	 */
 	@RequestMapping(value = "/excels", method = RequestMethod.POST)
 	public void exportToExcel(HttpServletRequest request, String modelName, boolean paging,
@@ -132,10 +136,10 @@ public class FormDataController extends BaseController {
 
 	/**
 	 * 下拉框对应表
-	 * 
-	 * @param request
-	 * @param formObj
-	 * @throws Exception
+	 * @param request HttpServletRequest
+	 * @param formObj FormDataModel对象
+	 * @param collectComboValues boolean
+	 * @throws Exception Exception
 	 */
 	private void collectParams(HttpServletRequest request, FormDataModel formObj,boolean collectComboValues)
 			throws Exception {
@@ -225,8 +229,8 @@ public class FormDataController extends BaseController {
 
 	/**
 	 * 覆盖默认值
-	 * 
-	 * @param cond
+	 * @param cond 查询条件
+	 * @param paramMap 参数
 	 */
 	private void setDefaultValue(QueryCondition cond,
 			Map<String, String[]> paramMap) {
@@ -267,7 +271,9 @@ public class FormDataController extends BaseController {
 
 	/**
 	 * 从数据库中取元数据
-	 *
+	 * @param page 分页信息
+	 * @param formObj FormDataModel对象
+	 * @param request HttpServletRequest
 	 */
 	private void queryDatabase(PageDesc page, FormDataModel formObj,
 			HttpServletRequest request) {
@@ -422,11 +428,11 @@ public class FormDataController extends BaseController {
 	static class HSSFWorkbookOpt {
 		/**
 		 * 
-		 * @param twodimenHead
-		 * @param headCombine
-		 * @param twodimenBody
-		 * @param bodyCombine
-		 * @return
+		 * @param twodimenHead 二维数组
+		 * @param headCombine int数组集合
+		 * @param twodimenBody 二维数组
+		 * @param bodyCombine int数组集合
+		 * @return HSSFWorkbook
 		 */
 		static HSSFWorkbook exportToWorkbook(Object[][] twodimenHead,
 				List<int[]> headCombine, Object[][] twodimenBody,

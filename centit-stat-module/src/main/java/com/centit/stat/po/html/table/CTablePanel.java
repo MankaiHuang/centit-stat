@@ -6,9 +6,8 @@ import com.centit.stat.po.html.AbstractCHtmlComponent;
 /**
  * TABLE组件，负责后台数据和前台TABLE转换
  * 
- * @author zk
- * @create 2013-6-8
- * @version 
+ * @author zk 2013-6-8
+ *
  */
 public class CTablePanel extends AbstractCHtmlComponent{
     

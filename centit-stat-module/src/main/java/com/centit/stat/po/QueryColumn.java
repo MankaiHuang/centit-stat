@@ -23,7 +23,7 @@ public class QueryColumn implements java.io.Serializable {
 	private QueryColumnId cid;
 	
 	/**
-	 * 数据操作 0：无操作  1：合计  2：平均  3：平均&合计
+	 * 数据操作 0：无操作  1：合计  2：平均  3：平均 合计
 	 */
 	@Column(name = "OPTTYPE")
 	private String  optType;
@@ -95,10 +95,9 @@ public class QueryColumn implements java.io.Serializable {
 		this.catalogCode = catalogCode;
 	}
 	// Constructors
-	/** default constructor */
 	public QueryColumn() {
 	}
-	/** minimal constructor */
+
 	public QueryColumn(QueryColumnId id 
 				
 		) {
@@ -135,13 +134,11 @@ public class QueryColumn implements java.io.Serializable {
     }
     
 
-/** full constructor */
 	public QueryColumn(QueryColumnId id
 			
 	,String  optType,String  drawChart,String  colType,String  colLogic,Integer colorder,String isShow,String showType) {
 		this.cid = id; 
 			
-	
 		this.optType= optType;
 		this.drawChart= drawChart;
 		this.colType= colType;
@@ -188,7 +185,6 @@ public class QueryColumn implements java.io.Serializable {
 			this.cid = new QueryColumnId();
 		this.cid.setColName(colName);
 	}
-	
 	
 
 	// Property accessors
@@ -306,14 +302,14 @@ public class QueryColumn implements java.io.Serializable {
     }
     /**
      * R 行头  C 列头  D 数值
-     * @return
+     * @return 显示类型
      */
     public String getShowType() {
         return showType;
     }
     /**
      * R 行头  C 列头  D 数值
-     * @param showType
+     * @param showType 显示类型
      */
     public void setShowType(String showType) {
         this.showType = showType;

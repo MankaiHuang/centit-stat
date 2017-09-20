@@ -3,9 +3,8 @@ package com.centit.stat.po.html;
 /**
  * HTML组件
  * 
- * @author zk
- * @create 2013-6-8
- * @version 
+ * @author zk 2013-6-8
+ *
  */
 public abstract class AbstractCHtmlComponent {
     private String id;

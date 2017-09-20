@@ -18,10 +18,10 @@ public class QueryConditionId implements java.io.Serializable {
 	private String condName;
 
 	// Constructors
-	/** default constructor */
+
 	public QueryConditionId() {
 	}
-	/** full constructor */
+
 	public QueryConditionId(String modelName, String condName) {
 
 		this.modelName = modelName;

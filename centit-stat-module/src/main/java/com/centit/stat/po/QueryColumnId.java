@@ -17,10 +17,9 @@ public class QueryColumnId implements java.io.Serializable {
 	private String colName;
 
 	// Constructors
-	/** default constructor */
 	public QueryColumnId() {
 	}
-	/** full constructor */
+	//full constructor
 	public QueryColumnId(String modelName, String colName) {
 
 		this.modelName = modelName;

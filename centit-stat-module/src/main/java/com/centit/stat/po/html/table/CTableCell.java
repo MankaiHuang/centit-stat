@@ -22,9 +22,8 @@ import com.centit.stat.po.html.AbstractCHtmlComponent;
 /**
  * 表格单元格组件，后台数据和前台TD之间的转换
  * 
- * @author zk
- * @create 2013-6-8
- * @version 
+ * @author zk 2013-6-8
+ *
  */
 public class CTableCell extends AbstractCHtmlComponent {
     
@@ -99,10 +98,10 @@ public class CTableCell extends AbstractCHtmlComponent {
     
     /**
      * 和报表功能结合，创建表格单元格
-     * @param orignValue
-     * @param col
-     * @param params
-     * @return
+     * @param orignValue 原始值
+     * @param col 列
+     * @param params 行参数
+     * @return 单元格
      */
     public static CTableCell createTableCell(Object orignValue, QueryColumn col, Map<String, Object> params) {
         CTableCell cell = new CTableCell();
@@ -183,16 +182,9 @@ public class CTableCell extends AbstractCHtmlComponent {
     /**
      * 和报表功能结合，创建表格单元格
      * 
-     * @param value 原始值
+     * @param orignValue 原始值
      * @param col 列
-     * @param params 行参数
-     * @return
-     */
-    /**
-     * @param orignValue
-     * @param col
-     * @param params
-     * @return
+     * @return CTableCell
      */
     public static CTableCell createTableHeadCell(String orignValue, QueryColumn col) {
         CTableCell cell = new CTableCell();
@@ -210,16 +202,8 @@ public class CTableCell extends AbstractCHtmlComponent {
     /**
      * 和报表功能结合，创建表格单元格
      * 
-     * @param value 原始值
-     * @param col 列
-     * @param params 行参数
-     * @return
-     */
-    /**
-     * @param orignValue
-     * @param col
-     * @param params
-     * @return
+     * @param orignValue 原始值
+     * @return CTableCell
      */
     public static CTableCell createTableHeadCell(String orignValue) {
         CTableCell cell = new CTableCell();
@@ -234,8 +218,8 @@ public class CTableCell extends AbstractCHtmlComponent {
     /**
      * 解析是否展示
      * 
-     * @param col
-     * @return
+     * @param col 列
+     * @return 布尔值
      */
     private static boolean parseDisplay(QueryColumn col) {
         // 为空或者值为 T 均显示
@@ -249,9 +233,9 @@ public class CTableCell extends AbstractCHtmlComponent {
     /**
      * 根据查询数值替换参数
      * 
-     * @param col
-     * @param params
-     * @return
+     * @param col 列
+     * @param params 参数
+     * @return String
      */
     private static String parseHref(QueryColumn col, Map<String, Object> params) {
         if (null == col || StringUtils.isBlank(col.getColLogic())) {
@@ -272,9 +256,9 @@ public class CTableCell extends AbstractCHtmlComponent {
     /**
      * 根据列类型 解析展示格式
      * 
-     * @param orignValue
-     * @param col
-     * @return
+     * @param orignValue 原始值
+     * @param col 列
+     * @return String
      */
     private static String parseDisplayValue(Object orignValue, QueryColumn col) {
     	if(orignValue instanceof Clob)
