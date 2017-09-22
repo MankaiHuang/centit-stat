@@ -1,5 +1,11 @@
 package com.centit.support.report;
 
+import com.centit.support.algorithm.DatetimeOpt;
+import com.centit.support.algorithm.NumberBaseOpt;
+import com.centit.support.algorithm.StringBaseOpt;
+import com.centit.support.algorithm.StringRegularOpt;
+import com.centit.support.common.JavaBeanField;
+import com.centit.support.common.JavaBeanMetaData;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -11,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by codefan on 17-9-20.
@@ -23,6 +30,133 @@ public class ExcelImportUtil {
     }
 
     protected static final Logger logger = LoggerFactory.getLogger(ExcelImportUtil.class);
+
+    private static void setObjectFieldValue(Object object, JavaBeanField field , HSSFCell cell){
+        switch (field.getFieldJavaType()) {
+            case "int":
+            case "Integer":
+                field.setObjectFieldValue(object,
+                        NumberBaseOpt.castObjectToInteger(
+                            cell.getNumericCellValue()));
+                break;
+            case "long":
+            case "Long":
+                field.setObjectFieldValue(object,
+                        NumberBaseOpt.castObjectToLong(
+                                cell.getNumericCellValue()
+                        ));
+                break;
+            case "float":
+            case "Float":
+            case "double":
+            case "Double":
+                field.setObjectFieldValue(object,cell.getNumericCellValue());
+                break;
+
+            case "byte[]":
+                field.setObjectFieldValue(object, cell.getStringCellValue().getBytes());
+                break;
+            case "BigDecimal":
+                field.setObjectFieldValue(object,
+                        NumberBaseOpt.castObjectToBigDecimal(cell.getNumericCellValue()));
+                break;
+            case "BigInteger":
+                field.setObjectFieldValue(object,
+                        NumberBaseOpt.castObjectToBigInteger(cell.getNumericCellValue()));
+                break;
+            case "String":
+                field.setObjectFieldValue(object,cell.getStringCellValue());
+                break;
+            case "Date":
+            case "Timestamp":
+                field.setObjectFieldValue(object,cell.getDateCellValue());
+                break;
+            case "boolean":
+            case "Boolean":
+                field.setObjectFieldValue(object,cell.getBooleanCellValue());
+                break;
+            default:
+                field.setObjectFieldValue(object, cell.getStringCellValue());
+                break;
+        }
+    }
+
+    private static <T>  List<T> loadObjectFromExcelSheet(HSSFSheet sheet, Class<T> beanType,
+                                                       Map<Integer,String > fieldDesc, int beginRow, int endRow)
+            throws IllegalAccessException, InstantiationException {
+
+        if(sheet == null)
+            return null;
+
+        JavaBeanMetaData metaData = JavaBeanMetaData.creatBeanMetaDataFromType(beanType);
+
+        List<T> datas = new ArrayList<>(endRow-beginRow+1);
+
+        for(int row =beginRow; row<endRow; row ++ ) {
+
+            HSSFRow excelRow = sheet.getRow(row);
+            if(excelRow==null)
+                continue;
+            int i=0;
+            T rowObj = beanType.newInstance();
+
+            //excelRow.getFirstCellNum()
+            for(Map.Entry<Integer,String> ent : fieldDesc.entrySet() ){
+                HSSFCell cell = excelRow.getCell(ent.getKey());
+                JavaBeanField field = metaData.getFiled(ent.getValue());
+                if(cell!=null && field !=null ){
+                    setObjectFieldValue(rowObj,field,cell);
+                }
+            }
+
+            datas.add(rowObj);
+        }
+
+        return datas;
+    }
+
+    public static <T>  List<T> loadObjectFromExcel(InputStream excelFile, String sheetName,
+                    Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow, int endRow)
+            throws IllegalAccessException, InstantiationException, IOException {
+
+            HSSFWorkbook wb = new HSSFWorkbook(excelFile);
+            HSSFSheet sheet = (StringUtils.isBlank(sheetName))?
+                    wb.getSheetAt(0) : wb.getSheet(sheetName);
+
+            return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow,  endRow);
+    }
+
+    public static <T>  List<T> loadObjectFromExcel(InputStream excelFile, String sheetName,
+                  Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow)
+            throws IllegalAccessException, InstantiationException, IOException {
+
+        HSSFWorkbook wb = new HSSFWorkbook(excelFile);
+        HSSFSheet sheet = (StringUtils.isBlank(sheetName))?
+                wb.getSheetAt(0) : wb.getSheet(sheetName);
+
+        return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow,  sheet.getLastRowNum());
+    }
+
+
+    public static <T>  List<T> loadObjectFromExcel(InputStream excelFile,  int sheetIndex,
+                   Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow, int endRow)
+            throws IllegalAccessException, InstantiationException, IOException {
+
+        HSSFWorkbook wb = new HSSFWorkbook(excelFile);
+        HSSFSheet sheet = wb.getSheetAt(sheetIndex);
+
+        return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow,  endRow);
+    }
+
+    public static <T>  List<T> loadObjectFromExcel(InputStream excelFile, int sheetIndex,
+                 Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow)
+            throws IllegalAccessException, InstantiationException, IOException {
+
+        HSSFWorkbook wb = new HSSFWorkbook(excelFile);
+        HSSFSheet sheet = wb.getSheetAt(sheetIndex);
+
+        return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow, sheet.getLastRowNum());
+    }
 
 
     private static List<String[]> loadDataFromExcelSheet(HSSFSheet sheet,
@@ -93,10 +227,6 @@ public class ExcelImportUtil {
                                                    int beginCol, int endCol, int beginRow, int endRow){
         if(sheet == null)
             return null;
-
-        if(endRow<1){
-            endRow = sheet.getLastRowNum();
-        }
 
         List<String[]> datas = new ArrayList<>(endRow-beginRow+1);
         for(int row =beginRow; row<endRow; row ++ ) {
@@ -174,7 +304,7 @@ public class ExcelImportUtil {
         HSSFWorkbook wb = new HSSFWorkbook(excelFile);
         HSSFSheet sheet = wb.getSheetAt(sheetIndex);
 
-        return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, -1);
+        return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, sheet.getLastRowNum() );
     }
     /**
      * 所有的行列都是 0 Base的
@@ -189,7 +319,11 @@ public class ExcelImportUtil {
                                                    int beginCol, int endCol, int beginRow)
             throws IOException {
 
-        return loadDataFromExcel(excelFile, sheetName, beginCol,  endCol,  beginRow, -1);
+        HSSFWorkbook wb = new HSSFWorkbook(excelFile);
+        HSSFSheet sheet = (StringUtils.isBlank(sheetName))?
+                wb.getSheetAt(0) : wb.getSheet(sheetName);
+
+        return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, sheet.getLastRowNum());
     }
 
     private static List<String[]> loadDataFromExcelSheet( HSSFSheet sheet,
