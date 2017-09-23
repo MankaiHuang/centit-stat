@@ -2,6 +2,7 @@ package com.centit.support.report;
 
 import com.centit.support.algorithm.ReflectionOpt;
 import com.centit.support.algorithm.StringBaseOpt;
+import com.centit.support.common.JavaBeanMetaData;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
@@ -12,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,13 +24,13 @@ import java.util.Map;
  * 2013-6-25
  */
 @SuppressWarnings("unused")
-public abstract class ExcelReportUtil {
+public abstract class ExcelExportUtil {
 
-    private ExcelReportUtil() {
+    private ExcelExportUtil() {
         throw new IllegalAccessError("Utility class");
     }
 
-    protected static final Logger logger = LoggerFactory.getLogger(ExcelReportUtil.class);
+    protected static final Logger logger = LoggerFactory.getLogger(ExcelExportUtil.class);
 
     /**
      * 生成Excel字节流
@@ -51,8 +52,49 @@ public abstract class ExcelReportUtil {
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
-    public static boolean writeExcelToOutputStream(OutputStream out, List<? extends Object> objLists) {
-        return writeExcelToOutputStream(out, objLists,null,null);
+    public static InputStream generateExcel(List<? extends Object> objLists, Class<?> objType) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        writeExcelToOutputStream(baos,objLists, objType);
+        return new ByteArrayInputStream(baos.toByteArray());
+    }
+
+
+    public static boolean writeExcelToOutputStream(OutputStream out,
+                                                   List<? extends Object> objLists, Class<?> objType) {
+        JavaBeanMetaData metaData = JavaBeanMetaData.creatBeanMetaDataFromType(objType);
+
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet();
+
+        HSSFRow headerRow = sheet.createRow(0);
+        HSSFCellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
+        List<String> header = new ArrayList<>( metaData.getFileds().keySet());
+        int i=0;
+        for (String headStr : header ) {
+            HSSFCell cell = headerRow.createCell(i);
+            setCellStyle(cell, cellStyle);
+            cell.setCellValue(headStr);
+            i ++;
+        }
+
+        int row=1;
+        for(Object obj : objLists){
+            HSSFRow objRow = sheet.createRow(row++);
+            i=0;
+            for (String headStr : header ) {
+                HSSFCell cell = objRow.createCell(i++);
+                setCellStyle(cell, cellStyle);
+                cell.setCellValue(
+                        StringBaseOpt.objectToString(
+                                metaData.getFiled(headStr).getObjectFieldValue(obj)));
+            }
+        }
+        try {
+            wb.write(out);
+        } catch (IOException e) {
+            throw new StatReportException(e);
+        }
+        return true;
     }
 
 
@@ -67,7 +109,7 @@ public abstract class ExcelReportUtil {
     public static boolean writeExcelToOutputStream(OutputStream baos,
                                                    List<? extends Object> objLists,
                                                    String[] header, String[] property) {
-
+        boolean succeed = true;
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet();
 
@@ -81,7 +123,7 @@ public abstract class ExcelReportUtil {
             if(property!=null && property.length>0) {
                 generateText(sheet, objLists, property, beginRow);
             }else{
-                generateObjText(sheet, objLists, beginRow);
+                succeed = false;
             }
             sheet.getWorkbook().write(baos);
         } catch (IOException | InvocationTargetException | NoSuchMethodException
@@ -89,7 +131,7 @@ public abstract class ExcelReportUtil {
             throw new StatReportException(e);
         }
 
-        return true;
+        return succeed;
     }
 
 
@@ -144,42 +186,12 @@ public abstract class ExcelReportUtil {
                 HSSFCell cell = textRow.createCell(j);
                 setCellStyle(cell, cellStyle);
 
-                //List中是Map类型
-                if (objLists.get(i) instanceof Map) {
-                    Object val = ((Map<String,Object>) objLists.get(i)).get(property[j]);
-                    cell.setCellValue(null == val ? "" : val.toString());
-                    continue;
-                }
-                //List中是普通Po类型
-                Method method = ReflectionOpt.getGetterMethod(objLists.get(i).getClass(), property[j]);
-                if(method == null)
-                    method = ReflectionOpt.getBooleanGetterMethod(objLists.get(i).getClass(), property[j]);
-
-                Object val = method.invoke(objLists.get(i));
-
-                cell.setCellValue(null == val ? "" : val.toString());
+                cell.setCellValue( StringBaseOpt.objectToString(
+                        ReflectionOpt.attainExpressionValue( objLists.get(i) , property[j] )));
             }
         }
     }
 
-    private static void generateObjText(HSSFSheet sheet, List<? extends Object> objLists, int beginRow) throws InvocationTargetException, IllegalAccessException {
-        for (int i = 0; i < objLists.size(); i++) {
-            HSSFRow textRow = sheet.createRow(i + beginRow);
-
-            List<Method> getMethods = ReflectionOpt.getAllGetterMethod(objLists.get(i).getClass());
-            HSSFCellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
-            //Field[] fields = objLists.get(i).getClass().getDeclaredFields();
-            int errorLen = 0;
-            for (int j = 0; j < getMethods.size(); j++) {
-
-                HSSFCell cell = textRow.createCell(j - errorLen);
-                setCellStyle(cell, cellStyle);
-
-                Object val = getMethods.get(j).invoke(objLists.get(i));
-                cell.setCellValue(null == val ? "" : val.toString());
-            }
-        }
-    }
 
     private static void generateText(HSSFSheet sheet, List<Object[]> objLists, int beginRow) {
         for (int i = 0; i < objLists.size(); i++) {
@@ -190,7 +202,8 @@ public abstract class ExcelReportUtil {
 
                 setCellStyle(cell, cellStyle);
 
-                cell.setCellValue(null == objLists.get(i)[j] ? "" : objLists.get(i)[j].toString());
+                cell.setCellValue(null == objLists.get(i)[j] ? "" :
+                        StringBaseOpt.objectToString(objLists.get(i)[j]));
             }
         }
     }

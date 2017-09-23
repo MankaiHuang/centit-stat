@@ -15,6 +15,7 @@ import java.io.OutputStream;
  * Created by codefan on 17-8-10.
  * 模板进能用 Docx
  * 依赖开源项目 https://github.com/opensagres/xdocreport
+ * 示例代码 http://www.cnblogs.com/fish-in-sky/p/4973237.html
  */
 
 @SuppressWarnings("unused")

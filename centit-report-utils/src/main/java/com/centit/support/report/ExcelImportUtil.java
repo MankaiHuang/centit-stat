@@ -1,9 +1,6 @@
 package com.centit.support.report;
 
-import com.centit.support.algorithm.DatetimeOpt;
 import com.centit.support.algorithm.NumberBaseOpt;
-import com.centit.support.algorithm.StringBaseOpt;
-import com.centit.support.algorithm.StringRegularOpt;
 import com.centit.support.common.JavaBeanField;
 import com.centit.support.common.JavaBeanMetaData;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +10,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ import java.util.Map;
  * @author codefan@sina.com
  */
 @SuppressWarnings("unused")
-public class ExcelImportUtil {
+public abstract class ExcelImportUtil {
     private ExcelImportUtil() {
         throw new IllegalAccessError("Utility class");
     }
