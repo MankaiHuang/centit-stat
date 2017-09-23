@@ -2,21 +2,26 @@ package com.centit.support.report;
 
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import fr.opensagres.xdocreport.core.XDocReportException;
+import fr.opensagres.xdocreport.document.IXDocReport;
+import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
+import fr.opensagres.xdocreport.template.IContext;
+import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by codefan on 17-8-10.
  * 模板进能用 Docx
  * 依赖开源项目 https://github.com/opensagres/xdocreport
- * 示例代码 http://www.cnblogs.com/fish-in-sky/p/4973237.html
- */
+ * 示例代码 https://github.com/opensagres/xdocreport.samples/tree/master/samples ~
+ *         /fr.opensagres.xdocreport.samples.docxandfreemarker/src/fr/opensagres/xdocreport/samples/docxandfreemarker
+ * */
 
 @SuppressWarnings("unused")
 public abstract class WordReportUtil {
@@ -48,5 +53,53 @@ public abstract class WordReportUtil {
     }
 
 
+    /**
+     * 根据模板导出word文件
+     *
+     * @param params     ReportData对象为数据对象，里面存储Map 数据
+     * @param templateName   模板文件路径
+     * @param outputFileName 输出文件路径
+     */
+    public static void reportDocxWithFreemarker(Map<String, Object> params, String templateName, String outputFileName) {
 
+        try(InputStream in = new FileInputStream(new File(templateName))) {
+            // 1) Load ODT file and set Velocity template engine and cache it to the registry
+
+            IXDocReport report = XDocReportRegistry.getRegistry().loadReport(
+                    in, TemplateEngineKind.Freemarker);
+
+            // 2) Create Java model context
+            IContext context = getReportContext(report, params);
+            // 输出文件，文件存在则删除
+            File outputFile = new File(outputFileName);
+            // 文件夹不存在，创建所有文件夹
+            File parentFile = outputFile.getParentFile();
+            if (!parentFile.exists()) {
+                parentFile.mkdirs();
+            }
+            if (outputFile.exists()) {
+                outputFile.renameTo(new File(outputFileName + "." + new Date().getTime()));
+            }
+            // 生成新的文件
+            try(OutputStream outputStream = new FileOutputStream(outputFileName)) {
+                report.process(context, outputStream);
+            }
+        } catch (IOException e) {
+            logger.warn("文件流获取失败", e);
+        } catch (XDocReportException e) {
+            logger.warn("导出失败", e);
+        }
+    }
+
+    private static IContext getReportContext(IXDocReport report, Map<String, Object> params) throws XDocReportException {
+
+        IContext context = report.createContext();
+        //FieldsMetadata metadata = new FieldsMetadata();
+        for (Map.Entry<String, Object> entry : params.entrySet()){
+            context.put(entry.getKey(), entry.getValue());
+        }
+        //report.setFieldsMetadata(metadata);
+
+        return context;
+    }
 }
