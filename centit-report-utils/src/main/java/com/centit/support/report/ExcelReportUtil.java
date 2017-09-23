@@ -31,11 +31,6 @@ public abstract class ExcelReportUtil {
 
     protected static final Logger logger = LoggerFactory.getLogger(ExcelReportUtil.class);
 
-    public static InputStream generateExcel(List<? extends Object> objLists) {
-        return generateExcel(objLists,null,null);
-    }
-
-
     /**
      * 生成Excel字节流
      *
@@ -46,19 +41,47 @@ public abstract class ExcelReportUtil {
      */
     public static InputStream generateExcel(List<? extends Object> objLists, String[] header, String[] property) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        writeExcelToOutputStream(baos,objLists, header, property);
+        return new ByteArrayInputStream(baos.toByteArray());
+    }
+
+    public static InputStream generateExcel(List<Object[]> objLists, String[] header) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        writeExcelToOutputStream(baos,objLists, header);
+        return new ByteArrayInputStream(baos.toByteArray());
+    }
+
+    public static boolean writeExcelToOutputStream(OutputStream out, List<? extends Object> objLists) {
+        return writeExcelToOutputStream(out, objLists,null,null);
+    }
+
+
+    /**
+     * 生成Excel字节流
+     *
+     * @param objLists 对象集合
+     * @param header   Excel页头
+     * @param property 需要显示的属性
+     * @return InputStream excel 文件流
+     */
+    public static boolean writeExcelToOutputStream(OutputStream baos,
+                                                   List<? extends Object> objLists,
+                                                   String[] header, String[] property) {
 
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet();
 
+        int beginRow = 0;
         if(header!=null && header.length>0) {
             generateHeader(sheet, header);
+            beginRow ++;
         }
 
         try {
             if(property!=null && property.length>0) {
-                generateText(sheet, objLists, property);
+                generateText(sheet, objLists, property, beginRow);
             }else{
-                generateObjText(sheet, objLists);
+                generateObjText(sheet, objLists, beginRow);
             }
             sheet.getWorkbook().write(baos);
         } catch (IOException | InvocationTargetException | NoSuchMethodException
@@ -66,49 +89,37 @@ public abstract class ExcelReportUtil {
             throw new StatReportException(e);
         }
 
-        return new ByteArrayInputStream(baos.toByteArray());
+        return true;
     }
 
-    /*
-     * 生成Excel字节流
-     *
-     * @param objLists 对象集合
-     * @param property 需要显示的属性
-     * @return InputStream excel 文件流
-     */
 
-    /*public static InputStream generateExcel(List<? extends Object> objLists, String[] property) {
-        return generateExcel(objLists,null,property);
-    }*/
 
     /**
      * 生成Excel字节流
-     *
+     * @param baos OutputStream 保存到输出流
      * @param objLists 对象数组集合
      * @param header   Excel页头
      * @return InputStream excel 文件流
      */
-    public static InputStream generateExcel(List<Object[]> objLists, String[] header) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
+    public static boolean writeExcelToOutputStream(OutputStream baos,
+                                                   List<Object[]> objLists, String[] header) {
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet();
+        int beginRow = 0;
+        if(header!=null && header.length>0) {
+            generateHeader(sheet, header);
+            beginRow ++;
+        }
 
-        generateHeader(sheet, header);
-        generateText(sheet, objLists);
+        generateText(sheet, objLists, beginRow);
 
         try {
             sheet.getWorkbook().write(baos);
         } catch (IOException e) {
             throw new StatReportException(e);
         }
-
-        return new ByteArrayInputStream(baos.toByteArray());
-
+        return true;
     }
-
-
-
 
 
     private static void generateHeader(HSSFSheet sheet, String[] header) {
@@ -123,11 +134,12 @@ public abstract class ExcelReportUtil {
     }
 
     @SuppressWarnings("unchecked")
-    private static void generateText(HSSFSheet sheet, List<? extends Object> objLists, String[] property) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private static void generateText(HSSFSheet sheet, List<? extends Object> objLists,
+                                     String[] property, int beginRow) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         HSSFCellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
 
         for (int i = 0; i < objLists.size(); i++) {
-            HSSFRow textRow = sheet.createRow(i + 1);
+            HSSFRow textRow = sheet.createRow(i + beginRow );
             for (int j = 0; j < property.length; j++) {
                 HSSFCell cell = textRow.createCell(j);
                 setCellStyle(cell, cellStyle);
@@ -150,9 +162,9 @@ public abstract class ExcelReportUtil {
         }
     }
 
-    private static void generateObjText(HSSFSheet sheet, List<? extends Object> objLists) throws InvocationTargetException, IllegalAccessException {
+    private static void generateObjText(HSSFSheet sheet, List<? extends Object> objLists, int beginRow) throws InvocationTargetException, IllegalAccessException {
         for (int i = 0; i < objLists.size(); i++) {
-            HSSFRow textRow = sheet.createRow(i);
+            HSSFRow textRow = sheet.createRow(i + beginRow);
 
             List<Method> getMethods = ReflectionOpt.getAllGetterMethod(objLists.get(i).getClass());
             HSSFCellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
@@ -169,9 +181,9 @@ public abstract class ExcelReportUtil {
         }
     }
 
-    private static void generateText(HSSFSheet sheet, List<Object[]> objLists) {
+    private static void generateText(HSSFSheet sheet, List<Object[]> objLists, int beginRow) {
         for (int i = 0; i < objLists.size(); i++) {
-            HSSFRow textRow = sheet.createRow(i + 1);
+            HSSFRow textRow = sheet.createRow(i + beginRow);
             HSSFCellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
             for (int j = 0; j < objLists.get(i).length; j++) {
                 HSSFCell cell = textRow.createCell(j);
