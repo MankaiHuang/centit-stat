@@ -19,6 +19,7 @@ import java.util.Map;
  * Created by codefan on 17-8-10.
  * 模板进能用 Docx
  * 依赖开源项目 https://github.com/opensagres/xdocreport
+ *             https://github.com/opensagres/xdocreport.samples
  * 示例代码 https://github.com/opensagres/xdocreport.samples/tree/master/samples ~
  *         /fr.opensagres.xdocreport.samples.docxandfreemarker/src/fr/opensagres/xdocreport/samples/docxandfreemarker
  * */
@@ -69,7 +70,7 @@ public abstract class WordReportUtil {
                     in, TemplateEngineKind.Freemarker);
 
             // 2) Create Java model context
-            IContext context = getReportContext(report, params);
+            IContext context =  getReportContext(report,params);//new ObjectDocxContext(params);//
             // 输出文件，文件存在则删除
             File outputFile = new File(outputFileName);
             // 文件夹不存在，创建所有文件夹
@@ -84,6 +85,7 @@ public abstract class WordReportUtil {
             try(OutputStream outputStream = new FileOutputStream(outputFileName)) {
                 report.process(context, outputStream);
             }
+            System.out.println("done!");
         } catch (IOException e) {
             logger.warn("文件流获取失败", e);
         } catch (XDocReportException e) {
@@ -95,11 +97,11 @@ public abstract class WordReportUtil {
 
         IContext context = report.createContext();
         //FieldsMetadata metadata = new FieldsMetadata();
+        //context.putMap(params);
         for (Map.Entry<String, Object> entry : params.entrySet()){
             context.put(entry.getKey(), entry.getValue());
         }
         //report.setFieldsMetadata(metadata);
-
         return context;
     }
 }
