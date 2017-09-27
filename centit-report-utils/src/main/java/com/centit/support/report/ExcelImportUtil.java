@@ -90,7 +90,7 @@ public abstract class ExcelImportUtil {
 
         List<T> datas = new ArrayList<>(endRow-beginRow+1);
 
-        for(int row =beginRow; row<endRow; row ++ ) {
+        for(int row =beginRow; row<endRow+1; row ++ ) {
 
             HSSFRow excelRow = sheet.getRow(row);
             if(excelRow==null)
@@ -100,7 +100,7 @@ public abstract class ExcelImportUtil {
 
             //excelRow.getFirstCellNum()
             for(Map.Entry<Integer,String> ent : fieldDesc.entrySet() ){
-                HSSFCell cell = excelRow.getCell(ent.getKey());
+                HSSFCell cell = excelRow.getCell(ent.getKey()-1);
                 JavaBeanField field = metaData.getFiled(ent.getValue());
                 if(cell!=null && field !=null ){
                     setObjectFieldValue(rowObj,field,cell);
@@ -153,7 +153,7 @@ public abstract class ExcelImportUtil {
         HSSFWorkbook wb = new HSSFWorkbook(excelFile);
         HSSFSheet sheet = wb.getSheetAt(sheetIndex);
 
-        return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow, sheet.getLastRowNum());
+        return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow, sheet.getLastRowNum()+1);
     }
 
 
