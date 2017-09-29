@@ -24,6 +24,20 @@ public enum ExcelTypeEnum {
         this.value = value;
     }*/
     protected static final Logger logger = LoggerFactory.getLogger(ExcelTypeEnum.class);
+
+    public static ExcelTypeEnum checkFileExcelType(InputStream inputStream) throws IOException {
+
+        byte[] b = new byte[28];
+        inputStream.read(b, 0, 28);
+        String fileHead =  String.valueOf(Hex.encodeHex(b,false));
+        if(fileHead.startsWith("D0CF11E0"))//mFileTypes.get("office2003")))
+            return HSSF;
+        if(fileHead.startsWith("504B0304"))//mFileTypes.get("officeX")))
+            return XSSF;
+
+        return NOTEXCEL;
+    }
+
     public static ExcelTypeEnum checkFileExcelType(String filePath){
         String suffix = FileType.getFileExtName(filePath);
         if("xls".equalsIgnoreCase(suffix)){
@@ -35,13 +49,7 @@ public enum ExcelTypeEnum {
         }
 
         try(InputStream inputStream = new FileInputStream(new File(filePath))) {
-            byte[] b = new byte[28];
-            inputStream.read(b, 0, 28);
-            String fileHead =  String.valueOf(Hex.encodeHex(b,false));
-            if(fileHead.startsWith("D0CF11E0"))//mFileTypes.get("office2003")))
-                return HSSF;
-            if(fileHead.startsWith("504B0304"))//mFileTypes.get("officeX")))
-                return XSSF;
+           return checkFileExcelType(inputStream);
         } catch (IOException e) {
             logger.error(e.getMessage(),e);
         }
