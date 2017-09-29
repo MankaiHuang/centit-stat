@@ -33,11 +33,10 @@ public abstract class ExcelExportUtil {
 
     /**
      * 生成Excel字节流
-     *
+     * @param outputStream 输出文件流
      * @param objLists 对象集合
      * @param header   Excel页头
      * @param property 需要显示的属性
-     * @return InputStream excel 文件流
      */
     public static void generateExcel(OutputStream outputStream, List<? extends Object> objLists, String[] header, String[] property)
             throws IOException {
@@ -46,7 +45,12 @@ public abstract class ExcelExportUtil {
         generateExcelSheet(sheet, objLists, header, property);
         wb.write(outputStream);
     }
-
+    /**
+     * 生成Excel字节流
+     * @param outputStream 输出文件流
+     * @param objLists 对象集合
+     * @param header   Excel页头
+     */
     public static void generateExcel(OutputStream outputStream, List<Object[]> objLists, String[] header)
             throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -54,7 +58,12 @@ public abstract class ExcelExportUtil {
         generateExcelSheet(sheet, objLists, header);
         wb.write(outputStream);
     }
-
+    /**
+     * 生成Excel字节流
+     * @param outputStream 输出文件流
+     * @param objLists 对象集合
+     * @param objType 对象类型
+     */
     public static void generateExcel(OutputStream outputStream, List<? extends Object> objLists, Class<?> objType) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet();
@@ -62,6 +71,13 @@ public abstract class ExcelExportUtil {
         wb.write(outputStream);
     }
 
+    /**
+     * 生成Excel 2003字节流
+     * @param outputStream 输出文件流
+     * @param objLists 对象集合
+     * @param header   Excel页头
+     * @param property 需要显示的属性
+     */
     public static void generateExcel2003(OutputStream outputStream, List<? extends Object> objLists, String[] header, String[] property)
             throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
@@ -69,7 +85,12 @@ public abstract class ExcelExportUtil {
         generateExcelSheet(sheet, objLists, header, property);
         wb.write(outputStream);
     }
-
+    /**
+     * 生成Excel 2003字节流
+     * @param outputStream 输出文件流
+     * @param objLists 对象集合
+     * @param header   Excel页头
+     */
     public static void generateExcel2003(OutputStream outputStream, List<Object[]> objLists, String[] header)
             throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
@@ -78,6 +99,12 @@ public abstract class ExcelExportUtil {
         wb.write(outputStream);
     }
 
+    /**
+     * 生成Excel 2003 字节流
+     * @param outputStream 输出文件流
+     * @param objLists 对象集合
+     * @param objType 对象类型
+     */
     public static void generateExcel2003(OutputStream outputStream, List<? extends Object> objLists, Class<?> objType) throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet();
@@ -118,7 +145,7 @@ public abstract class ExcelExportUtil {
 
     /**
      * 生成Excel字节流
-     *
+     * @param sheet excel页面
      * @param objLists 对象集合
      * @param header   Excel页头
      * @param property 需要显示的属性
@@ -148,6 +175,7 @@ public abstract class ExcelExportUtil {
 
     /**
      * 生成Excel字节流
+     * @param sheet excel页面
      * @param objLists 对象数组集合
      * @param header   Excel页头
      * @return InputStream excel 文件流

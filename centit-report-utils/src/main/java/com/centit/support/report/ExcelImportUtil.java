@@ -146,6 +146,20 @@ public abstract class ExcelImportUtil {
             return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow,  endRow);
     }
 
+    /**
+     *
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetName sheet名称 如果为空为 第一个页面
+     * @param beanType 对象类型
+     * @param fieldDesc 字段对应关系
+     * @param beginRow 其实行 包括
+     * @param endRow 结束行 不包括
+     * @param <T> 返回的对象类型
+     * @return 对象列表
+     * @throws IllegalAccessException 异常
+     * @throws InstantiationException 异常
+     * @throws IOException  异常
+     */
     public static <T>  List<T> loadObjectFromExcel(String filePath, String sheetName,
                                                    Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow, int endRow)
             throws IllegalAccessException, InstantiationException, IOException {
@@ -158,6 +172,20 @@ public abstract class ExcelImportUtil {
         }
     }
 
+    /**
+     *
+     * @param excelFile 文件流
+     * @param excelType excel 版本 2003 还是新版本
+     * @param sheetName sheet名称 如果为空为 第一个页面
+     * @param beanType 对象类型
+     * @param fieldDesc 字段对应关系
+     * @param beginRow 其实行 包括
+     * @param <T> 返回的对象类型
+     * @return 对象列表
+     * @throws IllegalAccessException 异常
+     * @throws InstantiationException 异常
+     * @throws IOException  异常
+     */
     public static <T>  List<T> loadObjectFromExcel(InputStream excelFile, ExcelTypeEnum excelType, String sheetName,
                   Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow)
             throws IllegalAccessException, InstantiationException, IOException {
@@ -170,7 +198,19 @@ public abstract class ExcelImportUtil {
         return loadObjectFromExcelSheet(sheet,beanType,fieldDesc, beginRow, sheet.getLastRowNum()+1);
     }
 
-
+    /**
+     *
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetName sheet名称 如果为空为 第一个页面
+     * @param beanType 对象类型
+     * @param fieldDesc 字段对应关系
+     * @param beginRow 其实行 包括
+     * @param <T> 返回的对象类型
+     * @return 对象列表
+     * @throws IllegalAccessException 异常
+     * @throws InstantiationException 异常
+     * @throws IOException  异常
+     */
     public static <T>  List<T> loadObjectFromExcel(String filePath, String sheetName,
                                                    Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow)
             throws IllegalAccessException, InstantiationException, IOException {
@@ -183,6 +223,21 @@ public abstract class ExcelImportUtil {
         }
     }
 
+    /**
+     *
+     * @param excelFile 文件流
+     * @param excelType excel 版本 2003 还是新版本
+     * @param sheetIndex sheet序号
+     * @param beanType 对象类型
+     * @param fieldDesc 字段对应关系
+     * @param beginRow 其实行 包括
+     * @param endRow 结束行 不包括
+     * @param <T> 返回的对象类型
+     * @return 对象列表
+     * @throws IllegalAccessException 异常
+     * @throws InstantiationException 异常
+     * @throws IOException  异常
+     */
     public static <T>  List<T> loadObjectFromExcel(InputStream excelFile, ExcelTypeEnum excelType, int sheetIndex,
                    Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow, int endRow)
             throws IllegalAccessException, InstantiationException, IOException {
@@ -194,6 +249,20 @@ public abstract class ExcelImportUtil {
         return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow,  endRow);
     }
 
+    /**
+     *
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetIndex sheet序号
+     * @param beanType 对象类型
+     * @param fieldDesc 字段对应关系
+     * @param beginRow 其实行 包括
+     * @param endRow 结束行 不包括
+     * @param <T> 返回的对象类型
+     * @return 对象列表
+     * @throws IllegalAccessException 异常
+     * @throws InstantiationException 异常
+     * @throws IOException  异常
+     */
     public static <T>  List<T> loadObjectFromExcel(String filePath, int sheetIndex,
                                                    Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow, int endRow)
             throws IllegalAccessException, InstantiationException, IOException {
@@ -206,6 +275,20 @@ public abstract class ExcelImportUtil {
         }
     }
 
+    /**
+     *
+     * @param excelFile 文件流
+     * @param excelType excel 版本 2003 还是新版本
+     * @param sheetIndex sheet序号
+     * @param beanType 对象类型
+     * @param fieldDesc 字段对应关系
+     * @param beginRow 其实行 包括
+     * @param <T> 返回的对象类型
+     * @return 对象列表
+     * @throws IllegalAccessException 异常
+     * @throws InstantiationException 异常
+     * @throws IOException  异常
+     */
     public static <T>  List<T> loadObjectFromExcel(InputStream excelFile, ExcelTypeEnum excelType, int sheetIndex,
                  Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow)
             throws IllegalAccessException, InstantiationException, IOException {
@@ -217,6 +300,19 @@ public abstract class ExcelImportUtil {
         return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow, sheet.getLastRowNum()+1);
     }
 
+    /**
+     *
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetIndex sheet序号
+     * @param beanType 对象类型
+     * @param fieldDesc 字段对应关系
+     * @param beginRow 其实行 包括
+     * @param <T> 返回的对象类型
+     * @return 对象列表
+     * @throws IllegalAccessException 异常
+     * @throws InstantiationException 异常
+     * @throws IOException  异常
+     */
     public static <T>  List<T> loadObjectFromExcel(String filePath, int sheetIndex,
                                                    Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow)
             throws IllegalAccessException, InstantiationException, IOException {
@@ -228,6 +324,7 @@ public abstract class ExcelImportUtil {
                     beanType, fieldDesc, beginRow);
         }
     }
+
 
     private static List<String[]> loadDataFromExcelSheet(Sheet sheet,
                                                    int[] columnList, int[] rowList){
@@ -257,6 +354,7 @@ public abstract class ExcelImportUtil {
     /**
      *
      * @param excelFile excel 文件流
+     * @param excelType excel 版本 2003 还是新版本
      * @param sheetName 读取的页面名称
      * @param columnList 读取的列
      * @param rowList 读取的行
@@ -288,6 +386,7 @@ public abstract class ExcelImportUtil {
     /**
      *
      * @param excelFile excel 文件流
+     * @param excelType excel 版本 2003 还是新版本
      * @param sheetIndex 读取的页面序号 0 base
      * @param columnList 读取的列
      * @param rowList 读取的行
@@ -304,6 +403,14 @@ public abstract class ExcelImportUtil {
         return loadDataFromExcelSheet(sheet,columnList,rowList);
     }
 
+    /**
+     *
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetIndex 读取的页面序号 0 base
+     * @param columnList 读取的列
+     * @param rowList 读取的行
+     * @return 返回二维数组
+     */
     public static List<String[]> loadDataFromExcel(String filePath, int sheetIndex,
                                                    int[] columnList, int[] rowList)
             throws IOException {
@@ -344,6 +451,7 @@ public abstract class ExcelImportUtil {
     /**
      * 所有的行列都是 0 Base的
      * @param excelFile excel 文件流
+     * @param excelType excel 版本 2003 还是新版本
      * @param sheetIndex 读取的页面序号 0 base
      * @param beginCol 起始列  包含 beginCol
      * @param endCol 终止列 不包含 endCol
@@ -362,6 +470,16 @@ public abstract class ExcelImportUtil {
         return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, endRow);
     }
 
+    /**
+     * 所有的行列都是 0 Base的
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetIndex 读取的页面序号 0 base
+     * @param beginCol 起始列  包含 beginCol
+     * @param endCol 终止列 不包含 endCol
+     * @param beginRow 起始行 包含 beginRow
+     * @param endRow 起始行 不包含 endRow
+     * @return 返回二维数组
+     */
     public static List<String[]> loadDataFromExcel(String filePath, int sheetIndex,
                                                    int beginCol, int endCol, int beginRow, int endRow)
             throws IOException {
@@ -377,6 +495,7 @@ public abstract class ExcelImportUtil {
     /**
      * 所有的行列都是 0 Base的
      * @param excelFile excel 文件流
+     * @param excelType excel 版本 2003 还是新版本
      * @param sheetName 读取的页面名称 , 如果为空则 读取第一个页面
      * @param beginCol 起始列  包含 beginCol
      * @param endCol 终止列 不包含 endCol
@@ -396,6 +515,16 @@ public abstract class ExcelImportUtil {
         return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, endRow);
     }
 
+    /**
+     * 所有的行列都是 0 Base的
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetName 读取的页面名称 , 如果为空则 读取第一个页面
+     * @param beginCol 起始列  包含 beginCol
+     * @param endCol 终止列 不包含 endCol
+     * @param beginRow 起始行 包含 beginRow
+     * @param endRow 起始行 不包含 endRow
+     * @return 返回二维数组
+     */
     public static List<String[]> loadDataFromExcel(String filePath, String sheetName,
                                                    int beginCol, int endCol, int beginRow, int endRow)
             throws IOException {
@@ -410,6 +539,7 @@ public abstract class ExcelImportUtil {
     /**
      * 所有的行列都是 0 Base的
      * @param excelFile excel 文件流
+     * @param excelType excel 版本 2003 还是新版本
      * @param sheetIndex 读取的页面序号 0 base
      * @param beginCol 起始列  包含 beginCol
      * @param endCol 终止列 不包含 endCol
@@ -427,6 +557,15 @@ public abstract class ExcelImportUtil {
         return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, sheet.getLastRowNum()+1 );
     }
 
+    /**
+     * 所有的行列都是 0 Base的
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetIndex 读取的页面序号 0 base
+     * @param beginCol 起始列  包含 beginCol
+     * @param endCol 终止列 不包含 endCol
+     * @param beginRow 起始行 包含 beginRow
+     * @return 返回二维数组
+     */
     public static List<String[]> loadDataFromExcel(String filePath, int sheetIndex,
                                                    int beginCol, int endCol, int beginRow)
             throws IOException {
@@ -442,6 +581,7 @@ public abstract class ExcelImportUtil {
     /**
      * 所有的行列都是 0 Base的
      * @param excelFile excel 文件流
+     * @param excelType excel 版本 2003 还是新版本
      * @param sheetName 读取的页面名称
      * @param beginCol 起始列  包含 beginCol
      * @param endCol 终止列 不包含 endCol
@@ -460,6 +600,15 @@ public abstract class ExcelImportUtil {
         return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, sheet.getLastRowNum()+1);
     }
 
+    /**
+     * 所有的行列都是 0 Base的
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetName 读取的页面名称
+     * @param beginCol 起始列  包含 beginCol
+     * @param endCol 终止列 不包含 endCol
+     * @param beginRow 起始行 包含 beginRow
+     * @return 返回二维数组
+     */
     public static List<String[]> loadDataFromExcel(String filePath, String sheetName,
                                                    int beginCol, int endCol, int beginRow)
             throws IOException {
@@ -500,14 +649,15 @@ public abstract class ExcelImportUtil {
         return datas;
     }
 
-        /**
-         * 所有的行列都是 0 Base的
-         * @param excelFile excel 文件流
-         * @param sheetIndex 读取的页面序号 0 base
-         * @param beginCol 起始列  包含 beginCol
-         * @param beginRow 起始行 包含 beginRow
-         * @return 返回二维数组
-         */
+    /**
+     * 所有的行列都是 0 Base的
+     * @param excelFile excel 文件流
+     * @param excelType excel 版本 2003 还是新版本
+     * @param sheetIndex 读取的页面序号 0 base
+     * @param beginCol 起始列  包含 beginCol
+     * @param beginRow 起始行 包含 beginRow
+     * @return 返回二维数组
+     */
     public static List<String[]> loadDataFromExcel(InputStream excelFile, ExcelTypeEnum excelType, int sheetIndex,
                                                    int beginCol,  int beginRow)
             throws IOException {
@@ -519,6 +669,14 @@ public abstract class ExcelImportUtil {
         return loadDataFromExcelSheet(sheet, beginCol, beginRow);
     }
 
+    /**
+     * 所有的行列都是 0 Base的
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetIndex 读取的页面序号 0 base
+     * @param beginCol 起始列  包含 beginCol
+     * @param beginRow 起始行 包含 beginRow
+     * @return 返回二维数组
+     */
     public static List<String[]> loadDataFromExcel(String filePath,int sheetIndex,
                                                    int beginCol, int beginRow)
             throws IOException {
@@ -534,6 +692,7 @@ public abstract class ExcelImportUtil {
     /**
      * 所有的行列都是 0 Base的
      * @param excelFile excel 文件流
+     * @param excelType excel 版本 2003 还是新版本
      * @param sheetName 读取的页面名称
      * @param beginCol 起始列  包含 beginCol
      * @param beginRow 起始行 包含 beginRow
@@ -551,6 +710,14 @@ public abstract class ExcelImportUtil {
         return loadDataFromExcelSheet(sheet, beginCol, beginRow);
     }
 
+    /**
+     * 所有的行列都是 0 Base的
+     * @param filePath 文件名，通过后缀名判断excel版本号
+     * @param sheetName 读取的页面名称
+     * @param beginCol 起始列  包含 beginCol
+     * @param beginRow 起始行 包含 beginRow
+     * @return 返回二维数组
+     */
     public static List<String[]> loadDataFromExcel(String filePath, String sheetName,
                                                    int beginCol, int beginRow)
             throws IOException {
