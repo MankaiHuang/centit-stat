@@ -84,6 +84,7 @@ public abstract class ExcelImportUtil {
         }
     }
 
+
     private static <T>  List<T> loadObjectFromExcelSheet(Sheet sheet, Class<T> beanType,
                                                          Map<Integer,String > fieldDesc, int beginRow, int endRow)
             throws IllegalAccessException, InstantiationException {
@@ -95,7 +96,7 @@ public abstract class ExcelImportUtil {
 
         List<T> datas = new ArrayList<>(endRow-beginRow+1);
 
-        for(int row =beginRow; row<endRow+1; row ++ ) {
+        for(int row =beginRow; row<endRow; row ++ ) {
 
             Row excelRow = sheet.getRow(row);
             if(excelRow==null)
@@ -105,11 +106,7 @@ public abstract class ExcelImportUtil {
 
             //excelRow.getFirstCellNum()
             for(Map.Entry<Integer,String> ent : fieldDesc.entrySet() ){
-<<<<<<< HEAD
                 Cell cell = excelRow.getCell(ent.getKey());
-=======
-                HSSFCell cell = excelRow.getCell(ent.getKey()-1);
->>>>>>> remotes/gitlab/master
                 JavaBeanField field = metaData.getFiled(ent.getValue());
                 if(cell!=null && field !=null ){
                     setObjectFieldValue(rowObj,field,cell);
@@ -122,6 +119,21 @@ public abstract class ExcelImportUtil {
         return datas;
     }
 
+    /**
+     *
+     * @param excelFile 文件流
+     * @param excelType excel 版本 2003 还是新版本
+     * @param sheetName sheet名称 如果为空为 第一个页面
+     * @param beanType 对象类型
+     * @param fieldDesc 字段对应关系
+     * @param beginRow 其实行 包括
+     * @param endRow 结束行 不包括
+     * @param <T> 返回的对象类型
+     * @return 对象列表
+     * @throws IllegalAccessException 异常
+     * @throws InstantiationException 异常
+     * @throws IOException  异常
+     */
     public static <T>  List<T> loadObjectFromExcel(InputStream excelFile, ExcelTypeEnum excelType, String sheetName,
                     Class<T> beanType, Map<Integer,String > fieldDesc, int beginRow, int endRow)
             throws IllegalAccessException, InstantiationException, IOException {
@@ -155,7 +167,7 @@ public abstract class ExcelImportUtil {
         Sheet sheet = (StringUtils.isBlank(sheetName))?
                 wb.getSheetAt(0) : wb.getSheet(sheetName);
 
-        return loadObjectFromExcelSheet(sheet,beanType,fieldDesc,  beginRow,  sheet.getLastRowNum());
+        return loadObjectFromExcelSheet(sheet,beanType,fieldDesc, beginRow, sheet.getLastRowNum()+1);
     }
 
 
@@ -222,8 +234,6 @@ public abstract class ExcelImportUtil {
         if(sheet == null)
             return null;
 
-        //int minRow = sheet.getFirstRowNum();
-        //int maxRow = sheet.getLastRowNum();
         List<String[]> datas = new ArrayList<>(rowList.length+1);
         for(int row : rowList) {
             String[] rowObj = new String[columnList.length];
@@ -414,7 +424,7 @@ public abstract class ExcelImportUtil {
                 new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
         Sheet  sheet = wb.getSheetAt(sheetIndex);
 
-        return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, sheet.getLastRowNum() );
+        return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, sheet.getLastRowNum()+1 );
     }
 
     public static List<String[]> loadDataFromExcel(String filePath, int sheetIndex,
@@ -447,7 +457,7 @@ public abstract class ExcelImportUtil {
         Sheet sheet = (StringUtils.isBlank(sheetName))?
                 wb.getSheetAt(0) : wb.getSheet(sheetName);
 
-        return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, sheet.getLastRowNum());
+        return loadDataFromExcelSheet(sheet, beginCol,  endCol, beginRow, sheet.getLastRowNum()+1);
     }
 
     public static List<String[]> loadDataFromExcel(String filePath, String sheetName,
@@ -470,7 +480,7 @@ public abstract class ExcelImportUtil {
             return null;
         int maxRow = sheet.getLastRowNum();
         List<String[]> datas = new ArrayList<>(maxRow-beginRow+1);
-        for(int row =beginRow; row<maxRow; row ++ ) {
+        for(int row =beginRow; row<=maxRow; row ++ ) {
 
             Row excelRow = sheet.getRow(row);
             if(excelRow==null)
@@ -480,7 +490,7 @@ public abstract class ExcelImportUtil {
             String[] rowObj = new String[endCol-beginCol+1];
             int i=0;
             //excelRow.getFirstCellNum()
-            for(int col = beginCol; col < endCol; col++ ){
+            for(int col = beginCol; col <= endCol; col++ ){
                 Cell cell = excelRow.getCell(col);
                 rowObj[i++] = cell == null ? null : cell.getStringCellValue();
             }
