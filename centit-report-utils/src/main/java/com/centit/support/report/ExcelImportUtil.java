@@ -195,7 +195,7 @@ public abstract class ExcelImportUtil {
         Sheet sheet = (StringUtils.isBlank(sheetName))?
                 wb.getSheetAt(0) : wb.getSheet(sheetName);
 
-        return loadObjectFromExcelSheet(sheet,beanType,fieldDesc, beginRow, sheet.getLastRowNum()+1);
+        return loadObjectFromExcelSheet(sheet,beanType,fieldDesc, beginRow, sheet.getLastRowNum());
     }
 
     /**
