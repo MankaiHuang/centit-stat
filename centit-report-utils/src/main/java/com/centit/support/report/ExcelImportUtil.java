@@ -103,17 +103,19 @@ public abstract class ExcelImportUtil {
                 continue;
             int i=0;
             T rowObj = beanType.newInstance();
-
+            boolean hasValue = false;
             //excelRow.getFirstCellNum()
             for(Map.Entry<Integer,String> ent : fieldDesc.entrySet() ){
                 Cell cell = excelRow.getCell(ent.getKey());
                 JavaBeanField field = metaData.getFiled(ent.getValue());
                 if(cell!=null && field !=null ){
+                    hasValue = true;
                     setObjectFieldValue(rowObj,field,cell);
                 }
             }
-
-            datas.add(rowObj);
+            if(hasValue) {
+                datas.add(rowObj);
+            }
         }
 
         return datas;
@@ -438,11 +440,18 @@ public abstract class ExcelImportUtil {
             int i=0;
             String[] rowObj = new String[endCol-beginCol+1];
             //excelRow.getFirstCellNum()
-            for(int col =beginCol; col < endCol; col++ ){
+            boolean hasValue = false;
+            for(int col = beginCol; col <= endCol; col++ ){
                 Cell cell = excelRow.getCell(col);
-                rowObj[i++] = cell == null ? null : cell.getStringCellValue();
+                if( cell != null) {
+                    rowObj[i] = cell.getStringCellValue();
+                    hasValue = true;
+                }
+                i++;
             }
-            datas.add(rowObj);
+            if(hasValue) {
+                datas.add(rowObj);
+            }
         }
 
         return datas;
@@ -639,11 +648,18 @@ public abstract class ExcelImportUtil {
             String[] rowObj = new String[endCol-beginCol+1];
             int i=0;
             //excelRow.getFirstCellNum()
+            boolean hasValue = false;
             for(int col = beginCol; col <= endCol; col++ ){
                 Cell cell = excelRow.getCell(col);
-                rowObj[i++] = cell == null ? null : cell.getStringCellValue();
+                if( cell != null) {
+                    hasValue = true;
+                    rowObj[i] = cell.getStringCellValue();
+                }
+                i++;
             }
-            datas.add(rowObj);
+            if(hasValue) {
+                datas.add(rowObj);
+            }
         }
 
         return datas;
