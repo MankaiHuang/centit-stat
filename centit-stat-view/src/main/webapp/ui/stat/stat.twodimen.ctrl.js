@@ -1,5 +1,5 @@
 
-	// var model=angular.module('statModel', ['restangular']);
+	var model=angular.module('statModel', ['restangular']);
 	
 	
 	//将带小数点的四舍五入只保留两位小数
