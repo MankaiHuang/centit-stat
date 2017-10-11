@@ -29,7 +29,7 @@
       "created": "u0000000"
     },
     {
-      "databaseCode": "0000000081",
+      "databaseCode": "0000001316",
       "osId": "CONTRACT",
       "databaseName": "经营数据管理数据库",
       "databaseUrl": "jdbc:mysql://192.168.131.6/bizdata?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true",
