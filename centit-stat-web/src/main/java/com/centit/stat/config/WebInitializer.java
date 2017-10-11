@@ -2,6 +2,7 @@ package com.centit.stat.config;
 
 import com.centit.framework.config.SystemSpringMvcConfig;
 import com.centit.framework.config.WebConfig;
+import com.centit.framework.hibernate.config.HibernateConfig;
 import com.centit.support.file.PropertiesReader;
 import org.h2.server.web.WebServlet;
 import org.springframework.web.WebApplicationInitializer;
@@ -36,6 +37,7 @@ public class WebInitializer implements WebApplicationInitializer {
         WebConfig.registerRequestThreadLocalFilter(servletContext);
         WebConfig.registerSpringSecurityFilter(servletContext);
 
+        HibernateConfig.registerOpenSessionInViewFilter(servletContext);
         Properties properties = PropertiesReader.getClassPathProperties("/system.properties");
         String jdbcUrl = properties.getProperty("jdbc.url");
 
