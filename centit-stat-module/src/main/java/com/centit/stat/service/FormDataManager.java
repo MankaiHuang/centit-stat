@@ -1,6 +1,6 @@
 package com.centit.stat.service;
 
-import com.centit.framework.core.dao.PageDesc;
+import com.centit.support.database.utils.PageDesc;
 
 public interface FormDataManager {
     public FormDataModel getDataModel(String modelName);

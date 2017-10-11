@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.centit.framework.core.dao.PageDesc;
+import com.centit.support.database.utils.PageDesc;
 import com.centit.stat.dao.DBCPDao;
 import com.centit.stat.dao.QueryModelDao;
 import com.centit.stat.po.QueryCell;
