@@ -12,7 +12,6 @@ import com.centit.support.database.utils.DataSourceDescription;
 import com.centit.support.database.utils.DatabaseAccess;
 import com.centit.support.database.utils.DbcpConnectPools;
 import com.centit.support.database.utils.QueryAndNamedParams;
-import com.centit.support.security.DESSecurityUtils;
 
 public class DBCPDao {
 	
@@ -115,7 +114,7 @@ public class DBCPDao {
 		   DataSourceDescription desc=new DataSourceDescription();
 		   desc.setConnUrl(dbinfo.getDatabaseUrl());
 		   desc.setUsername(dbinfo.getUsername());
-		   desc.setPassword(DESSecurityUtils.decryptBase64String(dbinfo.getPassword(),DatabaseInfo.DESKEY));
+		   desc.setPassword(dbinfo.getClearPassword());
 		   desc.setMaxIdle(10);
 		   desc.setMaxTotal(20);
 		   desc.setMaxWaitMillis(20000);
