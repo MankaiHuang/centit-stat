@@ -1,14 +1,21 @@
+define('app', ['angular', 'restangular'], function(angular) {
+  return angular.module('statModel', ['restangular'])
+})
+
+window.RestangularContextPath = parseURL().segments[0] + '/'
+window.ContextPath = '/' + RestangularContextPath
+
 requirejs.config({
-    baseUrl: './ui',
+    baseUrl: ContextPath + 'ui',
 
     paths: {
-        'jquery': 'js/plugins/jquery-1.8.3.min',
-        'lodash': 'js/plugins/angularjs-1.2.6/lodash',
-        'angular': 'js/plugins/angularjs-1.2.6/angular.min',
-        'restangular': 'js/plugins/angularjs-1.2.6/restangular.min',
+        'jquery': 'js/plugins/jquery',
+        'lodash': 'js/plugins/lodash',
+        'angular': 'js/plugins/angular',
+        'restangular': 'js/plugins/restangular',
         'echarts': 'js/plugins/echarts/echarts.min',
         'stat.twodimen': 'stat/stat.twodimen.ctrl',
-        'stat.chart': 'stat/stat.chart.ctrl'
+        'stat.chart': 'stat/chart.twodimen.ctrl'
     },
 
     shim: {
@@ -17,11 +24,11 @@ requirejs.config({
         },
 
         'stat.twodimen': {
-            deps: ['restangular', 'angular', 'echarts', 'css!stat/twodimenform.css']
+            deps: ['jquery', 'lodash', 'app', 'echarts', 'css!stat/twodimenform.css']
         },
 
         'stat.chart': {
-            deps: ['restangular', 'angular', 'echarts', 'css!stat/twodimenform.css']
+            deps: ['jquery', 'lodash', 'app', 'echarts', 'css!stat/twodimenform.css']
         },
 
         'restangular': {
@@ -37,7 +44,60 @@ requirejs.config({
     }
 })
 
-requirejs(['jquery', 'lodash', 'stat.twodimen'], function(angular) {
-    angular.bootstrap(document, ["app"]);
-    angular.module('statModel', ['restangular'])
-})
+
+
+/**
+ *@param {string} url 完整的URL地址
+ *@returns {object} 自定义的对象
+ *@description 用法示例：var myURL = parseURL('http://abc.com:8080/dir/index.html?id=255&m=hello#top');
+ myURL.file='index.html'
+
+ myURL.hash= 'top'
+
+ myURL.host= 'abc.com'
+
+ myURL.query= '?id=255&m=hello'
+
+ myURL.params= Object = { id: 255, m: hello }
+
+ myURL.path= '/dir/index.html'
+
+ myURL.segments= Array = ['dir', 'index.html']
+
+ myURL.port= '8080'
+
+ myURL.protocol= 'http'
+
+ myURL.source= 'http://abc.com:8080/dir/index.html?id=255&m=hello#top'
+ */
+function parseURL(url) {
+  url = url || document.location.href;
+  var a =  document.createElement('a');
+  a.href = url;
+  return {
+    source: url,
+    protocol: a.protocol.replace(':',''),
+    host: a.hostname,
+    port: a.port,
+    query: a.search,
+    params: (function(){
+      var ret = {},
+        seg = a.search.replace(/^\?/,'').split('&'),
+        len = seg.length, i = 0, s;
+      for (;i<len;i++) {
+        if (!seg[i]) { continue; }
+        s = seg[i].split('=');
+        ret[s[0]] = s[1];
+      }
+      return ret;
+    })(),
+    file: (a.pathname.match(/\/([^\/?#]+)$/i) || [,''])[1],
+    hash: a.hash.replace('#',''),
+    path: a.pathname.replace(/^([^\/])/,'/$1'),
+    relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [,''])[1],
+    segments: a.pathname.replace(/^\//,'').split('/')
+  };
+}
+
+
+
