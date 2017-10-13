@@ -48,7 +48,7 @@
 			<thead>
 			<tr ng-repeat="datas in tableHead.lines" class="tableHead">
 				<td rowspan="{{tableHead.lines.length}}" class="tableHead" ng-if="$index==0">行号</td>
-				<td ng-repeat="data in datas.cells track by $index" colspan="{{data.colspan}}" rowspan="{{data.rowspan}}" ng-if="data.display==true"class="tableHead">{{data.value}}</td>
+				<td ng-repeat="data in datas.cells track by $index" colspan="{{data.colspan}}" rowspan="{{data.rowspan}}" ng-if="data.display==true" class="tableHead">{{data.value}}</td>
 			</tr>
 			</thead>
 			<tr ng-repeat="datas in tableBody.lines">

@@ -38,6 +38,7 @@ define(function(require) {
             // 当交叉制表时才显示 列语句输入框
             var columnSQLField = panel.find('#columnSql');
             panel.find('#databaseType').combobox({
+                novalidate: true,
                 onChange:function(value){
                     // 交叉表可以填写列sql
                     if ('5' == value) {
