@@ -1,5 +1,8 @@
 package com.centit.support.report;
 
+import com.alibaba.fastjson.JSONObject;
+import com.centit.support.algorithm.DatetimeOpt;
+import com.centit.support.algorithm.NumberBaseOpt;
 import com.centit.support.algorithm.ReflectionOpt;
 import com.centit.support.algorithm.StringBaseOpt;
 import com.centit.support.common.JavaBeanMetaData;
@@ -205,16 +208,21 @@ public abstract class ExcelExportUtil {
     @SuppressWarnings("unchecked")
     private static void generateExcelText(Sheet sheet, List<? extends Object> objLists,
                                      String[] property, int beginRow) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
+//        CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
 
         for (int i = 0; i < objLists.size(); i++) {
             Row textRow = sheet.createRow(i + beginRow );
             for (int j = 0; j < property.length; j++) {
+              CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
                 Cell cell = textRow.createCell(j);
-                setCellStyle(cell, cellStyle);
+//                setCellStyle(cell, cellStyle);
+//                cell.setCellValue( StringBaseOpt.objectToString(
+//                ReflectionOpt.attainExpressionValue( objLists.get(i) , property[j] )));
+                JSONObject obj = (JSONObject) JSONObject.toJSON(objLists.get(i));
+                String type = obj.get(property[j]) != null?obj.get(property[j]).getClass().getSimpleName():"String";
+                setCellStyle(sheet,cell, cellStyle,type);
+                setCellValue(cell, objLists.get(i),property[j],type);
 
-                cell.setCellValue( StringBaseOpt.objectToString(
-                        ReflectionOpt.attainExpressionValue( objLists.get(i) , property[j] )));
             }
         }
     }
@@ -239,6 +247,72 @@ public abstract class ExcelExportUtil {
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(cellStyle);
     }
+  private static void setCellStyle(Sheet sheet,Cell cell, CellStyle cellStyle,String type) {
+    switch (type) {
+      case "int":
+      case "Integer":
+      case "long":
+      case "Long":
+      case "float":
+      case "Float":
+      case "double":
+      case "Double":
+      case "BigDecimal":
+        cell.setCellType(CellType.NUMERIC);
+        break;
+      case "String":
+        cell.setCellType(CellType.STRING);
+        break;
+      case "boolean":
+      case "Boolean":
+        cell.setCellType(CellType.BOOLEAN);
+        break;
+      case "Date":
+      case "Timestamp":
+        cell.setCellType(CellType.NUMERIC);
+        DataFormat format= sheet.getWorkbook().createDataFormat();
+        cellStyle.setDataFormat(format.getFormat("yyyy-MM-dd"));
+        break;
+      default:
+        cell.setCellType(CellType.STRING);
+        break;
+    }
+    cell.setCellStyle(cellStyle);
+  }
+  private static void setCellValue(Cell cell, Object obj,String property,String type) {
+    switch (type) {
+      case "int":
+      case "Integer":
+        cell.setCellValue( NumberBaseOpt.castObjectToInteger(
+          ReflectionOpt.attainExpressionValue( obj , property )));
+        break;
+      case "long":
+      case "Long":
+        cell.setCellValue( NumberBaseOpt.castObjectToLong(
+          ReflectionOpt.attainExpressionValue( obj , property )));
+        break;
+      case "float":
+      case "Float":
+      case "double":
+      case "Double":
+        cell.setCellValue( NumberBaseOpt.castObjectToDouble(
+          ReflectionOpt.attainExpressionValue( obj , property )));
+        break;
+      case "String":
+        cell.setCellValue( StringBaseOpt.objectToString(
+          ReflectionOpt.attainExpressionValue( obj , property )));
+        break;
+      case "Date":
+      case "Timestamp":
+        cell.setCellValue( DatetimeOpt.castObjectToDate(
+          ReflectionOpt.attainExpressionValue( obj , property )));
+        break;
+      default:
+        cell.setCellValue( StringBaseOpt.objectToString(
+          ReflectionOpt.attainExpressionValue( obj , property )));
+        break;
+    }
+  }
 
     /*
      * 设置单元格默认样式
