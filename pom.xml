@@ -13,11 +13,11 @@
         <centit.stat.version>2.0.1-SNAPSHOT</centit.stat.version>
         <jdk.version>1.8</jdk.version>
 
-        <centit.commons.version>2.2.4</centit.commons.version>
-        <centit.persistence.version>1.0</centit.persistence.version>
-        <centit.framework.version>4.0.1</centit.framework.version>
-        <centit.ui.version>3.0.1</centit.ui.version>
-        <centit.ip.version>1.0</centit.ip.version>
+        <centit.commons.version>2.2.5-SNAPSHOT</centit.commons.version>
+        <centit.persistence.version>1.0.1-SNAPSHOT</centit.persistence.version>
+        <centit.framework.version>4.0.2-SNAPSHOT</centit.framework.version>
+        <centit.ui.version>3.0.1-SNAPSHOT</centit.ui.version>
+        <centit.ip.version>1.0.1-SNAPSHOT</centit.ip.version>
 
         <servlet-api.version>3.1.0</servlet-api.version>
         <xdocreport.version>2.0.1</xdocreport.version>
