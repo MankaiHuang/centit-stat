@@ -118,7 +118,7 @@ public abstract class ExcelExportUtil {
 
     public static void generateExcelSheet(Sheet sheet,
                                                    List<? extends Object> objLists, Class<?> objType) {
-        JavaBeanMetaData metaData = JavaBeanMetaData.creatBeanMetaDataFromType(objType);
+        JavaBeanMetaData metaData = JavaBeanMetaData.createBeanMetaDataFromType(objType);
 
         Row headerRow = sheet.createRow(0);
         CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());

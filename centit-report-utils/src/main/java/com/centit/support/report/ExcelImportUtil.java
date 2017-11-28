@@ -92,7 +92,7 @@ public abstract class ExcelImportUtil {
         if(sheet == null)
             return null;
 
-        JavaBeanMetaData metaData = JavaBeanMetaData.creatBeanMetaDataFromType(beanType);
+        JavaBeanMetaData metaData = JavaBeanMetaData.createBeanMetaDataFromType(beanType);
 
         List<T> datas = new ArrayList<>(endRow-beginRow+1);
 
