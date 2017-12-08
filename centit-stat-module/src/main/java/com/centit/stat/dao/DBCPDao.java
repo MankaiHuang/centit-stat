@@ -14,7 +14,7 @@ import com.centit.support.database.utils.DbcpConnectPools;
 import com.centit.support.database.utils.QueryAndNamedParams;
 
 public class DBCPDao {
-	
+
 	/**
 	 * 这里的params必须和queryString里面的？一一对应。
 	 * @param dbinfo 数据库连接信息
@@ -39,7 +39,7 @@ public class DBCPDao {
 		}
 		return currDatas;
 	}
-	
+
 	/**
 	 * 这里的params必须和queryString里面的？一一对应。
 	 * @param dbinfo 数据库连接信息
@@ -68,7 +68,7 @@ public class DBCPDao {
 		}
 		return currDatas;
 	}
-	
+
 	public static List<Object[]> findObjectsBySql(DatabaseInfo dbinfo,String queryString,Object oneParam){
 		List<Object[]> currDatas=new ArrayList<Object[]>();
 		try {
@@ -79,7 +79,7 @@ public class DBCPDao {
 		}
 		return currDatas;
 	}
-	
+
 	public static List<Object[]> findObjectsNamedSql(DatabaseInfo dbinfo,String sSql,Map<String,Object> params){
 		List<Object[]> currDatas=new ArrayList<Object[]>();
 		try {
@@ -90,7 +90,7 @@ public class DBCPDao {
 		}
 		return currDatas;
 	}
-	
+
 	public static List<Object[]> findObjectsNamedSql(DatabaseInfo dbinfo,QueryAndNamedParams queryAndParams){
 		List<Object[]> currDatas=new ArrayList<Object[]>();
 		Connection conn=null;
@@ -133,22 +133,26 @@ public class DBCPDao {
 			return "Unknown";
 		}
 	}
-	
+
 	public static List<Object[]> findObjectsNamedSql(DatabaseInfo dbinfo,
 			QueryAndNamedParams qap, PageDesc page) {
-		List<Object[]> currDatas=new ArrayList<Object[]>();
+      List<Object[]> currDatas=new ArrayList<Object[]>();
 
-		if(null==dbinfo)
-			throw new RuntimeException("未配置数据源！");
-		try(Connection conn= getConn(dbinfo)) {
-    		currDatas = DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize());
-    		//long totalRows=DatabaseAccess.queryTotalRows(conn, qap.getQuery(), qap.getParams());
-    		long totalRows=DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams()).size();
-    		//分页数超过int范围会报错
-    		page.setTotalRows((int) totalRows);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		return currDatas;
+      if(null==dbinfo)
+        throw new RuntimeException("未配置数据源！");
+      try(Connection conn= getConn(dbinfo)) {
+        if (DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize()) == null){
+          page.setTotalRows(0);
+        }else {
+          currDatas = DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize());
+          //long totalRows=DatabaseAccess.queryTotalRows(conn, qap.getQuery(), qap.getParams());
+          long totalRows=DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams()).size();
+          //分页数超过int范围会报错
+          page.setTotalRows((int) totalRows);
+        }
+      }catch (Exception e) {
+        e.printStackTrace();
+      }
+      return currDatas;
 	}
 }
