@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.centit.support.database.jsonmaptable.GeneralJsonObjectDao;
+import com.centit.support.database.jsonmaptable.JsonObjectDao;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.framework.ip.po.DatabaseInfo;
 import com.centit.support.database.utils.DataSourceDescription;
@@ -141,10 +143,12 @@ public class DBCPDao {
         if(null==dbinfo)
         throw new RuntimeException("未配置数据源！");
         try(Connection conn= getConn(dbinfo)) {
-            List<Object[]> currDatas = DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize());
+            JsonObjectDao jsonDao = GeneralJsonObjectDao.createJsonObjectDao(conn);
+            List<Object[]> currDatas = jsonDao.findObjectsByNamedSql(qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize());
+            //List<Object[]> currDatas = DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize());
             if (currDatas == null){
                 page.setTotalRows(0);
-            }else if(currDatas.size()<page.getPageSize()) {
+            }else if(page.getPageSize()<=0 || currDatas.size()<page.getPageSize()) {
                 page.setTotalRows(currDatas.size());
             }else{
                 long totalRows=DatabaseAccess.queryTotalRows(conn, qap.getQuery(), qap.getParams());
@@ -158,4 +162,6 @@ public class DBCPDao {
             return new ArrayList<>(0);
         }
 	}
+
+
 }
