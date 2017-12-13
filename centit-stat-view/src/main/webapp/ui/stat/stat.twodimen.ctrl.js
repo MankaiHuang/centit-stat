@@ -282,9 +282,10 @@ define(['app', 'echarts'], function(model, echarts) {
         $scope.page.totalPage = Math.ceil($scope.page.totalRows / $scope.page.pageSize);
 
         //交叉报表不显示搜索栏
-        if ($scope.data.modelType != 5) {
-          $scope.queryformshow = true;
-        }
+        // if ($scope.data.modelType != 5) {
+        //   $scope.queryformshow = true;
+        // }
+        $scope.queryformshow = true;
         var columnDatas = [];
         for (var i = 0; i < columns.length; i++) {
           if (columns[i].isShow == 'T') {
