@@ -1,6 +1,5 @@
 package com.centit.support.report;
 
-import com.centit.support.algorithm.GeneralAlgorithm;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import fr.opensagres.xdocreport.core.XDocReportException;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * Created by codefan on 17-8-10.
@@ -54,7 +52,6 @@ public abstract class WordReportUtil {
         PdfConverter.getInstance().convert( document, out, options );
     }
 
-
     /**
      * 根据模板导出word文件
      *
@@ -62,16 +59,16 @@ public abstract class WordReportUtil {
      * @param templateName   模板文件路径
      * @param outputFileName 输出文件路径
      */
-    public static void reportDocxWithFreemarker(Map<String, Object> params, String templateName, String outputFileName) {
+    public static void reportDocxWithFreemarker(Object params, String templateName, String outputFileName) {
 
         try(InputStream in = new FileInputStream(new File(templateName))) {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
 
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(
-                    in, TemplateEngineKind.Freemarker);
+                    in, TemplateEngineKind.Freemarker, false);
 
             // 2) Create Java model context
-            IContext context =  getReportContext(report,params);//new ObjectDocxContext(params);//
+            IContext context =  getReportContext(params);//new JsonDocxContext(params);//
             // 输出文件，文件存在则删除
             File outputFile = new File(outputFileName);
             // 文件夹不存在，创建所有文件夹
@@ -86,7 +83,7 @@ public abstract class WordReportUtil {
             try(OutputStream outputStream = new FileOutputStream(outputFileName)) {
                 report.process(context, outputStream);
             }
-            System.out.println("done!");
+            //XDocReportRegistry.getRegistry().unregisterReport(report);
         } catch (IOException e) {
             logger.warn("文件流获取失败", e);
         } catch (XDocReportException e) {
@@ -94,15 +91,15 @@ public abstract class WordReportUtil {
         }
     }
 
-    private static IContext getReportContext(IXDocReport report, Map<String, Object> params) throws XDocReportException {
-
-        IContext context = report.createContext();
-        //FieldsMetadata metadata = new FieldsMetadata();
-        //context.putMap(params);
-        for (Map.Entry<String, Object> entry : params.entrySet()){
-            context.put(entry.getKey(), GeneralAlgorithm.nvl(entry.getValue(),""));
-        }
-        //report.setFieldsMetadata(metadata);
-        return context;
+    private static IContext getReportContext(Object params) throws XDocReportException {
+        return new JsonDocxContext(params);
+//        IContext context = report.createContext();
+//        FieldsMetadata metadata = new FieldsMetadata();
+//        context.putMap(params);
+//        for (Map.Entry<String, Object> entry : params.entrySet()){
+//            context.put(entry.getKey(), GeneralAlgorithm.nvl(entry.getValue(),""));
+//        }
+//        report.setFieldsMetadata(metadata);
+//        return context;
     }
 }
