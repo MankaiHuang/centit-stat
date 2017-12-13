@@ -1,5 +1,6 @@
 package com.centit.support.report;
 
+import com.centit.support.algorithm.GeneralAlgorithm;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import fr.opensagres.xdocreport.core.XDocReportException;
@@ -99,7 +100,7 @@ public abstract class WordReportUtil {
         //FieldsMetadata metadata = new FieldsMetadata();
         //context.putMap(params);
         for (Map.Entry<String, Object> entry : params.entrySet()){
-            context.put(entry.getKey(), entry.getValue());
+            context.put(entry.getKey(), GeneralAlgorithm.nvl(entry.getValue(),""));
         }
         //report.setFieldsMetadata(metadata);
         return context;
