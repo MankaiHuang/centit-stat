@@ -12,9 +12,11 @@ import com.centit.support.database.utils.DataSourceDescription;
 import com.centit.support.database.utils.DatabaseAccess;
 import com.centit.support.database.utils.DbcpConnectPools;
 import com.centit.support.database.utils.QueryAndNamedParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DBCPDao {
-
+    public static final Logger logger = LoggerFactory.getLogger(DBCPDao.class);
 	/**
 	 * 这里的params必须和queryString里面的？一一对应。
 	 * @param dbinfo 数据库连接信息
@@ -136,23 +138,24 @@ public class DBCPDao {
 
 	public static List<Object[]> findObjectsNamedSql(DatabaseInfo dbinfo,
 			QueryAndNamedParams qap, PageDesc page) {
-      List<Object[]> currDatas=new ArrayList<Object[]>();
-
-      if(null==dbinfo)
+        if(null==dbinfo)
         throw new RuntimeException("未配置数据源！");
-      try(Connection conn= getConn(dbinfo)) {
-        if (DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize()) == null){
-          page.setTotalRows(0);
-        }else {
-          currDatas = DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize());
-          //long totalRows=DatabaseAccess.queryTotalRows(conn, qap.getQuery(), qap.getParams());
-          long totalRows=DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams()).size();
-          //分页数超过int范围会报错
-          page.setTotalRows((int) totalRows);
+        try(Connection conn= getConn(dbinfo)) {
+            List<Object[]> currDatas = DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams(),page.getPageNo(),page.getPageSize());
+            if (currDatas == null){
+                page.setTotalRows(0);
+            }else if(currDatas.size()<page.getPageSize()) {
+                page.setTotalRows(currDatas.size());
+            }else{
+                long totalRows=DatabaseAccess.queryTotalRows(conn, qap.getQuery(), qap.getParams());
+                //long totalRows=DatabaseAccess.findObjectsByNamedSql(conn, qap.getQuery(), qap.getParams()).size();
+                //分页数超过int范围会报错
+                page.setTotalRows( Long.valueOf(totalRows).intValue());
+            }
+            return currDatas;
+        }catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+            return new ArrayList<>(0);
         }
-      }catch (Exception e) {
-        e.printStackTrace();
-      }
-      return currDatas;
 	}
 }

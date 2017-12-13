@@ -3,8 +3,9 @@ package com.centit.stat.dao;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Repository;
 
 import com.centit.framework.core.dao.CodeBook;
@@ -14,8 +15,8 @@ import com.centit.stat.po.QueryModel;
 @Repository
 public class QueryModelDao extends BaseDaoImpl<QueryModel,String>
 {
-	public static final Log log = LogFactory.getLog(QueryModelDao.class);
-	@Override	
+	public static final Logger logger = LoggerFactory.getLogger(QueryModelDao.class);
+	@Override
 	public Map<String, String> getFilterField() {
 		if( filterField == null){
 			filterField = new HashMap<String, String>();
@@ -51,10 +52,10 @@ public class QueryModelDao extends BaseDaoImpl<QueryModel,String>
 
 		}
 		return filterField;
-	} 
+	}
 
 	public String  getWizardNo(){
         return DatabaseOptUtils.getNextValueOfSequence(this,"S_WIZARDNO");
     }
-		
+
 }
