@@ -46,18 +46,17 @@ public abstract class ExcelImportUtil {
             case "Double":
             case "BigDecimal":
             case "BigInteger":
-                field.setObjectFieldValue(object,
-                        NumberBaseOpt.castObjectToBigInteger(cell.getNumericCellValue()));
+                field.setObjectFieldValue(object, cell.getNumericCellValue());
                 break;
 
             case "Date":
             case "sqlDate":
             case "sqlTimestamp":
-                field.setObjectFieldValue(object,cell.getDateCellValue());
+                field.setObjectFieldValue(object, cell.getDateCellValue());
                 break;
             case "boolean":
             case "Boolean":
-                field.setObjectFieldValue(object,cell.getBooleanCellValue());
+                field.setObjectFieldValue(object, cell.getBooleanCellValue());
                 break;
             case "byte[]":
             case "String":
