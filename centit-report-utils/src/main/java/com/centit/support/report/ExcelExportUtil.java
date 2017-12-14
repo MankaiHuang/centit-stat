@@ -7,7 +7,7 @@ import com.centit.support.algorithm.ReflectionOpt;
 import com.centit.support.algorithm.StringBaseOpt;
 import com.centit.support.common.JavaBeanMetaData;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -28,45 +28,72 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public abstract class ExcelExportUtil {
 
+    protected static final Logger logger = LoggerFactory.getLogger(ExcelExportUtil.class);
+
     private ExcelExportUtil() {
         throw new IllegalAccessError("Utility class");
     }
 
-    protected static final Logger logger = LoggerFactory.getLogger(ExcelExportUtil.class);
-
     /**
      * 生成Excel字节流
+     *
      * @param outputStream 输出文件流
-     * @param objLists 对象集合
-     * @param header   Excel页头
-     * @param property 需要显示的属性
+     * @param sheetName    pageName 页面名称
+     * @param objLists     对象集合
+     * @param header       Excel页头
+     * @param property     需要显示的属性
      */
-    public static void generateExcel(OutputStream outputStream, List<? extends Object> objLists, String[] header, String[] property)
-            throws IOException {
+    public static void generateExcel(OutputStream outputStream, String sheetName, List<? extends Object> objLists, String[] header, String[] property) throws IOException {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet(sheetName);
+        generateExcelSheet(sheet, objLists, header, property);
+        wb.write(outputStream);
+    }
+
+    public static void generateExcel(OutputStream outputStream, List<? extends Object> objLists, String[] header, String[] property) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet();
         generateExcelSheet(sheet, objLists, header, property);
         wb.write(outputStream);
     }
+
     /**
      * 生成Excel字节流
+     *
      * @param outputStream 输出文件流
-     * @param objLists 对象集合
-     * @param header   Excel页头
+     * @param sheetName    pageName 页面名称
+     * @param objLists     对象集合
+     * @param header       Excel页头
      */
-    public static void generateExcel(OutputStream outputStream, List<Object[]> objLists, String[] header)
-            throws IOException {
+    public static void generateExcel(OutputStream outputStream, String sheetName, List<Object[]> objLists, String[] header) throws IOException {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet(sheetName);
+        generateExcelSheet(sheet, objLists, header);
+        wb.write(outputStream);
+    }
+
+    public static void generateExcel(OutputStream outputStream, List<Object[]> objLists, String[] header) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet();
         generateExcelSheet(sheet, objLists, header);
         wb.write(outputStream);
     }
+
     /**
      * 生成Excel字节流
+     *
      * @param outputStream 输出文件流
-     * @param objLists 对象集合
-     * @param objType 对象类型
+     * @param sheetName    pageName 页面名称
+     * @param objLists     对象集合
+     * @param objType      对象类型
      */
+    public static void generateExcel(OutputStream outputStream, String sheetName, List<? extends Object> objLists, Class<?> objType) throws IOException {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet(sheetName);
+        generateExcelSheet(sheet, objLists, objType);
+        wb.write(outputStream);
+    }
+
     public static void generateExcel(OutputStream outputStream, List<? extends Object> objLists, Class<?> objType) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet();
@@ -76,26 +103,43 @@ public abstract class ExcelExportUtil {
 
     /**
      * 生成Excel 2003字节流
+     *
      * @param outputStream 输出文件流
-     * @param objLists 对象集合
-     * @param header   Excel页头
-     * @param property 需要显示的属性
+     * @param sheetName    pageName 页面名称
+     * @param objLists     对象集合
+     * @param header       Excel页头
+     * @param property     需要显示的属性
      */
-    public static void generateExcel2003(OutputStream outputStream, List<? extends Object> objLists, String[] header, String[] property)
-            throws IOException {
+    public static void generateExcel2003(OutputStream outputStream, String sheetName, List<? extends Object> objLists, String[] header, String[] property) throws IOException {
+        HSSFWorkbook wb = new HSSFWorkbook();
+        Sheet sheet = wb.createSheet(sheetName);
+        generateExcelSheet(sheet, objLists, header, property);
+        wb.write(outputStream);
+    }
+
+    public static void generateExcel2003(OutputStream outputStream, List<? extends Object> objLists, String[] header, String[] property) throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet();
         generateExcelSheet(sheet, objLists, header, property);
         wb.write(outputStream);
     }
+
     /**
      * 生成Excel 2003字节流
+     *
      * @param outputStream 输出文件流
-     * @param objLists 对象集合
-     * @param header   Excel页头
+     * @param sheetName    pageName 页面名称
+     * @param objLists     对象集合
+     * @param header       Excel页头
      */
-    public static void generateExcel2003(OutputStream outputStream, List<Object[]> objLists, String[] header)
-            throws IOException {
+    public static void generateExcel2003(OutputStream outputStream, String sheetName, List<Object[]> objLists, String[] header) throws IOException {
+        HSSFWorkbook wb = new HSSFWorkbook();
+        Sheet sheet = wb.createSheet(sheetName);
+        generateExcelSheet(sheet, objLists, header);
+        wb.write(outputStream);
+    }
+
+    public static void generateExcel2003(OutputStream outputStream, List<Object[]> objLists, String[] header) throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet();
         generateExcelSheet(sheet, objLists, header);
@@ -104,10 +148,19 @@ public abstract class ExcelExportUtil {
 
     /**
      * 生成Excel 2003 字节流
+     *
      * @param outputStream 输出文件流
-     * @param objLists 对象集合
-     * @param objType 对象类型
+     * @param sheetName    pageName 页面名称
+     * @param objLists     对象集合
+     * @param objType      对象类型
      */
+    public static void generateExcel2003(OutputStream outputStream, String sheetName, List<? extends Object> objLists, Class<?> objType) throws IOException {
+        HSSFWorkbook wb = new HSSFWorkbook();
+        Sheet sheet = wb.createSheet(sheetName);
+        generateExcelSheet(sheet, objLists, objType);
+        wb.write(outputStream);
+    }
+
     public static void generateExcel2003(OutputStream outputStream, List<? extends Object> objLists, Class<?> objType) throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet();
@@ -115,32 +168,28 @@ public abstract class ExcelExportUtil {
         wb.write(outputStream);
     }
 
-
-    public static void generateExcelSheet(Sheet sheet,
-                                                   List<? extends Object> objLists, Class<?> objType) {
+    public static void generateExcelSheet(Sheet sheet, List<? extends Object> objLists, Class<?> objType) {
         JavaBeanMetaData metaData = JavaBeanMetaData.createBeanMetaDataFromType(objType);
 
         Row headerRow = sheet.createRow(0);
         CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
-        List<String> header = new ArrayList<>( metaData.getFileds().keySet());
-        int i=0;
-        for (String headStr : header ) {
+        List<String> header = new ArrayList<>(metaData.getFileds().keySet());
+        int i = 0;
+        for (String headStr : header) {
             Cell cell = headerRow.createCell(i);
             setCellStyle(cell, cellStyle);
             cell.setCellValue(headStr);
-            i ++;
+            i++;
         }
 
-        int row=1;
-        for(Object obj : objLists){
+        int row = 1;
+        for (Object obj : objLists) {
             Row objRow = sheet.createRow(row++);
-            i=0;
-            for (String headStr : header ) {
+            i = 0;
+            for (String headStr : header) {
                 Cell cell = objRow.createCell(i++);
                 setCellStyle(cell, cellStyle);
-                cell.setCellValue(
-                        StringBaseOpt.objectToString(
-                                metaData.getFiled(headStr).getObjectFieldValue(obj)));
+                cell.setCellValue(StringBaseOpt.objectToString(metaData.getFiled(headStr).getObjectFieldValue(obj)));
             }
         }
     }
@@ -148,47 +197,44 @@ public abstract class ExcelExportUtil {
 
     /**
      * 生成Excel字节流
-     * @param sheet excel页面
+     *
+     * @param sheet    excel页面
      * @param objLists 对象集合
      * @param header   Excel页头
      * @param property 需要显示的属性
      * @return InputStream excel 文件流
      */
-    public static void generateExcelSheet(Sheet sheet,
-                                          List<? extends Object> objLists,
-                                                   String[] header, String[] property) {
+    public static void generateExcelSheet(Sheet sheet, List<? extends Object> objLists, String[] header, String[] property) {
 
         int beginRow = 0;
-        if(header!=null && header.length>0) {
+        if (header != null && header.length > 0) {
             generateExcelHeader(sheet, header);
-            beginRow ++;
+            beginRow++;
         }
 
         try {
-            if(property!=null && property.length>0) {
+            if (property != null && property.length > 0) {
                 generateExcelText(sheet, objLists, property, beginRow);
             }
-        } catch (InvocationTargetException | NoSuchMethodException
-                | IllegalAccessException | NoSuchFieldException e) {
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | NoSuchFieldException e) {
             throw new StatReportException(e);
         }
     }
 
 
-
     /**
      * 生成Excel字节流
-     * @param sheet excel页面
+     *
+     * @param sheet    excel页面
      * @param objLists 对象数组集合
      * @param header   Excel页头
      * @return InputStream excel 文件流
      */
-    public static void generateExcelSheet(Sheet sheet,
-                                                   List<Object[]> objLists, String[] header) {
+    public static void generateExcelSheet(Sheet sheet, List<Object[]> objLists, String[] header) {
         int beginRow = 0;
-        if(header!=null && header.length>0) {
+        if (header != null && header.length > 0) {
             generateExcelHeader(sheet, header);
-            beginRow ++;
+            beginRow++;
         }
         generateExcelText(sheet, objLists, beginRow);
     }
@@ -206,23 +252,22 @@ public abstract class ExcelExportUtil {
     }
 
     @SuppressWarnings("unchecked")
-    private static void generateExcelText(Sheet sheet, List<? extends Object> objLists,
-                                     String[] property, int beginRow) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private static void generateExcelText(Sheet sheet, List<? extends Object> objLists, String[] property, int beginRow) throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 //        CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
-
         for (int i = 0; i < objLists.size(); i++) {
-            Row textRow = sheet.createRow(i + beginRow );
+            Row textRow = sheet.createRow(i + beginRow);
             for (int j = 0; j < property.length; j++) {
-              CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
-                Cell cell = textRow.createCell(j);
-//                setCellStyle(cell, cellStyle);
-//                cell.setCellValue( StringBaseOpt.objectToString(
-//                ReflectionOpt.attainExpressionValue( objLists.get(i) , property[j] )));
-                JSONObject obj = (JSONObject) JSONObject.toJSON(objLists.get(i));
-                String type = obj.get(property[j]) != null?obj.get(property[j]).getClass().getSimpleName():"String";
-                setCellStyle(sheet,cell, cellStyle,type);
-                setCellValue(cell, objLists.get(i),property[j],type);
-
+                if(StringUtils.isNotBlank(property[j])) {
+                    CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
+                    Cell cell = textRow.createCell(j);
+//                  setCellStyle(cell, cellStyle);
+//                  cell.setCellValue( StringBaseOpt.objectToString(
+//                  ReflectionOpt.attainExpressionValue( objLists.get(i) , property[j] )));
+                    JSONObject obj = (JSONObject) JSONObject.toJSON(objLists.get(i));
+                    String type = obj.get(property[j]) != null ? obj.get(property[j]).getClass().getSimpleName() : "String";
+                    setCellStyle(sheet, cell, cellStyle, type);
+                    setCellValue(cell, objLists.get(i), property[j], type);
+                }
             }
         }
     }
@@ -237,8 +282,7 @@ public abstract class ExcelExportUtil {
 
                 setCellStyle(cell, cellStyle);
 
-                cell.setCellValue(null == objLists.get(i)[j] ? "" :
-                        StringBaseOpt.objectToString(objLists.get(i)[j]));
+                cell.setCellValue(null == objLists.get(i)[j] ? "" : StringBaseOpt.objectToString(objLists.get(i)[j]));
             }
         }
     }
@@ -247,72 +291,68 @@ public abstract class ExcelExportUtil {
         cell.setCellType(CellType.STRING);
         cell.setCellStyle(cellStyle);
     }
-  private static void setCellStyle(Sheet sheet,Cell cell, CellStyle cellStyle,String type) {
-    switch (type) {
-      case "int":
-      case "Integer":
-      case "long":
-      case "Long":
-      case "float":
-      case "Float":
-      case "double":
-      case "Double":
-      case "BigDecimal":
-        cell.setCellType(CellType.NUMERIC);
-        break;
-      case "String":
-        cell.setCellType(CellType.STRING);
-        break;
-      case "boolean":
-      case "Boolean":
-        cell.setCellType(CellType.BOOLEAN);
-        break;
-      case "Date":
-      case "Timestamp":
-        cell.setCellType(CellType.NUMERIC);
-        DataFormat format= sheet.getWorkbook().createDataFormat();
-        cellStyle.setDataFormat(format.getFormat("yyyy-MM-dd"));
-        break;
-      default:
-        cell.setCellType(CellType.STRING);
-        break;
+
+    private static void setCellStyle(Sheet sheet, Cell cell, CellStyle cellStyle, String type) {
+        switch (type) {
+            case "int":
+            case "Integer":
+            case "long":
+            case "Long":
+            case "float":
+            case "Float":
+            case "double":
+            case "Double":
+            case "BigDecimal":
+                cell.setCellType(CellType.NUMERIC);
+                break;
+            case "String":
+                cell.setCellType(CellType.STRING);
+                break;
+            case "boolean":
+            case "Boolean":
+                cell.setCellType(CellType.BOOLEAN);
+                break;
+            case "Date":
+            case "Timestamp":
+                cell.setCellType(CellType.NUMERIC);
+                DataFormat format = sheet.getWorkbook().createDataFormat();
+                cellStyle.setDataFormat(format.getFormat("yyyy-MM-dd"));
+                break;
+            default:
+                cell.setCellType(CellType.STRING);
+                break;
+        }
+        cell.setCellStyle(cellStyle);
     }
-    cell.setCellStyle(cellStyle);
-  }
-  private static void setCellValue(Cell cell, Object obj,String property,String type) {
-    switch (type) {
-      case "int":
-      case "Integer":
-        cell.setCellValue( NumberBaseOpt.castObjectToInteger(
-          ReflectionOpt.attainExpressionValue( obj , property )));
-        break;
-      case "long":
-      case "Long":
-        cell.setCellValue( NumberBaseOpt.castObjectToLong(
-          ReflectionOpt.attainExpressionValue( obj , property )));
-        break;
-      case "float":
-      case "Float":
-      case "double":
-      case "Double":
-        cell.setCellValue( NumberBaseOpt.castObjectToDouble(
-          ReflectionOpt.attainExpressionValue( obj , property )));
-        break;
-      case "String":
-        cell.setCellValue( StringBaseOpt.objectToString(
-          ReflectionOpt.attainExpressionValue( obj , property )));
-        break;
-      case "Date":
-      case "Timestamp":
-        cell.setCellValue( DatetimeOpt.castObjectToDate(
-          ReflectionOpt.attainExpressionValue( obj , property )));
-        break;
-      default:
-        cell.setCellValue( StringBaseOpt.objectToString(
-          ReflectionOpt.attainExpressionValue( obj , property )));
-        break;
+
+    private static void setCellValue(Cell cell, Object obj, String property, String type) {
+        switch (type) {
+            case "int":
+            case "Integer":
+                cell.setCellValue(NumberBaseOpt.castObjectToInteger(ReflectionOpt.attainExpressionValue(obj, property)));
+                break;
+            case "long":
+            case "Long":
+                cell.setCellValue(NumberBaseOpt.castObjectToLong(ReflectionOpt.attainExpressionValue(obj, property)));
+                break;
+            case "float":
+            case "Float":
+            case "double":
+            case "Double":
+                cell.setCellValue(NumberBaseOpt.castObjectToDouble(ReflectionOpt.attainExpressionValue(obj, property)));
+                break;
+            case "String":
+                cell.setCellValue(StringBaseOpt.objectToString(ReflectionOpt.attainExpressionValue(obj, property)));
+                break;
+            case "Date":
+            case "Timestamp":
+                cell.setCellValue(DatetimeOpt.castObjectToDate(ReflectionOpt.attainExpressionValue(obj, property)));
+                break;
+            default:
+                cell.setCellValue(StringBaseOpt.objectToString(ReflectionOpt.attainExpressionValue(obj, property)));
+                break;
+        }
     }
-  }
 
     /*
      * 设置单元格默认样式
@@ -320,13 +360,11 @@ public abstract class ExcelExportUtil {
      */
     private static CellStyle getDefaultCellStyle(Workbook wb) {
         CellStyle cellStyle = wb.createCellStyle();
-
         // 指定单元格居中对齐
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         // 指定单元格垂直居中对齐
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 //        cellStyle.setWrapText(true);// 指定单元格自动换行
-
         // 设置单元格字体
         Font font = wb.createFont();
 //        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -337,8 +375,7 @@ public abstract class ExcelExportUtil {
         return cellStyle;
     }
 
-    public static void saveObjectsToExcelSheet(Sheet sheet, List<Object> objects,
-                                          Map<Integer,String > fieldDesc, int beginRow, boolean createRow) {
+    public static void saveObjectsToExcelSheet(Sheet sheet, List<Object> objects, Map<Integer, String> fieldDesc, int beginRow, boolean createRow) {
         int nRowCount = objects.size();
         CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
         for (int i = 0; i < nRowCount; i++) {
@@ -357,9 +394,7 @@ public abstract class ExcelExportUtil {
                         setCellStyle(cell, cellStyle);
                     }
 
-                    cell.setCellValue(
-                            StringBaseOpt.objectToString(
-                                    ReflectionOpt.attainExpressionValue(rowObj, ent.getValue())));
+                    cell.setCellValue(StringBaseOpt.objectToString(ReflectionOpt.attainExpressionValue(rowObj, ent.getValue())));
                 }
 
             }
@@ -367,8 +402,7 @@ public abstract class ExcelExportUtil {
         //return 0;
     }
 
-    public static void saveObjectsToExcelSheet(Sheet sheet, List<Object[]> objects,
-                                           int beginCol, int beginRow, boolean createRow) {
+    public static void saveObjectsToExcelSheet(Sheet sheet, List<Object[]> objects, int beginCol, int beginRow, boolean createRow) {
         int nRowCount = objects.size();
         CellStyle cellStyle = getDefaultCellStyle(sheet.getWorkbook());
         for (int i = 0; i < nRowCount; i++) {
@@ -378,19 +412,18 @@ public abstract class ExcelExportUtil {
 
             if (rowObj != null && excelRow != null) {
 
-                for (int j = 0; j<rowObj.length; j++ ) {
+                for (int j = 0; j < rowObj.length; j++) {
                     Cell cell = null;
                     if (!createRow) {
-                        cell = excelRow.getCell(beginCol+j);
+                        cell = excelRow.getCell(beginCol + j);
                     }
 
                     if (cell == null) {
-                        cell = excelRow.createCell(beginCol+j);
+                        cell = excelRow.createCell(beginCol + j);
                         setCellStyle(cell, cellStyle);
                     }
 
-                    cell.setCellValue(
-                            StringBaseOpt.objectToString(rowObj[j]));
+                    cell.setCellValue(StringBaseOpt.objectToString(rowObj[j]));
                 }
 
             }
@@ -400,33 +433,29 @@ public abstract class ExcelExportUtil {
 
     /**
      * 保存对象到 Excel 文件
+     *
      * @param excelTemplateFilePath 文件
-     * @param excelFilePath 文件
-     * @param sheetName sheet名称
-     * @param objects 对象数组
-     * @param fieldDesc 列和字段对应关系
-     * @param beginRow 写入起始行
-     * @param createRow 是否 创建（插入）行 还是直接覆盖
+     * @param excelFilePath         文件
+     * @param sheetName             sheet名称
+     * @param objects               对象数组
+     * @param fieldDesc             列和字段对应关系
+     * @param beginRow              写入起始行
+     * @param createRow             是否 创建（插入）行 还是直接覆盖
      * @throws IOException 文件存储异常
      */
-    public static void generateExcelByTemplate(String excelTemplateFilePath , String excelFilePath, String sheetName,
-                                          List<Object> objects,
-                                          Map<Integer,String > fieldDesc, int beginRow, boolean createRow)
-            throws IOException {
+    public static void generateExcelByTemplate(String excelTemplateFilePath, String excelFilePath, String sheetName, List<Object> objects, Map<Integer, String> fieldDesc, int beginRow, boolean createRow) throws IOException {
 
         ExcelTypeEnum excelType = ExcelTypeEnum.checkFileExcelType(excelTemplateFilePath);
         Workbook wb;
 
-        try(InputStream excelFile = new FileInputStream(new File(excelTemplateFilePath)) ){
-            wb = excelType == ExcelTypeEnum.HSSF ?
-                    new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
-            Sheet sheet = (StringUtils.isBlank(sheetName))?
-                    wb.getSheetAt(0) : wb.getSheet(sheetName);
-            saveObjectsToExcelSheet(sheet, objects,  fieldDesc, beginRow, createRow);
+        try (InputStream excelFile = new FileInputStream(new File(excelTemplateFilePath))) {
+            wb = excelType == ExcelTypeEnum.HSSF ? new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
+            Sheet sheet = (StringUtils.isBlank(sheetName)) ? wb.getSheetAt(0) : wb.getSheet(sheetName);
+            saveObjectsToExcelSheet(sheet, objects, fieldDesc, beginRow, createRow);
 
         }
 
-        try(OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath)) ) {
+        try (OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath))) {
             wb.write(newExcelFile);
         }
     }
@@ -434,32 +463,29 @@ public abstract class ExcelExportUtil {
 
     /**
      * 保存对象到 Excel 文件
+     *
      * @param excelTemplateFilePath 文件
-     * @param excelFilePath 文件
-     * @param sheetIndex sheet 索引
-     * @param objects 对象数组
-     * @param fieldDesc 列和字段对应关系
-     * @param beginRow 写入起始行
-     * @param createRow 是否 创建（插入）行 还是直接覆盖
+     * @param excelFilePath         文件
+     * @param sheetIndex            sheet 索引
+     * @param objects               对象数组
+     * @param fieldDesc             列和字段对应关系
+     * @param beginRow              写入起始行
+     * @param createRow             是否 创建（插入）行 还是直接覆盖
      * @throws IOException 文件存储异常
      */
-    public static void generateExcelByTemplate(String excelTemplateFilePath , String excelFilePath, int sheetIndex,
-                                           List<Object> objects,
-                                           Map<Integer,String > fieldDesc, int beginRow, boolean createRow)
-            throws IOException {
+    public static void generateExcelByTemplate(String excelTemplateFilePath, String excelFilePath, int sheetIndex, List<Object> objects, Map<Integer, String> fieldDesc, int beginRow, boolean createRow) throws IOException {
 
         ExcelTypeEnum excelType = ExcelTypeEnum.checkFileExcelType(excelTemplateFilePath);
         Workbook wb;
 
-        try(InputStream excelFile = new FileInputStream(new File(excelTemplateFilePath)) ){
-            wb = excelType == ExcelTypeEnum.HSSF ?
-                    new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
+        try (InputStream excelFile = new FileInputStream(new File(excelTemplateFilePath))) {
+            wb = excelType == ExcelTypeEnum.HSSF ? new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
             Sheet sheet = wb.getSheetAt(sheetIndex);
-            saveObjectsToExcelSheet(sheet, objects,  fieldDesc, beginRow, createRow);
+            saveObjectsToExcelSheet(sheet, objects, fieldDesc, beginRow, createRow);
 
         }
 
-        try(OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath)) ) {
+        try (OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath))) {
             wb.write(newExcelFile);
         }
     }
@@ -467,67 +493,159 @@ public abstract class ExcelExportUtil {
 
     /**
      * 保存二维数组到 Excel 文件
+     *
      * @param excelTemplateFilePath 文件
-     * @param excelFilePath 文件
-     * @param sheetName sheet 名称
-     * @param objects 二维数组
-     * @param beginCol 写入起始列
-     * @param beginRow 写入起始行
-     * @param createRow 是否 创建（插入）行 还是直接覆盖
+     * @param excelFilePath         文件
+     * @param sheetName             sheet 名称
+     * @param objects               二维数组
+     * @param beginCol              写入起始列
+     * @param beginRow              写入起始行
+     * @param createRow             是否 创建（插入）行 还是直接覆盖
      * @throws IOException 文件存储异常
      */
-    public static void generateExcelByTemplate(String excelTemplateFilePath , String excelFilePath, String sheetName,
-                                             List<Object[]> objects,
-                                             int beginCol, int beginRow, boolean createRow)
-            throws IOException {
+    public static void generateExcelByTemplate(String excelTemplateFilePath, String excelFilePath, String sheetName, List<Object[]> objects, int beginCol, int beginRow, boolean createRow) throws IOException {
 
         ExcelTypeEnum excelType = ExcelTypeEnum.checkFileExcelType(excelTemplateFilePath);
         Workbook wb;
 
-        try(InputStream excelFile = new FileInputStream(new File(excelTemplateFilePath)) ){
-            wb = excelType == ExcelTypeEnum.HSSF ?
-                    new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
-            Sheet sheet =  (StringUtils.isBlank(sheetName))?
-                    wb.getSheetAt(0) : wb.getSheet(sheetName);
-            saveObjectsToExcelSheet(sheet, objects,  beginCol, beginRow, createRow);
+        try (InputStream excelFile = new FileInputStream(new File(excelTemplateFilePath))) {
+            wb = excelType == ExcelTypeEnum.HSSF ? new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
+            Sheet sheet = (StringUtils.isBlank(sheetName)) ? wb.getSheetAt(0) : wb.getSheet(sheetName);
+            saveObjectsToExcelSheet(sheet, objects, beginCol, beginRow, createRow);
 
         }
 
-        try(OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath)) ) {
+        try (OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath))) {
             wb.write(newExcelFile);
         }
     }
 
     /**
      * 保存二维数组到 Excel 文件
+     *
      * @param excelTemplateFilePath 文件
-     * @param excelFilePath 文件
-     * @param sheetIndex sheet 索引
-     * @param objects 二维数组
-     * @param beginCol 写入起始列
-     * @param beginRow 写入起始行
-     * @param createRow 是否 创建（插入）行 还是直接覆盖
+     * @param excelFilePath         文件
+     * @param sheetIndex            sheet 索引
+     * @param objects               二维数组
+     * @param beginCol              写入起始列
+     * @param beginRow              写入起始行
+     * @param createRow             是否 创建（插入）行 还是直接覆盖
      * @throws IOException 文件存储异常
      */
-    public static void generateExcelByTemplate(String excelTemplateFilePath , String excelFilePath, int sheetIndex,
-                                             List<Object[]> objects,
-                                             int beginCol, int beginRow, boolean createRow)
-            throws IOException {
+    public static void generateExcelByTemplate(String excelTemplateFilePath, String excelFilePath, int sheetIndex, List<Object[]> objects, int beginCol, int beginRow, boolean createRow) throws IOException {
 
         ExcelTypeEnum excelType = ExcelTypeEnum.checkFileExcelType(excelTemplateFilePath);
         Workbook wb;
 
-        try(InputStream excelFile = new FileInputStream(new File(excelTemplateFilePath)) ){
-            wb = excelType == ExcelTypeEnum.HSSF ?
-                    new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
+        try (InputStream excelFile = new FileInputStream(new File(excelTemplateFilePath))) {
+            wb = excelType == ExcelTypeEnum.HSSF ? new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
             Sheet sheet = wb.getSheetAt(sheetIndex);
-            saveObjectsToExcelSheet(sheet, objects,  beginCol, beginRow, createRow);
+            saveObjectsToExcelSheet(sheet, objects, beginCol, beginRow, createRow);
 
         }
 
-        try(OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath)) ) {
+        try (OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath))) {
             wb.write(newExcelFile);
         }
     }
 
+    public static void appendDataToExcelSheet(String excelFilePath, String sheetName, List<? extends Object> objLists, String[] header, String[] property ) throws IOException {
+
+        ExcelTypeEnum excelType = ExcelTypeEnum.checkFileExcelType(excelFilePath);
+        Workbook wb=null;
+
+        try (InputStream excelFile = new FileInputStream(new File(excelFilePath))) {
+            wb = excelType == ExcelTypeEnum.HSSF ? new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
+            Sheet sheet = wb.getSheet(sheetName);
+            if(sheet == null){
+                sheet = wb.createSheet(sheetName);
+                generateExcelSheet(sheet,objLists,header,property);
+            }else{
+                int  beginRow = sheet.getLastRowNum()+1;
+                generateExcelText(sheet, objLists, property, beginRow);
+            }
+
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        try (OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath))) {
+            if(wb!=null) {
+                wb.write(newExcelFile);
+            }
+        }
+    }
+
+    public static void appendDataToExcelSheet(String excelFilePath, int sheetIndex, List<? extends Object> objLists, String[] header, String[] property ) throws IOException {
+
+        ExcelTypeEnum excelType = ExcelTypeEnum.checkFileExcelType(excelFilePath);
+        Workbook wb=null;
+
+        try (InputStream excelFile = new FileInputStream(new File(excelFilePath))) {
+            wb = excelType == ExcelTypeEnum.HSSF ? new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
+            Sheet sheet = wb.getSheetAt(sheetIndex);
+            if(sheet == null){
+                sheet = wb.createSheet();
+                generateExcelSheet(sheet,objLists,header,property);
+            }else{
+                int  beginRow = sheet.getLastRowNum()+1;
+                generateExcelText(sheet, objLists, property, beginRow);
+            }
+
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        try (OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath))) {
+            if(wb!=null) {
+                wb.write(newExcelFile);
+            }
+        }
+    }
+
+    public static void appendDataToExcelSheet(String excelFilePath, String sheetName, List<Object[]> objLists, String[] header ) throws IOException {
+
+        ExcelTypeEnum excelType = ExcelTypeEnum.checkFileExcelType(excelFilePath);
+        Workbook wb=null;
+
+        try (InputStream excelFile = new FileInputStream(new File(excelFilePath))) {
+            wb = excelType == ExcelTypeEnum.HSSF ? new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
+            Sheet sheet = wb.getSheet(sheetName);
+            if(sheet == null){
+                sheet = wb.createSheet(sheetName);
+                generateExcelSheet(sheet,objLists,header);
+            }else{
+                int  beginRow = sheet.getLastRowNum()+1;
+                generateExcelText(sheet, objLists,beginRow);
+            }
+
+        }
+        try (OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath))) {
+            if(wb!=null) {
+                wb.write(newExcelFile);
+            }
+        }
+    }
+
+    public static void appendDataToExcelSheet(String excelFilePath, int sheetIndex,List<Object[]> objLists, String[] header ) throws IOException {
+
+        ExcelTypeEnum excelType = ExcelTypeEnum.checkFileExcelType(excelFilePath);
+        Workbook wb=null;
+
+        try (InputStream excelFile = new FileInputStream(new File(excelFilePath))) {
+            wb = excelType == ExcelTypeEnum.HSSF ? new HSSFWorkbook(excelFile) : new XSSFWorkbook(excelFile);
+            Sheet sheet = wb.getSheetAt(sheetIndex);
+            if(sheet == null){
+                sheet = wb.createSheet();
+                generateExcelSheet(sheet,objLists,header);
+            }else{
+                int  beginRow = sheet.getLastRowNum()+1;
+                generateExcelText(sheet, objLists,beginRow);
+            }
+
+        }
+        try (OutputStream newExcelFile = new FileOutputStream(new File(excelFilePath))) {
+            if(wb!=null) {
+                wb.write(newExcelFile);
+            }
+        }
+    }
 }

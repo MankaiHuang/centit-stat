@@ -18,6 +18,7 @@ public class TestDocReport {
             "D:/Projects/RunData/demo_home/XDocReport.docx",
             "D:/Projects/RunData/demo_home/XDocReport2.docx");
         System.out.println("done!");
+        System.exit(0);
 //        InputStream in = new FileInputStream(new File("C:\\Users\\zhang_gd\\Desktop\\sola\\testTypeFile\\read\\testE2003.xls"));
 //        List<String[]> list = ExcelImportUtil.loadDataFromExcel(in,null,1,5);
     }

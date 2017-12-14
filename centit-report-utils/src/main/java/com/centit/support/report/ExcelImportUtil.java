@@ -38,46 +38,29 @@ public abstract class ExcelImportUtil {
         switch (field.getFieldJavaType()) {
             case "int":
             case "Integer":
-                field.setObjectFieldValue(object,
-                        NumberBaseOpt.castObjectToInteger(
-                            cell.getNumericCellValue()));
-                break;
             case "long":
             case "Long":
-                field.setObjectFieldValue(object,
-                        NumberBaseOpt.castObjectToLong(
-                                cell.getNumericCellValue()
-                        ));
-                break;
             case "float":
             case "Float":
             case "double":
             case "Double":
-                field.setObjectFieldValue(object,cell.getNumericCellValue());
-                break;
-
-            case "byte[]":
-                field.setObjectFieldValue(object, cell.getStringCellValue().getBytes());
-                break;
             case "BigDecimal":
-                field.setObjectFieldValue(object,
-                        NumberBaseOpt.castObjectToBigDecimal(cell.getNumericCellValue()));
-                break;
             case "BigInteger":
                 field.setObjectFieldValue(object,
                         NumberBaseOpt.castObjectToBigInteger(cell.getNumericCellValue()));
                 break;
-            case "String":
-                field.setObjectFieldValue(object,cell.getStringCellValue());
-                break;
+
             case "Date":
-            case "Timestamp":
+            case "sqlDate":
+            case "sqlTimestamp":
                 field.setObjectFieldValue(object,cell.getDateCellValue());
                 break;
             case "boolean":
             case "Boolean":
                 field.setObjectFieldValue(object,cell.getBooleanCellValue());
                 break;
+            case "byte[]":
+            case "String":
             default:
                 field.setObjectFieldValue(object, cell.getStringCellValue());
                 break;
