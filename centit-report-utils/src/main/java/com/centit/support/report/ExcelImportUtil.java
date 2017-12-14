@@ -111,8 +111,8 @@ public abstract class ExcelImportUtil {
      * @param sheetName sheet名称 如果为空为 第一个页面
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
-     * @param endRow 结束行 不包括
+     * @param beginRow 起始行 0 base 包含
+     * @param endRow 结束行 0 base 不包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -137,8 +137,8 @@ public abstract class ExcelImportUtil {
      * @param sheetName sheet名称 如果为空为 第一个页面
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
-     * @param endRow 结束行 不包括
+     * @param beginRow 起始行 0 base 包含
+     * @param endRow 结束行 0 base 不包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -164,7 +164,7 @@ public abstract class ExcelImportUtil {
      * @param sheetName sheet名称 如果为空为 第一个页面
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
+     * @param beginRow 起始行 0 base 包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -189,7 +189,7 @@ public abstract class ExcelImportUtil {
      * @param sheetName sheet名称 如果为空为 第一个页面
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
+     * @param beginRow 起始行 0 base 包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -212,11 +212,11 @@ public abstract class ExcelImportUtil {
      *
      * @param excelFile 文件流
      * @param excelType excel 版本 2003 还是新版本
-     * @param sheetIndex sheet序号
+     * @param sheetIndex sheet 序号 0 base
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
-     * @param endRow 结束行 不包括
+     * @param beginRow 起始行 0 base 包含
+     * @param endRow 结束行 0 base 不包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -237,11 +237,11 @@ public abstract class ExcelImportUtil {
     /**
      *
      * @param filePath 文件名，通过后缀名判断excel版本号
-     * @param sheetIndex sheet序号
+     * @param sheetIndex sheet 序号 0 base
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
-     * @param endRow 结束行 不包括
+     * @param beginRow 起始行 0 base 包含
+     * @param endRow 结束行 0 base 不包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -264,10 +264,10 @@ public abstract class ExcelImportUtil {
      *
      * @param excelFile 文件流
      * @param excelType excel 版本 2003 还是新版本
-     * @param sheetIndex sheet序号
+     * @param sheetIndex sheet 序号 0 base
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
+     * @param beginRow 起始行 0 base 包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -288,10 +288,10 @@ public abstract class ExcelImportUtil {
     /**
      *
      * @param filePath 文件名，通过后缀名判断excel版本号
-     * @param sheetIndex sheet序号
+     * @param sheetIndex sheet 序号 0 base
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
+     * @param beginRow 起始行 0 base 包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
