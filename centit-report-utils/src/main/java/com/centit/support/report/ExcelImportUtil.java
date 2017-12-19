@@ -38,46 +38,28 @@ public abstract class ExcelImportUtil {
         switch (field.getFieldJavaType()) {
             case "int":
             case "Integer":
-                field.setObjectFieldValue(object,
-                        NumberBaseOpt.castObjectToInteger(
-                            cell.getNumericCellValue()));
-                break;
             case "long":
             case "Long":
-                field.setObjectFieldValue(object,
-                        NumberBaseOpt.castObjectToLong(
-                                cell.getNumericCellValue()
-                        ));
-                break;
             case "float":
             case "Float":
             case "double":
             case "Double":
-                field.setObjectFieldValue(object,cell.getNumericCellValue());
+            case "BigDecimal":
+            case "BigInteger":
+                field.setObjectFieldValue(object, cell.getNumericCellValue());
                 break;
 
-            case "byte[]":
-                field.setObjectFieldValue(object, cell.getStringCellValue().getBytes());
-                break;
-            case "BigDecimal":
-                field.setObjectFieldValue(object,
-                        NumberBaseOpt.castObjectToBigDecimal(cell.getNumericCellValue()));
-                break;
-            case "BigInteger":
-                field.setObjectFieldValue(object,
-                        NumberBaseOpt.castObjectToBigInteger(cell.getNumericCellValue()));
-                break;
-            case "String":
-                field.setObjectFieldValue(object,cell.getStringCellValue());
-                break;
             case "Date":
-            case "Timestamp":
-                field.setObjectFieldValue(object,cell.getDateCellValue());
+            case "sqlDate":
+            case "sqlTimestamp":
+                field.setObjectFieldValue(object, cell.getDateCellValue());
                 break;
             case "boolean":
             case "Boolean":
-                field.setObjectFieldValue(object,cell.getBooleanCellValue());
+                field.setObjectFieldValue(object, cell.getBooleanCellValue());
                 break;
+            case "byte[]":
+            case "String":
             default:
                 field.setObjectFieldValue(object, cell.getStringCellValue());
                 break;
@@ -128,8 +110,8 @@ public abstract class ExcelImportUtil {
      * @param sheetName sheet名称 如果为空为 第一个页面
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
-     * @param endRow 结束行 不包括
+     * @param beginRow 起始行 0 base 包含
+     * @param endRow 结束行 0 base 不包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -154,8 +136,8 @@ public abstract class ExcelImportUtil {
      * @param sheetName sheet名称 如果为空为 第一个页面
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
-     * @param endRow 结束行 不包括
+     * @param beginRow 起始行 0 base 包含
+     * @param endRow 结束行 0 base 不包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -181,7 +163,7 @@ public abstract class ExcelImportUtil {
      * @param sheetName sheet名称 如果为空为 第一个页面
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
+     * @param beginRow 起始行 0 base 包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -206,7 +188,7 @@ public abstract class ExcelImportUtil {
      * @param sheetName sheet名称 如果为空为 第一个页面
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
+     * @param beginRow 起始行 0 base 包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -229,11 +211,11 @@ public abstract class ExcelImportUtil {
      *
      * @param excelFile 文件流
      * @param excelType excel 版本 2003 还是新版本
-     * @param sheetIndex sheet序号
+     * @param sheetIndex sheet 序号 0 base
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
-     * @param endRow 结束行 不包括
+     * @param beginRow 起始行 0 base 包含
+     * @param endRow 结束行 0 base 不包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -254,11 +236,11 @@ public abstract class ExcelImportUtil {
     /**
      *
      * @param filePath 文件名，通过后缀名判断excel版本号
-     * @param sheetIndex sheet序号
+     * @param sheetIndex sheet 序号 0 base
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
-     * @param endRow 结束行 不包括
+     * @param beginRow 起始行 0 base 包含
+     * @param endRow 结束行 0 base 不包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -281,10 +263,10 @@ public abstract class ExcelImportUtil {
      *
      * @param excelFile 文件流
      * @param excelType excel 版本 2003 还是新版本
-     * @param sheetIndex sheet序号
+     * @param sheetIndex sheet 序号 0 base
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
+     * @param beginRow 起始行 0 base 包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
@@ -305,10 +287,10 @@ public abstract class ExcelImportUtil {
     /**
      *
      * @param filePath 文件名，通过后缀名判断excel版本号
-     * @param sheetIndex sheet序号
+     * @param sheetIndex sheet 序号 0 base
      * @param beanType 对象类型
      * @param fieldDesc 字段对应关系
-     * @param beginRow 其实行 包括
+     * @param beginRow 起始行 0 base 包含
      * @param <T> 返回的对象类型
      * @return 对象列表
      * @throws IllegalAccessException 异常
