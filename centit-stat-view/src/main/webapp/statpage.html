@@ -1,64 +1,70 @@
 <html>
 <head>
-  <base href=".">
+    <base href=".">
 </head>
 <body>
 <div ng-controller="TwoDimenFormController">
 
-	<form id="queryForm" ng-if="queryformshow">
-	<div class="searchboxs">
-		<div ng-repeat="cond in conditions_create" ng-if="cond.condDisplayStyle!='H'">
-				<label ng-if="cond.paramReferenceType =='Y'||cond.paramReferenceType =='M'||cond.paramReferenceType =='1'||cond.paramReferenceType =='2'" >{{cond.condLabel}}:</label>
-				<select ng-change="resetPage()"
-				  		ng-model="queryParams[cond.condName]"
-				 		ng-options="vari.value+'' as vari.key for vari in cond.comboValues"
-				 		clsss="searchbox" ng-if="cond.paramReferenceType =='Y'||cond.paramReferenceType =='M'||cond.paramReferenceType =='1'||cond.paramReferenceType =='2'">
-						<option  value="" >---请选择---</option>
-				</select>
-				<label ng-if="cond.paramReferenceType =='0'|| cond.paramReferenceType =='3'">{{cond.condLabel}}：</label>
-				<input ng-change="resetPage()" ng-model="queryParams[cond.condName]" ng-model-options="{debounce:1}"type="text" value="{{cond.condValue}}" id="{{cond.condName}}" ng-if="cond.paramReferenceType =='0'||cond.paramReferenceType =='3'" />
-		</div>
-	</div>
-		<div class="pagination">
-		 每页大小
-		<select ng-model="page.pageSize"
-		ng-change="resetPage()"
-		style="width: 60px;height:22px;"
-		ng-options="ps.key as ps.value for ps in pageSizeChoose"></select>
-		 共 --{{page.totalRows}}--条记录•共--{{page.totalPage}}--页 当前第
-		 <input style="width: 40px;"type="number"
-		 min="1"
-		 max="{{page.totalPage}}"
-		 ng-change="queryByParam()"
-		 ng-model="page.pageNo"/>
-		  页
-		</div>
-	</form>
-	<div class="btnbox">
-		<!-- <input clsss="searchbutton"  class="btn" type="button" ng-click="queryByParam()" value="统计"/> -->
-		<input clsss="searchbutton"  class="btn" type="button" ng-click="printTable()" value="打印"/>
-		<input clsss="searchbutton"  class="btn" type="button" ng-click="exportToExcel()" value="导入excel"/>
-		<!-- <input clsss="searchbutton"  class="btn" type="button" ng-click="showChart()" value="显示/隐藏统计图"/> -->
-	</div>
-	<chart-panel chartcols="chartcols">
-	</chart-panel>
-	<div id="normalTableBody" class="print">
-		<div class="tableTitle">{{data.formNameFormat}}</div>
-		<table>
-			<thead>
-			<tr ng-repeat="datas in tableHead.lines" class="tableHead">
-				<td rowspan="{{tableHead.lines.length}}" class="tableHead" ng-if="$index==0">行号</td>
-				<td ng-repeat="data in datas.cells track by $index" colspan="{{data.colspan}}" rowspan="{{data.rowspan}}" ng-if="data.display==true" class="tableHead">{{data.value}}</td>
-			</tr>
-			</thead>
-			<tr ng-repeat="datas in tableBody.lines">
-				<td ng-if="datas.lineType=='T'&& datas.cells[0].display==true"></td>
-				<td ng-if="datas.lineType=='T'&& datas.cells[0].display==false">{{datas.cells[0].displayValue}}</td>
-            	<td ng-if="datas.lineType!='T'">{{(page.pageNo-1)*page.pageSize+$index+1}}</td>
-				<td ng-repeat="data in datas.cells track by $index" colspan="{{data.colspan}}" rowspan="{{data.rowspan}}" ng-if="data.rowspan!=-1 && data.display==true" style="{{data.cssStyle}}">{{data.displayValue}}</td>
-			</tr>
-		</table>
-	</div>
+    <form id="queryForm" ng-if="queryformshow">
+        <div class="searchboxs">
+            <div ng-repeat="cond in conditions_create" ng-if="cond.condDisplayStyle!='H'">
+                <label
+                    ng-if="cond.paramReferenceType =='Y'||cond.paramReferenceType =='M'||cond.paramReferenceType =='1'
+                    ||cond.paramReferenceType =='2'">{{cond.condLabel}}:</label>
+                <select ng-change="resetPage()"
+                        ng-model="queryParams[cond.condName]"
+                        ng-options="vari.value+'' as vari.key for vari in cond.comboValues"
+                        clsss="searchbox"
+                        ng-if="cond.paramReferenceType =='Y'||cond.paramReferenceType =='M'
+                        ||cond.paramReferenceType =='1'||cond.paramReferenceType =='2'">
+                    <option value="">---请选择---</option>
+                </select>
+                <label ng-if="cond.paramReferenceType =='0'|| cond.paramReferenceType =='3'">{{cond.condLabel}}：</label>
+                <input ng-change="resetPage()" ng-model="queryParams[cond.condName]" ng-model-options="{debounce:1}"
+                       type="text" value="{{cond.condValue}}" id="{{cond.condName}}"
+                       ng-if="cond.paramReferenceType =='0'||cond.paramReferenceType =='3'"/>
+            </div>
+        </div>
+        <div class="pagination">
+            每页大小
+            <select ng-model="page.pageSize" ng-change="resetPage()" style="width: 60px;height:22px;"
+                    ng-options="ps.key as ps.value for ps in pageSizeChoose"></select>
+            共 --{{page.totalRows}}--条记录•共--{{page.totalPage}}--页 当前第
+            <input style="width: 40px;" type="number" min="1" max="{{page.totalPage}}" ng-change="queryByParam()"
+                   ng-model="page.pageNo"/>
+            页
+        </div>
+    </form>
+    <div class="btnbox">
+        <!-- <input clsss="searchbutton"  class="btn" type="button" ng-click="queryByParam()" value="统计"/> -->
+        <input clsss="searchbutton" class="btn" type="button" ng-click="printTable()" value="打印"/>
+        <input clsss="searchbutton" class="btn" type="button" ng-click="exportToExcel()" value="导入excel"/>
+        <!-- <input clsss="searchbutton"  class="btn" type="button" ng-click="showChart()" value="显示/隐藏统计图"/> -->
+    </div>
+    <chart-panel chartcols="chartcols"></chart-panel>
+    <div id="normalTableBody" class="print">
+        <div class="tableTitle">{{data.formNameFormat}}</div>
+        <table>
+            <thead>
+            <tr ng-repeat="datas in tableHead.lines" class="tableHead">
+                <td rowspan="{{tableHead.lines.length}}" class="tableHead" ng-if="$index==0">行号</td>
+                <td ng-repeat="data in datas.cells track by $index" colspan="{{data.colspan}}"
+                    rowspan="{{data.rowspan}}"
+                    ng-if="data.display==true" class="tableHead">{{data.value}}
+                </td>
+            </tr>
+            </thead>
+            <tr ng-repeat="datas in tableBody.lines">
+                <td ng-if="datas.lineType=='T'&& datas.cells[0].display==true"></td>
+                <td ng-if="datas.lineType=='T'&& datas.cells[0].display==false">{{datas.cells[0].displayValue}}</td>
+                <td ng-if="datas.lineType!='T'">{{(page.pageNo-1)*page.pageSize+$index+1}}</td>
+                <td ng-repeat="data in datas.cells track by $index" colspan="{{data.colspan}}"
+                    rowspan="{{data.rowspan}}"
+                    ng-if="data.rowspan!=-1 && data.display==true" style="{{data.cssStyle}}">{{data.displayValue}}
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <script src="ui/js/require.js"></script>

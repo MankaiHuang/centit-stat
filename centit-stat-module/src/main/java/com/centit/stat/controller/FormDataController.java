@@ -94,13 +94,12 @@ public class FormDataController extends BaseController {
 			@Valid PageDesc page, HttpServletResponse response) {
 		FormDataModel fdm = new FormDataModel();
 		fdm.copyModelMetaData(dataManager.getDataModel(modelName));
-		
+
 		queryDatabase(paging?page:null, fdm, request);
-		
-		
+
 		response.reset();
 		response.setContentType("application/vnd.ms-excel;charset=utf-8");
-		
+
 		SimpleDateFormat sdf=new SimpleDateFormat("YYYYMMddhhmm");
 		Date date=new Date();
 		String time=sdf.format(date);
@@ -177,7 +176,7 @@ public class FormDataController extends BaseController {
 							map.put("key", ent.getKey());
 							map.put("value", ent.getValue());
 							cond.getComboValues().add(map);
-	
+
 						}
 					}
 				}
@@ -297,23 +296,27 @@ public class FormDataController extends BaseController {
 		// 普通二维报表
 		if ("2".equals(modelType) || StringUtils.isEmpty(modelType)) {
 			totalRows = dataManager.queryFormData(formObj, page);
+            formObj.setTotalRowsAll(page==null?totalRows:page.getTotalRows());
 		}
 
 		// 同比报表 环比报表
 		else if ("3".equals(modelType) || "4".equals(modelType)) {
 			totalRows = dataManager.queryCompareData(formObj);
+            formObj.setTotalRowsAll(totalRows);
 		}
 
 		// 交叉表
 		else if ("5".equals(modelType)) {
 			totalRows = dataManager.queryCrossData(formObj);
+            formObj.setTotalRowsAll(totalRows);
 		}
 
 		else {
 			totalRows = dataManager.queryFormData(formObj, page);
+            formObj.setTotalRowsAll(page==null?totalRows:page.getTotalRows());
 		}
 		formObj.setTotalRows(totalRows);
-		formObj.setTotalRowsAll(page.getTotalRows());
+//		formObj.setTotalRowsAll(page.getTotalRows());
 		formObj.makeParamByFormat();
 	}
 
@@ -346,7 +349,7 @@ public class FormDataController extends BaseController {
 		}
 	}
 
-	
+
 	public TwoDimen convertLinesToTwoDimen(List<CTableLine> lines) {
 		int xlen = 0;
 		for (int i = 0; i < lines.get(0).getCells().size(); i++) {
@@ -414,7 +417,7 @@ public class FormDataController extends BaseController {
 		}
 		return new TwoDimen(twodimen, combineList);
 	}
-	
+
 	public boolean isNumType(Object value) {
 		if (value instanceof BigDecimal || value instanceof Integer
 				|| value instanceof Double || value instanceof Float)
@@ -422,12 +425,12 @@ public class FormDataController extends BaseController {
 		else
 			return false;
 	}
-	
-	
+
+
 	//excel操作类
 	static class HSSFWorkbookOpt {
 		/**
-		 * 
+		 *
 		 * @param twodimenHead 二维数组
 		 * @param headCombine int数组集合
 		 * @param twodimenBody 二维数组
@@ -465,9 +468,9 @@ public class FormDataController extends BaseController {
 			return workbook;
 		}
 
-		
+
 		/**
-		 * 
+		 *
 		 * @param sheet 表格
 		 * @param twodimen 二位数组
 		 * @param startIndex int
@@ -519,6 +522,6 @@ public class FormDataController extends BaseController {
 
 			return endIndex;
 		}
-		
+
 	}
 }

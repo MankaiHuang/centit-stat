@@ -1,5 +1,6 @@
 package com.centit.stat.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,7 @@ import com.centit.support.database.utils.QueryAndNamedParams;
 @Service
 public class FormDataManagerImpl implements FormDataManager {
 	protected QueryModelDao baseDao = null;
-	
+
 	@Resource
 	public void setBaseDao(QueryModelDao baseDao) {
 		this.baseDao = baseDao;
@@ -44,7 +45,7 @@ public class FormDataManagerImpl implements FormDataManager {
 	protected IntegrationEnvironment integrationEnvironment;
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.centit.stat.twodimenform.FormDataManager#getDataModel(java.lang.
 	 * String)
 	 */
@@ -63,7 +64,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.centit.stat.twodimenform.FormDataManager#queryFormData(com.centit.
 	 * stat.twodimenform.FormDataModel, boolean)
@@ -392,7 +393,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/**
 	 * 解析表格内容
-	 * 
+	 *
 	 * @param compareDatas
 	 * @param cols
 	 * @param dataMap
@@ -468,7 +469,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/**
 	 * 解析表头数据
-	 * 
+	 *
 	 * @param dataColumns
 	 * @return
 	 */
@@ -550,7 +551,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/**
 	 * 数组行列互换
-	 * 
+	 *
 	 * @param array
 	 * @return
 	 */
@@ -584,7 +585,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/**
 	 * 解析表头
-	 * 
+	 *
 	 * @param columns
 	 * @param dataColumns
 	 * @return
@@ -649,7 +650,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/**
 	 * 解析表头
-	 * 
+	 *
 	 * @param cols
 	 * @param currTitle
 	 * @param prevTitle
@@ -755,7 +756,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/**
 	 * 将数据转换成hash表，供后面链接参数替换
-	 * 
+	 *
 	 * @param datas
 	 * @param cols
 	 * @return
@@ -797,7 +798,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/**
 	 * 按照显示类型过滤列头
-	 * 
+	 *
 	 * @param cols
 	 * @param showType
 	 * @return
@@ -965,10 +966,14 @@ public class FormDataManagerImpl implements FormDataManager {
 			nf = foundCrossColumn(dataColumns, col, dataCols, colGroup);
 			if (nf > 0) {
 
-				for (int j = 0; j < dataAnalyseSum; j++) {
-					rowData[rowGroup + nf * dataAnalyseSum + j] = ReflectionOpt.addTwoObject(
-							rowData[rowGroup + nf * dataAnalyseSum + j], curData[rowGroup + colGroup + j]);
-				}
+//				for (int j = 0; j < dataAnalyseSum; j++) {
+//					rowData[rowGroup + nf * dataAnalyseSum + j] = ReflectionOpt.addTwoObject(
+//							rowData[rowGroup + nf * dataAnalyseSum + j], curData[rowGroup + colGroup + j]);
+//				}
+                for (int j = 0; j < dataAnalyseSum; j++) {
+                    rowData[rowGroup + nf * dataAnalyseSum + j] = addTwoObject(
+                        rowData[rowGroup + nf * dataAnalyseSum + j], curData[rowGroup + colGroup + j]);
+                }
 			}
 
 		}
@@ -1000,9 +1005,10 @@ public class FormDataManagerImpl implements FormDataManager {
 			for (int di = 0; di < crossDatas.size(); di++) {
 				for (int i = rowGroup; i < dataColCount; i++) {
 					if (crossDatas.get(di)[i] != null && crossDatas.get(di)[i] instanceof java.lang.Number)
-						sumData[i] = (sumData[i] == null) ? crossDatas.get(di)[i]
-								: ((Number) sumData[i]).doubleValue() + ((Number) crossDatas.get(di)[i]).doubleValue();
-					;
+//						sumData[i] = (sumData[i] == null) ? crossDatas.get(di)[i]
+//								: ((Number) sumData[i]).doubleValue() + ((Number) crossDatas.get(di)[i]).doubleValue();
+                        sumData[i] = (sumData[i] == null) ? crossDatas.get(di)[i]
+                            :new BigDecimal(((Number) sumData[i]).doubleValue() + ((Number) crossDatas.get(di)[i]).doubleValue()).setScale(2, BigDecimal.ROUND_HALF_UP);
 				}
 			}
 			for (int i = 1; i < dataColCount; i++)
@@ -1023,7 +1029,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/**
 	 * 解析表格内容数据,合并单元格
-	 * 
+	 *
 	 * @param crossDatas
 	 *            交叉表数据内容
 	 * @param columns
@@ -1094,7 +1100,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
 	/**
 	 * 解析表格内容数据
-	 * 
+	 *
 	 * @param crossDatas
 	 *            交叉表数据内容
 	 * @param columns
@@ -1110,34 +1116,55 @@ public class FormDataManagerImpl implements FormDataManager {
 	 * List<QueryColumn> columns, List<Map<String, Object>> dataMap,
 	 * List<Object[]> dataColumns) { CTableBodyTBody tbody = new
 	 * CTableBodyTBody();
-	 * 
+	 *
 	 * // 表格头固定列 List<QueryColumn> columnHead = parseQueryColumn(columns, "R");
-	 * 
+	 *
 	 * // 对比数据列 List<QueryColumn> columnCross = parseQueryColumn(columns, "C");
-	 * 
+	 *
 	 * // 对比数据列 List<QueryColumn> columnData = parseQueryColumn(columns, "D");
-	 * 
+	 *
 	 * for (int rowIndex = 0; rowIndex < crossDatas.size(); rowIndex++) { //
 	 * 每一行数据 Object[] datas = crossDatas.get(rowIndex);
-	 * 
+	 *
 	 * // 每一行参数 Map<String, Object> params = dataMap.get(rowIndex);
-	 * 
+	 *
 	 * int colIndex = 0;
-	 * 
+	 *
 	 * // 固定列 for (QueryColumn col : columnHead) { CTableCell cell =
 	 * CTableCell.createTableCell(datas[colIndex++], col, params);
 	 * tbody.addCell(cell); }
-	 * 
+	 *
 	 * // 交叉列 for (Object[] obj : dataColumns) { // 设置列参数 for (int paramIndex =
 	 * 0; paramIndex < obj.length; paramIndex++) { params.put(":" +
 	 * columnCross.get(paramIndex).getColName(), obj[paramIndex].toString()); }
-	 * 
+	 *
 	 * for (QueryColumn col : columnData) { CTableCell cell =
 	 * CTableCell.createTableCell(datas[colIndex++], col, params);
 	 * tbody.addCell(cell); } }
-	 * 
+	 *
 	 * if (rowIndex < crossDatas.size() - 1) { tbody.addLine(); } }
-	 * 
+	 *
 	 * return tbody; }
 	 */
+
+    /**
+     * 将两个对象加+起来，可能是数字相加，也可能是字符串连接
+     * @param a object1
+     * @param b object2
+     * @return 相加结果
+     */
+    public static Object addTwoObject(Object a,Object b){
+        if(a==null)
+            return b;
+        if(b==null)
+            return a;
+
+        if( a instanceof java.lang.Number &&  b instanceof java.lang.Number){
+            BigDecimal BigA = new BigDecimal(((Number) a).doubleValue());
+            BigDecimal BigB = new BigDecimal(((Number) b).doubleValue());
+            return BigA.add(BigB).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
+        return a.toString() + b.toString();
+    }
+
 }

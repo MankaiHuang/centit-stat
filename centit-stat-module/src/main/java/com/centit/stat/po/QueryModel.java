@@ -33,9 +33,9 @@ public class QueryModel implements java.io.Serializable {
 	 * 数据库外键
 	 */
 	//private String databaseCode;
-	@Column(name="Database_Code")  
+	@Column(name="Database_Code")
 	private String databaseCode;
-	
+
 	@Transient
 	private String databaseName;
 	/**
@@ -49,7 +49,7 @@ public class QueryModel implements java.io.Serializable {
 	@Length(min = 0, max = 8, message = "字段长度不能小于{min}大于{max}")
 	private String  ownerCode;
 	@Column(name = "QUERYSQL")
-	@Length(min = 0, max = 4000, message = "字段长度不能小于{min}大于{max}")
+//	@Length(min = 0, max = 4000, message = "字段长度不能小于{min}大于{max}")
 	private String  querySql;
 	@Column(name = "QUERYDESC")
 	@Length(min = 0, max = 512, message = "字段长度不能小于{min}大于{max}")
@@ -97,19 +97,19 @@ public class QueryModel implements java.io.Serializable {
 
 	// Constructors
 	public QueryModel() {
-		this.drawChartBeginCol= 0;  
-		this.drawChartEndCol= 0;  
+		this.drawChartBeginCol= 0;
+		this.drawChartEndCol= 0;
 	}
-	
+
 	public QueryModel(
-		String modelName		
+		String modelName
 		) {
-		this.modelName = modelName;	
-		this.drawChartBeginCol= 0;  
-		this.drawChartEndCol= 0;  
+		this.modelName = modelName;
+		this.drawChartBeginCol= 0;
+		this.drawChartEndCol= 0;
 	}
-	
-	
+
+
 	public String getDatabaseCode() {
 		return databaseCode;
 	}
@@ -129,15 +129,15 @@ public class QueryModel implements java.io.Serializable {
 	}
 
 	public QueryModel(
-	 String modelName		
+	 String modelName
 	,String  modelType,String  ownerType,String  ownerCode,String  querySql
 	,String  queryDesc,String  formNameFormat,String  resultName
 	,String  rowDrawChart,Integer  drawChartBeginCol,Integer  drawChartEndCol
 	,String  additionRow,String  rowLogic,Long  rowLogicValue,String logicUrl,String wizardNo) {
-	
-	
-		this.modelName = modelName;		
-	
+
+
+		this.modelName = modelName;
+
 		this.modelType= modelType;
 		this.ownerType= ownerType;
 		this.ownerCode= ownerCode;
@@ -154,9 +154,9 @@ public class QueryModel implements java.io.Serializable {
 		this.logicUrl = logicUrl;
 		this.wizardNo = wizardNo;
 	}
-	
-	
-	
+
+
+
     public String getWizardNo() {
     return wizardNo;
 }
@@ -169,7 +169,7 @@ public class QueryModel implements java.io.Serializable {
     public void setLogicUrl(String logicUrl) {
         this.logicUrl = logicUrl;
     }
-  
+
 	public String getModelName() {
 		return this.modelName;
 	}
@@ -184,7 +184,7 @@ public class QueryModel implements java.io.Serializable {
 		this.modelName = modelName;
 	}
 	// Property accessors
-  
+
 	/**
      * 2 ： 二维表  3 ：同比分析 4：环比分析 5：交叉制表
 	 * @return 模型类型
@@ -199,103 +199,103 @@ public class QueryModel implements java.io.Serializable {
 	public void setModelType(String modelType) {
 		this.modelType = modelType;
 	}
-  
+
 	public String getOwnerType() {
 		return this.ownerType;
 	}
-	
+
 	public void setOwnerType(String ownerType) {
 		this.ownerType = ownerType;
 	}
-  
+
 	public String getOwnerCode() {
 		return this.ownerCode;
 	}
-	
+
 	public void setOwnerCode(String ownerCode) {
 		this.ownerCode = ownerCode;
 	}
-  
+
 	public String getQuerySql() {
 		return this.querySql;
 	}
-	
+
 	public void setQuerySql(String querySql) {
 		this.querySql = querySql;
 	}
-  
+
 	public String getQueryDesc() {
 		return this.queryDesc;
 	}
-	
+
 	public void setQueryDesc(String queryDesc) {
 		this.queryDesc = queryDesc;
 	}
-  
+
 	public String getFormNameFormat() {
 		return this.formNameFormat;
 	}
-	
+
 	public void setFormNameFormat(String formNameFormat) {
 		this.formNameFormat = formNameFormat;
 	}
-  
+
 	public String getResultName() {
 		return this.resultName;
 	}
-	
+
 	public void setResultName(String resultName) {
 		this.resultName = resultName;
 	}
-  
+
 	public String getRowDrawChart() {
 		return this.rowDrawChart;
 	}
-	
+
 	public void setRowDrawChart(String rowDrawChart) {
 		this.rowDrawChart = rowDrawChart;
 	}
-  
+
 	public Integer getDrawChartBeginCol() {
 		if(this.drawChartBeginCol!=null)
 			return this.drawChartBeginCol;
 		return 0;
 	}
-	
+
 	public void setDrawChartBeginCol(Integer drawChartBeginCol) {
 		this.drawChartBeginCol = drawChartBeginCol;
 	}
-  
+
 	public Integer getDrawChartEndCol() {
 		if(this.drawChartEndCol!=null)
 			return this.drawChartEndCol;
 		return 0;
 	}
-	
+
 	public void setDrawChartEndCol(Integer drawChartEndCol) {
 		this.drawChartEndCol = drawChartEndCol;
 	}
-  
+
 	public String getAdditionRow() {
 		return this.additionRow;
 	}
-	
+
 	public void setAdditionRow(String additionRow) {
 		this.additionRow = additionRow;
 	}
-  
+
 	public String getRowLogic() {
 		return this.rowLogic;
 	}
-	
+
 	public void setRowLogic(String rowLogic) {
 		this.rowLogic = rowLogic;
 	}
-  
+
 	public Long getRowLogicValue() {
 		return this.rowLogicValue;
 	}
-	
+
 	public void setRowLogicValue(Long rowLogicValue) {
 		this.rowLogicValue = rowLogicValue;
 	}
@@ -311,23 +311,23 @@ public class QueryModel implements java.io.Serializable {
 		if(null==this.queryColumns)
 			this.queryColumns=new ArrayList<QueryColumn>();
 		this.queryColumns = queryColumns;
-	}	
+	}
 
 	public void addQueryColumn(QueryColumn queryColumn ){
 		if (this.queryColumns==null)
 			this.queryColumns = new ArrayList<QueryColumn>();
 		this.queryColumns.add(queryColumn);
 	}
-	
+
 	public void removeQueryColumn(QueryColumn queryColumn ){
 		if (this.queryColumns==null)
 			return;
 		this.queryColumns.remove(queryColumn);
 	}
-	
+
 	public QueryColumn newQueryColumn(){
 		QueryColumn res = new QueryColumn();
-  
+
 		res.setModelName(this.getModelName());
 
 		return res;
@@ -348,7 +348,7 @@ public class QueryModel implements java.io.Serializable {
 		boolean found = false;
 		List<QueryColumn> oldObjs = new ArrayList<QueryColumn>();
 		oldObjs.addAll(getQueryColumns());
-		
+
 		for(Iterator<QueryColumn> it=oldObjs.iterator(); it.hasNext();){
 			QueryColumn odt = it.next();
 			found = false;
@@ -376,8 +376,8 @@ public class QueryModel implements java.io.Serializable {
 			}
 			if(! found)
 				addQueryColumn(newdt);
-		} 	
-	}	
+		}
+	}
 
 	public List<QueryCondition> getQueryConditions(){
 		if(this.queryConditions==null)
@@ -389,23 +389,23 @@ public class QueryModel implements java.io.Serializable {
 		if(null==this.queryConditions)
 			this.queryConditions=new ArrayList<QueryCondition>();
 		this.queryConditions = queryConditons;
-	}	
+	}
 
 	public void addQueryConditon(QueryCondition queryConditon ){
 		if (this.queryConditions==null)
 			this.queryConditions = new ArrayList<QueryCondition>();
 		this.queryConditions.add(queryConditon);
 	}
-	
+
 	public void removeQueryConditon(QueryCondition queryConditon ){
 		if (this.queryConditions==null)
 			return;
 		this.queryConditions.remove(queryConditon);
 	}
-	
+
 	public QueryCondition newQueryConditon(){
 		QueryCondition res = new QueryCondition();
-  
+
 		res.setModelName(this.getModelName());
 
 		return res;
@@ -427,7 +427,7 @@ public class QueryModel implements java.io.Serializable {
 		boolean found = false;
 		List<QueryCondition> oldObjs = new ArrayList<QueryCondition>();
 		oldObjs.addAll(getQueryConditions());
-		
+
 		for(Iterator<QueryCondition> it=oldObjs.iterator(); it.hasNext();){
 			QueryCondition odt = it.next();
 			found = false;
@@ -455,100 +455,100 @@ public class QueryModel implements java.io.Serializable {
 			}
 			if(! found)
 				addQueryConditon(newdt);
-		} 	
-	}	
+		}
+	}
 
 
 	public void copy(QueryModel other){
-  
+
 		this.setModelName(other.getModelName());
 		this.setDatabaseCode(other.getDatabaseCode());
-		this.modelType= other.getModelType();  
-		this.ownerType= other.getOwnerType();  
-		this.ownerCode= other.getOwnerCode();  
-		this.querySql= other.getQuerySql();  
-		this.queryDesc= other.getQueryDesc();  
-		this.formNameFormat= other.getFormNameFormat();  
-		this.resultName= other.getResultName();  
-		this.rowDrawChart= other.getRowDrawChart();  
-		this.drawChartBeginCol= other.getDrawChartBeginCol();  
-		this.drawChartEndCol= other.getDrawChartEndCol();  
-		this.additionRow= other.getAdditionRow();  
-		this.rowLogic= other.getRowLogic();  
+		this.modelType= other.getModelType();
+		this.ownerType= other.getOwnerType();
+		this.ownerCode= other.getOwnerCode();
+		this.querySql= other.getQuerySql();
+		this.queryDesc= other.getQueryDesc();
+		this.formNameFormat= other.getFormNameFormat();
+		this.resultName= other.getResultName();
+		this.rowDrawChart= other.getRowDrawChart();
+		this.drawChartBeginCol= other.getDrawChartBeginCol();
+		this.drawChartEndCol= other.getDrawChartEndCol();
+		this.additionRow= other.getAdditionRow();
+		this.rowLogic= other.getRowLogic();
 		this.rowLogicValue= other.getRowLogicValue();
 	    this.logicUrl = other.getLogicUrl();
-		this.queryColumns = other.getQueryColumns();	
+		this.queryColumns = other.getQueryColumns();
 		this.queryConditions = other.getQueryConditions();
 		this.columnSql = other.getColumnSql();
 		this.isTree = other.getIsTree();
 		this.wizardNo = other.getWizardNo();
 	}
-	
+
 	public void copyNotNullProperty(QueryModel other){
-  
+
 	if( other.getModelName() != null)
 		this.setModelName(other.getModelName());
 	if(other.getDatabaseCode()!=null)
 		this.setDatabaseCode(other.getDatabaseCode());
 		if( other.getModelType() != null)
-			this.modelType= other.getModelType();  
+			this.modelType= other.getModelType();
 		if( other.getOwnerType() != null)
-			this.ownerType= other.getOwnerType();  
+			this.ownerType= other.getOwnerType();
 		if( other.getOwnerCode() != null)
-			this.ownerCode= other.getOwnerCode();  
+			this.ownerCode= other.getOwnerCode();
 		if( other.getQuerySql() != null)
-			this.querySql= other.getQuerySql();  
+			this.querySql= other.getQuerySql();
 		if( other.getQueryDesc() != null)
-			this.queryDesc= other.getQueryDesc();  
+			this.queryDesc= other.getQueryDesc();
 		if( other.getFormNameFormat() != null)
-			this.formNameFormat= other.getFormNameFormat();  
+			this.formNameFormat= other.getFormNameFormat();
 		if( other.getResultName() != null)
-			this.resultName= other.getResultName();  
+			this.resultName= other.getResultName();
 		if( other.getRowDrawChart() != null)
-			this.rowDrawChart= other.getRowDrawChart();  
+			this.rowDrawChart= other.getRowDrawChart();
 		if( other.getDrawChartBeginCol() != null)
-			this.drawChartBeginCol= other.getDrawChartBeginCol();  
+			this.drawChartBeginCol= other.getDrawChartBeginCol();
 		if( other.getDrawChartEndCol() != null)
-			this.drawChartEndCol= other.getDrawChartEndCol();  
+			this.drawChartEndCol= other.getDrawChartEndCol();
 		if( other.getAdditionRow() != null)
-			this.additionRow= other.getAdditionRow();  
+			this.additionRow= other.getAdditionRow();
 		if( other.getRowLogic() != null)
-			this.rowLogic= other.getRowLogic();  
+			this.rowLogic= other.getRowLogic();
 		if( other.getRowLogicValue() != null)
 			this.rowLogicValue= other.getRowLogicValue();
-		if(other.getLogicUrl()!=null) 
+		if(other.getLogicUrl()!=null)
 		    this.logicUrl = other.getLogicUrl();
-		if(other.getColumnSql()!=null) 
+		if(other.getColumnSql()!=null)
             this.columnSql = other.getColumnSql();
         this.isTree = other.isTree;
-        if(other.getWizardNo()!=null) 
+        if(other.getWizardNo()!=null)
             this.wizardNo = other.getWizardNo();
         if(null!=other.getQueryColumns())
         	replaceQueryColumns(other.getQueryColumns());
         if(null!=other.getQueryConditions())
         	replaceQueryConditions(other.getQueryConditions());
 	}
-	
+
 	public void clearProperties(){
-		this.modelType= null;  
-		this.columnSql= null;  
-		this.ownerType= null;  
-		this.ownerCode= null;  
+		this.modelType= null;
+		this.columnSql= null;
+		this.ownerType= null;
+		this.ownerCode= null;
 		this.setDatabaseCode(null);
-		this.querySql= null;  
-		this.queryDesc= null;  
-		this.formNameFormat= null;  
-		this.resultName= null;  
-		this.rowDrawChart= null;  
-		this.drawChartBeginCol= 0;  
-		this.drawChartEndCol= 0;  
-		this.additionRow= null;  
-		this.rowLogic= null;  
+		this.querySql= null;
+		this.queryDesc= null;
+		this.formNameFormat= null;
+		this.resultName= null;
+		this.rowDrawChart= null;
+		this.drawChartBeginCol= 0;
+		this.drawChartEndCol= 0;
+		this.additionRow= null;
+		this.rowLogic= null;
 		this.rowLogicValue= null;
 	    this.logicUrl = null;
 	    this.isTree = null;
 	    this.wizardNo = null;
-		this.queryColumns = new ArrayList<QueryColumn>();	
+		this.queryColumns = new ArrayList<QueryColumn>();
 		this.queryConditions = new ArrayList<QueryCondition>();
 	}
 }

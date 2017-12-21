@@ -15,14 +15,14 @@
 		float:left;
 		width:49%;
 		height:22px;
-		
+
 	}
 	.pagination p{
 		height:22px;
 	}
     table {
     table-layout: fixed;
-    width:100%;
+    /*width:100%;*/
 	font-family: verdana,arial,sans-serif;
 	font-size:11px;
 	color:#333333;
@@ -62,7 +62,7 @@
      white-space:normal;
 	 word-wrap: break-word;
 	}
-	
+
 	.btnbox{
 		text-align:right;
 		width:50%;
@@ -77,4 +77,3 @@
 		width:100%;
 		text-align:center;
 	}
-	
