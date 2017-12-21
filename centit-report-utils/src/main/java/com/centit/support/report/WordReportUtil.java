@@ -67,8 +67,7 @@ public abstract class WordReportUtil {
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
 
             // 2) Create Java model context
-            IContext context = contentType==1?getReportContext(report, params):
-                (contentType==2 ? new JsonDocxContext(params) : new SmartDocxContext(params));
+            IContext context = getReportContext(report, params,contentType);
             // 输出文件，文件存在则删除
             File outputFile = new File(outputFileName);
             // 文件夹不存在，创建所有文件夹
@@ -91,22 +90,29 @@ public abstract class WordReportUtil {
         }
     }
 
-    private static IContext getReportContext(IXDocReport report, Object object) throws XDocReportException {
-
-        IContext context = report.createContext();
-        FieldsMetadata metadata = new FieldsMetadata();
-        Map<String, Object> params;
-        if (object instanceof Map) {
-            params = (Map<String, Object>) object;
-        } else {
-            params = (JSONObject) JSON.toJSON(object);
+    private static IContext getReportContext(IXDocReport report, Object object,int contentType ) throws XDocReportException {
+        switch (contentType) {
+            case 1:
+                IContext context = report.createContext();
+                FieldsMetadata metadata = new FieldsMetadata();
+                Map<String, Object> params;
+                if (object instanceof Map) {
+                    params = (Map<String, Object>) object;
+                } else {
+                    params = (JSONObject) JSON.toJSON(object);
+                }
+                //context.putMap(params);
+                for (Map.Entry<String, Object> entry : params.entrySet()) {
+                    context.put(entry.getKey(), GeneralAlgorithm.nvl(entry.getValue(), ""));
+                }
+                report.setFieldsMetadata(metadata);
+                return context;
+            case 2:
+                return new JsonDocxContext(object);
+            case 3:
+            default:
+                return new SmartDocxContext(object);
         }
-        //context.putMap(params);
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            context.put(entry.getKey(), GeneralAlgorithm.nvl(entry.getValue(), ""));
-        }
-        report.setFieldsMetadata(metadata);
-        return context;
     }
 
     /**
