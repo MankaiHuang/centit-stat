@@ -59,7 +59,7 @@ public abstract class WordReportUtil {
     }
 
 
-    private static void innerReportDocxWithFreemarker(Object params, String templateName, String outputFileName, boolean useJsonContent) {
+    private static void innerReportDocxWithFreemarker(Object params, String templateName, String outputFileName, int contentType) {
 
         try (InputStream in = new FileInputStream(new File(templateName))) {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
@@ -67,7 +67,8 @@ public abstract class WordReportUtil {
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
 
             // 2) Create Java model context
-            IContext context = useJsonContent ? new JsonDocxContext(params) : getReportContext(report, params);
+            IContext context = contentType==1?getReportContext(report, params):
+                (contentType==2 ? new JsonDocxContext(params) : new SmartDocxContext(params));
             // 输出文件，文件存在则删除
             File outputFile = new File(outputFileName);
             // 文件夹不存在，创建所有文件夹
@@ -116,10 +117,14 @@ public abstract class WordReportUtil {
      * @param outputFileName 输出文件路径
      */
     public static void reportDocxWithFreemarker(Object params, String templateName, String outputFileName) {
-        innerReportDocxWithFreemarker(params, templateName, outputFileName, true);
+        innerReportDocxWithFreemarker(params, templateName, outputFileName, 2);
     }
 
     public static void reportListDocxWithFreemarker(Object params, String templateName, String outputFileName) {
-        innerReportDocxWithFreemarker(params, templateName, outputFileName, false);
+        innerReportDocxWithFreemarker(params, templateName, outputFileName, 1);
+    }
+
+    public static void reportSmartDocxWithFreemarker(Object params, String templateName, String outputFileName) {
+        innerReportDocxWithFreemarker(params, templateName, outputFileName, 3);
     }
 }
