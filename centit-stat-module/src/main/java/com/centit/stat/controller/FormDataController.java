@@ -97,7 +97,6 @@ public class FormDataController extends BaseController {
 
 		queryDatabase(paging?page:null, fdm, request);
 
-
 		response.reset();
 		response.setContentType("application/vnd.ms-excel;charset=utf-8");
 
@@ -297,7 +296,7 @@ public class FormDataController extends BaseController {
 		// 普通二维报表
 		if ("2".equals(modelType) || StringUtils.isEmpty(modelType)) {
 			totalRows = dataManager.queryFormData(formObj, page);
-            formObj.setTotalRowsAll(page.getTotalRows());
+            formObj.setTotalRowsAll(page==null?totalRows:page.getTotalRows());
 		}
 
 		// 同比报表 环比报表
@@ -314,7 +313,7 @@ public class FormDataController extends BaseController {
 
 		else {
 			totalRows = dataManager.queryFormData(formObj, page);
-            formObj.setTotalRowsAll(page.getTotalRows());
+            formObj.setTotalRowsAll(page==null?totalRows:page.getTotalRows());
 		}
 		formObj.setTotalRows(totalRows);
 //		formObj.setTotalRowsAll(page.getTotalRows());
