@@ -1,5 +1,8 @@
 package com.centit.support.report;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.centit.support.algorithm.GeneralAlgorithm;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import fr.opensagres.xdocreport.core.XDocReportException;
@@ -7,12 +10,14 @@ import fr.opensagres.xdocreport.document.IXDocReport;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
+import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by codefan on 17-8-10.
@@ -34,41 +39,35 @@ public abstract class WordReportUtil {
 
     /**
      * 这个可以在linux运行，缺点是转换的不完美 自动编号的转换会有错误，并且只能转换Docx，就是xml格式的我让的文档
+     *
      * @param docxFilePath word文件路径
-     * @param pdfFilePath pdf文件路径questionAnswer
+     * @param pdfFilePath  pdf文件路径questionAnswer
      * @throws Exception 转换异常
      */
-    public static void convertDocxToPdf(String docxFilePath,String pdfFilePath) throws Exception{
+    public static void convertDocxToPdf(String docxFilePath, String pdfFilePath) throws Exception {
 
         // 1) Load docx with POI XWPFDocument
-        XWPFDocument document = new XWPFDocument( new FileInputStream( new File(docxFilePath)));
+        XWPFDocument document = new XWPFDocument(new FileInputStream(new File(docxFilePath)));
 
         // 2) Convert POI XWPFDocument 2 PDF with iText
-        File outFile = new File( pdfFilePath);
+        File outFile = new File(pdfFilePath);
         outFile.getParentFile().mkdirs();
 
-        OutputStream out = new FileOutputStream( outFile );
+        OutputStream out = new FileOutputStream(outFile);
         PdfOptions options = PdfOptions.create()/*.fontEncoding( "UTF-8" )*/;
-        PdfConverter.getInstance().convert( document, out, options );
+        PdfConverter.getInstance().convert(document, out, options);
     }
 
-    /**
-     * 根据模板导出word文件
-     *
-     * @param params     ReportData对象为数据对象，里面存储Map 数据
-     * @param templateName   模板文件路径
-     * @param outputFileName 输出文件路径
-     */
-    public static void reportDocxWithFreemarker(Object params, String templateName, String outputFileName) {
 
-        try(InputStream in = new FileInputStream(new File(templateName))) {
+    private static void innerReportDocxWithFreemarker(Object params, String templateName, String outputFileName, boolean useJsonContent) {
+
+        try (InputStream in = new FileInputStream(new File(templateName))) {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
 
-            IXDocReport report = XDocReportRegistry.getRegistry().loadReport(
-                    in, TemplateEngineKind.Freemarker, false);
+            IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
 
             // 2) Create Java model context
-            IContext context =  getReportContext(params);//new JsonDocxContext(params);//
+            IContext context = useJsonContent ? new JsonDocxContext(params) : getReportContext(report, params);
             // 输出文件，文件存在则删除
             File outputFile = new File(outputFileName);
             // 文件夹不存在，创建所有文件夹
@@ -80,7 +79,7 @@ public abstract class WordReportUtil {
                 outputFile.renameTo(new File(outputFileName + "." + new Date().getTime()));
             }
             // 生成新的文件
-            try(OutputStream outputStream = new FileOutputStream(outputFileName)) {
+            try (OutputStream outputStream = new FileOutputStream(outputFileName)) {
                 report.process(context, outputStream);
             }
             //XDocReportRegistry.getRegistry().unregisterReport(report);
@@ -91,15 +90,36 @@ public abstract class WordReportUtil {
         }
     }
 
-    private static IContext getReportContext(Object params) throws XDocReportException {
-        return new JsonDocxContext(params);
-//        IContext context = report.createContext();
-//        FieldsMetadata metadata = new FieldsMetadata();
-//        context.putMap(params);
-//        for (Map.Entry<String, Object> entry : params.entrySet()){
-//            context.put(entry.getKey(), GeneralAlgorithm.nvl(entry.getValue(),""));
-//        }
-//        report.setFieldsMetadata(metadata);
-//        return context;
+    private static IContext getReportContext(IXDocReport report, Object object) throws XDocReportException {
+
+        IContext context = report.createContext();
+        FieldsMetadata metadata = new FieldsMetadata();
+        Map<String, Object> params;
+        if (object instanceof Map) {
+            params = (Map<String, Object>) object;
+        } else {
+            params = (JSONObject) JSON.toJSON(object);
+        }
+        //context.putMap(params);
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            context.put(entry.getKey(), GeneralAlgorithm.nvl(entry.getValue(), ""));
+        }
+        report.setFieldsMetadata(metadata);
+        return context;
+    }
+
+    /**
+     * 根据模板导出word文件
+     *
+     * @param params         ReportData对象为数据对象，里面存储Map 数据
+     * @param templateName   模板文件路径
+     * @param outputFileName 输出文件路径
+     */
+    public static void reportDocxWithFreemarker(Object params, String templateName, String outputFileName) {
+        innerReportDocxWithFreemarker(params, templateName, outputFileName, true);
+    }
+
+    public static void reportListDocxWithFreemarker(Object params, String templateName, String outputFileName) {
+        innerReportDocxWithFreemarker(params, templateName, outputFileName, false);
     }
 }
