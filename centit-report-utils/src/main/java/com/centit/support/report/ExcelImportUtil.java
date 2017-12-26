@@ -1,14 +1,10 @@
 package com.centit.support.report;
 
-import com.centit.support.algorithm.NumberBaseOpt;
 import com.centit.support.common.JavaBeanField;
 import com.centit.support.common.JavaBeanMetaData;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by codefan on 17-9-20.
@@ -46,22 +43,34 @@ public abstract class ExcelImportUtil {
             case "Double":
             case "BigDecimal":
             case "BigInteger":
-                field.setObjectFieldValue(object, cell.getNumericCellValue());
+                if(cell.getCellTypeEnum() == CellType.NUMERIC) {
+                    field.setObjectFieldValue(object, cell.getNumericCellValue());
+                }else{
+                    field.setObjectFieldValue(object, cell.toString());
+                }
                 break;
 
             case "Date":
             case "sqlDate":
             case "sqlTimestamp":
-                field.setObjectFieldValue(object, cell.getDateCellValue());
+                if(cell.getCellTypeEnum() == CellType.NUMERIC) {
+                    field.setObjectFieldValue(object, cell.getDateCellValue());
+                }else{
+                    field.setObjectFieldValue(object, cell.toString());
+                }
                 break;
             case "boolean":
             case "Boolean":
-                field.setObjectFieldValue(object, cell.getBooleanCellValue());
+                if(cell.getCellTypeEnum() == CellType.BOOLEAN) {
+                    field.setObjectFieldValue(object, cell.getBooleanCellValue());
+                }else{
+                    field.setObjectFieldValue(object, cell.toString());
+                }
                 break;
             case "byte[]":
             case "String":
             default:
-                field.setObjectFieldValue(object, cell.getStringCellValue());
+                field.setObjectFieldValue(object, cell.toString());
                 break;
         }
     }
@@ -90,7 +99,7 @@ public abstract class ExcelImportUtil {
             for(Map.Entry<Integer,String> ent : fieldDesc.entrySet() ){
                 Cell cell = excelRow.getCell(ent.getKey());
                 JavaBeanField field = metaData.getFiled(ent.getValue());
-                if(cell!=null && field !=null ){
+                if(cell != null && StringUtils.isNotBlank(cell.toString())){
                     hasValue = true;
                     setObjectFieldValue(rowObj,field,cell);
                 }

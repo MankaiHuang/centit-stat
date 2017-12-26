@@ -965,15 +965,10 @@ public class FormDataManagerImpl implements FormDataManager {
 			col[0] = "合计";
 			nf = foundCrossColumn(dataColumns, col, dataCols, colGroup);
 			if (nf > 0) {
-
-//				for (int j = 0; j < dataAnalyseSum; j++) {
-//					rowData[rowGroup + nf * dataAnalyseSum + j] = ReflectionOpt.addTwoObject(
-//							rowData[rowGroup + nf * dataAnalyseSum + j], curData[rowGroup + colGroup + j]);
-//				}
-                for (int j = 0; j < dataAnalyseSum; j++) {
-                    rowData[rowGroup + nf * dataAnalyseSum + j] = addTwoObject(
-                        rowData[rowGroup + nf * dataAnalyseSum + j], curData[rowGroup + colGroup + j]);
-                }
+				for (int j = 0; j < dataAnalyseSum; j++) {
+					rowData[rowGroup + nf * dataAnalyseSum + j] = ReflectionOpt.addTwoObject(
+							rowData[rowGroup + nf * dataAnalyseSum + j], curData[rowGroup + colGroup + j]);
+				}
 			}
 
 		}
@@ -985,15 +980,7 @@ public class FormDataManagerImpl implements FormDataManager {
 		}
 		// 树形结构
 		if ("1".equals(formData.getIsTree())) {
-			ParentChild<Object[]> c = new ListOpt.ParentChild<Object[]>() {
-				@Override
-				public boolean parentAndChild(Object[] p, Object[] c) {
-					return p[0].equals(c[1]);
-				}
-
-			};
-
-			ListOpt.sortAsTree(crossDatas, c);
+			ListOpt.sortAsTree(crossDatas, (p, c1) -> p[0].equals(c1[1]));
 		}
 		// 计算合计
 		if (needSum) {
@@ -1004,12 +991,11 @@ public class FormDataManagerImpl implements FormDataManager {
 				sumData[i] = null;
 			for (int di = 0; di < crossDatas.size(); di++) {
 				for (int i = rowGroup; i < dataColCount; i++) {
-					if (crossDatas.get(di)[i] != null && crossDatas.get(di)[i] instanceof java.lang.Number)
-//						sumData[i] = (sumData[i] == null) ? crossDatas.get(di)[i]
-//								: ((Number) sumData[i]).doubleValue() + ((Number) crossDatas.get(di)[i]).doubleValue();
+					if (crossDatas.get(di)[i] != null && crossDatas.get(di)[i] instanceof java.lang.Number) {
                         sumData[i] = (sumData[i] == null) ? crossDatas.get(di)[i]
-                            :new BigDecimal(((Number) sumData[i]).doubleValue() + ((Number) crossDatas.get(di)[i]).doubleValue()).setScale(2, BigDecimal.ROUND_HALF_UP);
-				}
+                            : ReflectionOpt.addTwoObject(sumData[i], crossDatas.get(di)[i]);
+                    }
+  				}
 			}
 			for (int i = 1; i < dataColCount; i++)
 				if (sumData[i] == null)
@@ -1097,74 +1083,5 @@ public class FormDataManagerImpl implements FormDataManager {
 
 		return tbody;
 	}
-
-	/**
-	 * 解析表格内容数据
-	 *
-	 * @param crossDatas
-	 *            交叉表数据内容
-	 * @param columns
-	 *            列
-	 * @param dataMap
-	 *            参数信息
-	 * @param dataColumns
-	 *            列参数
-	 * @return
-	 */
-	/*
-	 * private static CTableBodyTBody parseCrossTbody(List<Object[]> crossDatas,
-	 * List<QueryColumn> columns, List<Map<String, Object>> dataMap,
-	 * List<Object[]> dataColumns) { CTableBodyTBody tbody = new
-	 * CTableBodyTBody();
-	 *
-	 * // 表格头固定列 List<QueryColumn> columnHead = parseQueryColumn(columns, "R");
-	 *
-	 * // 对比数据列 List<QueryColumn> columnCross = parseQueryColumn(columns, "C");
-	 *
-	 * // 对比数据列 List<QueryColumn> columnData = parseQueryColumn(columns, "D");
-	 *
-	 * for (int rowIndex = 0; rowIndex < crossDatas.size(); rowIndex++) { //
-	 * 每一行数据 Object[] datas = crossDatas.get(rowIndex);
-	 *
-	 * // 每一行参数 Map<String, Object> params = dataMap.get(rowIndex);
-	 *
-	 * int colIndex = 0;
-	 *
-	 * // 固定列 for (QueryColumn col : columnHead) { CTableCell cell =
-	 * CTableCell.createTableCell(datas[colIndex++], col, params);
-	 * tbody.addCell(cell); }
-	 *
-	 * // 交叉列 for (Object[] obj : dataColumns) { // 设置列参数 for (int paramIndex =
-	 * 0; paramIndex < obj.length; paramIndex++) { params.put(":" +
-	 * columnCross.get(paramIndex).getColName(), obj[paramIndex].toString()); }
-	 *
-	 * for (QueryColumn col : columnData) { CTableCell cell =
-	 * CTableCell.createTableCell(datas[colIndex++], col, params);
-	 * tbody.addCell(cell); } }
-	 *
-	 * if (rowIndex < crossDatas.size() - 1) { tbody.addLine(); } }
-	 *
-	 * return tbody; }
-	 */
-
-    /**
-     * 将两个对象加+起来，可能是数字相加，也可能是字符串连接
-     * @param a object1
-     * @param b object2
-     * @return 相加结果
-     */
-    public static Object addTwoObject(Object a,Object b){
-        if(a==null)
-            return b;
-        if(b==null)
-            return a;
-
-        if( a instanceof java.lang.Number &&  b instanceof java.lang.Number){
-            BigDecimal BigA = new BigDecimal(((Number) a).doubleValue());
-            BigDecimal BigB = new BigDecimal(((Number) b).doubleValue());
-            return BigA.add(BigB).setScale(2, BigDecimal.ROUND_HALF_UP);
-        }
-        return a.toString() + b.toString();
-    }
 
 }
