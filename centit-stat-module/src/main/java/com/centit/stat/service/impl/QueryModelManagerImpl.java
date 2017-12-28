@@ -20,43 +20,43 @@ import com.centit.support.database.utils.QueryUtils;
 @Service
 @Transactional
 public class QueryModelManagerImpl extends BaseEntityManagerImpl<QueryModel,String,QueryModelDao>
-	implements QueryModelManager{
-	
-	private QueryModelDao queryModelDao ;
-	@Resource
-	public void setQueryModelDao(QueryModelDao baseDao)
-	{
-		this.queryModelDao = baseDao;
-		setBaseDao(this.queryModelDao);
-	}
-	
-	public String  getWizardNo(){
-	    return this.queryModelDao.getWizardNo();
-	}
+    implements QueryModelManager{
 
-	@Override
-	public Map<String,List<Object>> getColAndCond(String sql) {
-		Map<String,List<Object>> ColAndCond=new HashMap<String,List<Object>>();
-		List<Object> colList=new ArrayList<Object>();
+    private QueryModelDao queryModelDao ;
+    @Resource
+    public void setQueryModelDao(QueryModelDao baseDao)
+    {
+        this.queryModelDao = baseDao;
+        setBaseDao(this.queryModelDao);
+    }
 
-		List<String> columnNames=QueryUtils.getSqlTemplateFiledNames(sql);
+    public String  getWizardNo(){
+        return this.queryModelDao.getWizardNo();
+    }
 
-		for(String name:columnNames){
-			QueryColumn col=new QueryColumn();
-			col.setCid(new QueryColumnId("",name));
-			colList.add(col);
-		}
-		ColAndCond.put("columns", colList);
-		List<Object> condList=new ArrayList<Object>();
-		Set<String> paramNames=QueryUtils.getSqlTemplateParameters(sql);
-		for(String param : paramNames){
-			QueryCondition cond=new QueryCondition();
-			cond.setCondName(param);
-			condList.add(cond);
-		}
-		ColAndCond.put("conditions", condList);
-		return ColAndCond;
-	}
-	
+    @Override
+    public Map<String,List<Object>> getColAndCond(String sql) {
+        Map<String,List<Object>> ColAndCond=new HashMap<String,List<Object>>();
+        List<Object> colList=new ArrayList<Object>();
+
+        List<String> columnNames=QueryUtils.getSqlTemplateFiledNames(sql);
+
+        for(String name:columnNames){
+            QueryColumn col=new QueryColumn();
+            col.setCid(new QueryColumnId("",name));
+            colList.add(col);
+        }
+        ColAndCond.put("columns", colList);
+        List<Object> condList=new ArrayList<Object>();
+        Set<String> paramNames=QueryUtils.getSqlTemplateParameters(sql);
+        for(String param : paramNames){
+            QueryCondition cond=new QueryCondition();
+            cond.setCondName(param);
+            condList.add(cond);
+        }
+        ColAndCond.put("conditions", condList);
+        return ColAndCond;
+    }
+
 }
 

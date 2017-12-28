@@ -21,81 +21,81 @@ import com.centit.stat.po.html.AbstractCHtmlComponent;
 
 /**
  * 表格单元格组件，后台数据和前台TD之间的转换
- * 
+ *
  * @author zk 2013-6-8
  *
  */
 public class CTableCell extends AbstractCHtmlComponent {
-    
+
     public static final String TARGET_BLANK = "_Blank";
-    
+
     public static final String TARGET_NAVTAB = "navtab";
-    
+
     public static final String TARGET_DIALOG = "dialog";
-    
+
     /**
      * 检查style是否含有display属性
      */
     public static final Pattern PATTERN_DISPLAY = Pattern.compile("display:(.*?);");
-    
+
     /**
      * HTML模板 不带链接
      */
     public static final String TABLE_CELL_MODEL = "<td${id}${class}${style}${rowspan}${colspan}>${data}</td>";
-    
+
     /**
      * HTML模板 带链接
      */
-    public static final String TABLE_CELL_MODEL_LINK 
+    public static final String TABLE_CELL_MODEL_LINK
         = "<td ${id}${class}${style}${rowspan}${colspan}><a href='${href}'${target} external='true'>${data}</a></td>";
-    
+
     /**
      * HTML模板 不带链接
      */
     public static final String TABLE_HEAD_CELL_MODEL = "<th${id}${class}${style}${rowspan}${colspan}>${data}</th>";
-    
+
     /**
      * HTML模板 带链接
      */
-    public static final String TABLE_HEAD_CELL_MODEL_LINK 
+    public static final String TABLE_HEAD_CELL_MODEL_LINK
         = "<th ${id}${class}${style}${rowspan}${colspan}><a href='${href}'${target} external='true'>${data}</a></th>";
-    
+
     /**
      * 存储属性
      */
     private Map<String, String> property;
-    
+
     /**
      * 单元格原始值
      */
     private Object value;
-    
+
     /**
      * 单元格展示值
      */
     private String displayValue;
-    
+
     /**
      * 单元格链接
      */
     private String href;
-    
+
     /**
      * 单元格链接target
      */
     private String linkTarget;
-    
+
     /**
      * 是否展示
      */
     private boolean display = true;
-    
+
     private boolean isHead = false;
-    
+
     private int rowspan;
-    
+
     private int colspan;
-    
+
     /**
      * 和报表功能结合，创建表格单元格
      * @param orignValue 原始值
@@ -107,46 +107,46 @@ public class CTableCell extends AbstractCHtmlComponent {
         CTableCell cell = new CTableCell();
         String showValue;
         if("--".equals(orignValue))
-        	{showValue=(String)orignValue;}
+            {showValue=(String)orignValue;}
         else
-        	{showValue= parseDisplayValue(orignValue, col);}
-        
+            {showValue= parseDisplayValue(orignValue, col);}
+
         String hrefValue = parseHref(col, params);
         if(null!=col.getCssStyle())
         cell.setCssStyle(col.getCssStyle());
         cell.setValue(orignValue);
         if(StringUtils.isNotBlank(col.getCatalogCode()))
-        	{	
-        	String dicValue=CodeRepositoryUtil.getValue(col.getCatalogCode(), orignValue.toString());
-        		if(StringUtils.isNotBlank(dicValue))
-        			{cell.setDisplayValue(dicValue);}
-        		else{
-        			cell.setDisplayValue(showValue);}
-        	}
+            {
+            String dicValue=CodeRepositoryUtil.getValue(col.getCatalogCode(), orignValue.toString());
+                if(StringUtils.isNotBlank(dicValue))
+                    {cell.setDisplayValue(dicValue);}
+                else{
+                    cell.setDisplayValue(showValue);}
+            }
         else{
-        	cell.setDisplayValue(showValue);
+            cell.setDisplayValue(showValue);
         }
-        
+
         cell.setHref(hrefValue);
         cell.setLinkTarget(col.getLinkType());
-        
-        cell.setDisplay(parseDisplay(col)); 
-        
+
+        cell.setDisplay(parseDisplay(col));
+
         // 设置属性
         for(Entry<String, Object> entry : params.entrySet()) {
             String key = entry.getKey().replaceAll(":", "").trim();
             Object value = entry.getValue();
-            
+
             if (null == value) continue;
-            
+
             cell.setProperty(key, value.toString().trim());
         }
         return cell;
     }
-    
-    
-    
-    
+
+
+
+
     public static String ClobToString(Clob clob) {
         String reString = "";
         Reader is = null;
@@ -181,43 +181,43 @@ public class CTableCell extends AbstractCHtmlComponent {
     }
     /**
      * 和报表功能结合，创建表格单元格
-     * 
+     *
      * @param orignValue 原始值
      * @param col 列
      * @return CTableCell
      */
     public static CTableCell createTableHeadCell(String orignValue, QueryColumn col) {
         CTableCell cell = new CTableCell();
-        
+
         cell.setValue(orignValue);
         cell.setDisplayValue(orignValue);
-        
-        cell.setDisplay(parseDisplay(col)); 
+
+        cell.setDisplay(parseDisplay(col));
         cell.setLinkTarget(col.getLinkType());
         cell.setHead(true);
-        
+
         return cell;
     }
-    
+
     /**
      * 和报表功能结合，创建表格单元格
-     * 
+     *
      * @param orignValue 原始值
      * @return CTableCell
      */
     public static CTableCell createTableHeadCell(String orignValue) {
         CTableCell cell = new CTableCell();
-        
+
         cell.setValue(orignValue);
         cell.setDisplayValue(orignValue);
         cell.setHead(true);
-        
+
         return cell;
     }
-    
+
     /**
      * 解析是否展示
-     * 
+     *
      * @param col 列
      * @return 布尔值
      */
@@ -226,13 +226,13 @@ public class CTableCell extends AbstractCHtmlComponent {
         if (null == col || StringUtils.isBlank(col.getIsShow()) || "T".equals(col.getIsShow())) {
             return true;
         }
-        
+
         return false;
     }
 
     /**
      * 根据查询数值替换参数
-     * 
+     *
      * @param col 列
      * @param params 参数
      * @return String
@@ -241,67 +241,67 @@ public class CTableCell extends AbstractCHtmlComponent {
         if (null == col || StringUtils.isBlank(col.getColLogic())) {
             return null;
         }
-        
+
         String colLogic = col.getColLogic();
-        
+
         for(Entry<String, Object> entry : params.entrySet()) {
             if (null == entry.getValue()) continue;
-            
+
             colLogic = colLogic.replaceAll(entry.getKey(), ""+entry.getValue());
         }
-        
+
         return colLogic;
     }
 
     /**
      * 根据列类型 解析展示格式
-     * 
+     *
      * @param orignValue 原始值
      * @param col 列
      * @return String
      */
     private static String parseDisplayValue(Object orignValue, QueryColumn col) {
-    	if(orignValue instanceof Clob)
-    		return ClobToString((Clob)orignValue);
+        if(orignValue instanceof Clob)
+            return ClobToString((Clob)orignValue);
         String value = (null != orignValue) ? orignValue.toString() : "";
         if (StringUtils.isEmpty(value)) return value;
         if (null == col || StringUtils.isBlank(col.getColType())) {
             return value;
         }
-        
+
         String colType = col.getColType();
         String format = col.getColFormat();
-        
+
         // 字符串
         if ("S".equals(colType)) {
             return value;
         }
-        
+
         // 数字 货币
         if ("N".equals(colType) || "C".equals(colType)) {
             if (StringUtils.isEmpty(format)) {
                 return value;
             }
-            
+
             DecimalFormat df = new DecimalFormat(format);
             return df.format(Double.parseDouble(value));
         }
-        
+
         // 百分比
         if ("P".equals(colType)) {
             DecimalFormat df = new DecimalFormat(format + "%");
             return df.format(Double.parseDouble(value));
         }
-        
+
         // 日期
         if ("D".equals(colType)) {
             SimpleDateFormat sdf = new SimpleDateFormat(format);
-            if (orignValue=="--") 
+            if (orignValue=="--")
                 return value;
             return sdf.format(orignValue);
         }
-        
-        
+
+
         return value;
     }
 
@@ -368,26 +368,26 @@ public class CTableCell extends AbstractCHtmlComponent {
     public void setColspan(int colspan) {
         this.colspan = colspan;
     }
-    
+
     public Map<String, String> getProperty() {
         if (null == property) {
             property = new HashMap<String, String>();
         }
-        
+
         return property;
     }
 
     public void setProperty(String key, String value) {
         this.property = getProperty();
-        
+
         property.put(key, value);
     }
-    
+
     @Override
     public String getHtml() {
         if (!display) {
             Matcher m = PATTERN_DISPLAY.matcher(getCssStyle());
-            
+
             if (!m.matches()) {
                 setCssStyle(getCssStyle() + "display:none;");
             }
@@ -395,19 +395,19 @@ public class CTableCell extends AbstractCHtmlComponent {
                 setCssStyle(m.replaceAll("display:none;"));
             }
         }
-        
+
         String strRowspan = (0 == rowspan ? "" : " rowspan='" + rowspan + "'");
         String strColspan = (0 == colspan ? "" : " colspan='" + colspan + "'");
         String strTarget = (StringUtils.isEmpty(linkTarget) ? "" : " target='" + linkTarget + "'");
         String strStyle = (StringUtils.isEmpty(getCssStyle()) ? "" : " style='" + getCssStyle() + "'");
         String strClass = (StringUtils.isEmpty(getCssClass()) ? "" : " class='" + getCssClass() + "'");
         String strId = (StringUtils.isEmpty(getId()) ? "" : " id='" + getId() + "'");
-        
+
         String html;
-        
+
         // 纯数据不带链接
         if (StringUtils.isEmpty(href)) {
-            
+
             if (isHead) {
                 html = TABLE_HEAD_CELL_MODEL;
             }
@@ -425,7 +425,7 @@ public class CTableCell extends AbstractCHtmlComponent {
                         .replace("${target}", strTarget);
             }
         }
-        
+
         // 替换返回
         return html = html.replace("${id}", strId)
                 .replace("${class}", strClass)

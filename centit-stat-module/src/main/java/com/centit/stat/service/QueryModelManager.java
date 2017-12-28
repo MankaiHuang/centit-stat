@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface QueryModelManager extends BaseEntityManager<QueryModel, String>{
-	public String  getWizardNo();
+    public String  getWizardNo();
 
-	public Map<String, List<Object>> getColAndCond(String sql);
+    public Map<String, List<Object>> getColAndCond(String sql);
 }

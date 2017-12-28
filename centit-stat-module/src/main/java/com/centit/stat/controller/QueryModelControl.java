@@ -25,13 +25,13 @@ import java.util.Map;
 @Controller
 @RequestMapping("/stat/querymodel")
 public class QueryModelControl extends BaseController{
-	@Resource
-	private QueryModelManager queryModelMag;
-	
-	
-	@RequestMapping(value="",method={RequestMethod.GET})
-	public void list(PageDesc pageDesc,String[] field,  String _search,HttpServletRequest request, HttpServletResponse response){
-		Map<String, Object> searchColumn = convertSearchColumn(request);
+    @Resource
+    private QueryModelManager queryModelMag;
+
+
+    @RequestMapping(value="",method={RequestMethod.GET})
+    public void list(PageDesc pageDesc,String[] field,  String _search,HttpServletRequest request, HttpServletResponse response){
+        Map<String, Object> searchColumn = convertSearchColumn(request);
         List<QueryModel> listObjects = new ArrayList<QueryModel>();
         if (null == _search) {
             listObjects = queryModelMag.listObjects(searchColumn);
@@ -50,66 +50,66 @@ public class QueryModelControl extends BaseController{
         resData.addResponseData(OBJLIST, listObjects);
         resData.addResponseData(PAGE_DESC, pageDesc);
         JsonResultUtils.writeResponseDataAsJson(resData, response, simplePropertyPreFilter);
-	}
-	
-	
-	@RequestMapping(value="/{modelName}",method={RequestMethod.GET})
-	public void get(@PathVariable String modelName,HttpServletRequest request, HttpServletResponse response){
-		QueryModel qm=queryModelMag.getObjectById(modelName);
-		JsonResultUtils.writeSingleDataJson(qm, response);
-	}
-	
-	
-	@RequestMapping(value="",method={RequestMethod.POST})
-	public void create(@Valid QueryModel qm,HttpServletRequest request, HttpServletResponse response){
-		qm.setQuerySql(dealPlusAndAnd(qm.getQuerySql()));
-		queryModelMag.saveNewObject(qm);
-		JsonResultUtils.writeSingleDataJson(qm, response);
-	}
-	
-	
-	@RequestMapping(value="/{modelName}",method={RequestMethod.PUT})
-	public void update(@Valid QueryModel qm,@PathVariable String modelName,HttpServletRequest request, HttpServletResponse response){
-		QueryModel dbqm=queryModelMag.getObjectById(modelName);
-		qm.setQuerySql(dealPlusAndAnd(qm.getQuerySql()));
-		if(null!=dbqm)
-			dbqm.copyNotNullProperty(qm);
-		queryModelMag.saveObject(dbqm);
-		JsonResultUtils.writeSingleDataJson(dbqm, response);
-	}
+    }
 
 
-	//前端暂时将+号和&替换为<plussign>和<andsign>，然后进行了特殊字符转义，这个方法用来先反转义，再反替换
+    @RequestMapping(value="/{modelName}",method={RequestMethod.GET})
+    public void get(@PathVariable String modelName,HttpServletRequest request, HttpServletResponse response){
+        QueryModel qm=queryModelMag.getObjectById(modelName);
+        JsonResultUtils.writeSingleDataJson(qm, response);
+    }
 
-	public String dealPlusAndAnd(String str){
-		str=HtmlUtils.htmlUnescape(str);
-		return str.replaceAll("<plussign>", "+").replaceAll("<andsign>", "&");
-	}
-	
-	/**
-	 * 根据sql获取列名和查询参数名
-	 * @param sql 查询sql
-	 * @param response HttpServletResponse
-	 */
-	@RequestMapping(value="/colandcond",method={RequestMethod.POST})
-	public void generateColAndConByQM(@RequestParam String sql, HttpServletResponse response){
-		try {
-			Map<String,List<Object>> map=queryModelMag.getColAndCond(dealPlusAndAnd(sql));
-			JsonResultUtils.writeSingleDataJson(map, response);
-		}
-		catch(Exception e) {
 
-			JsonResultUtils.writeErrorMessageJson(501, "SQL解析失败，请检查是否", response);
+    @RequestMapping(value="",method={RequestMethod.POST})
+    public void create(@Valid QueryModel qm,HttpServletRequest request, HttpServletResponse response){
+        qm.setQuerySql(dealPlusAndAnd(qm.getQuerySql()));
+        queryModelMag.saveNewObject(qm);
+        JsonResultUtils.writeSingleDataJson(qm, response);
+    }
 
-		}
-	}
-	
-	@RequestMapping(value="/{queryName}",method={RequestMethod.DELETE})
-	public void delete(HttpServletRequest request, @PathVariable String queryName,HttpServletResponse response){
-		QueryModel dbqm=queryModelMag.getObjectById(queryName);
-		if(null!=dbqm)
-			queryModelMag.deleteObjectById(queryName);
-		JsonResultUtils.writeSuccessJson(response);
-	}
-	
+
+    @RequestMapping(value="/{modelName}",method={RequestMethod.PUT})
+    public void update(@Valid QueryModel qm,@PathVariable String modelName,HttpServletRequest request, HttpServletResponse response){
+        QueryModel dbqm=queryModelMag.getObjectById(modelName);
+        qm.setQuerySql(dealPlusAndAnd(qm.getQuerySql()));
+        if(null!=dbqm)
+            dbqm.copyNotNullProperty(qm);
+        queryModelMag.saveObject(dbqm);
+        JsonResultUtils.writeSingleDataJson(dbqm, response);
+    }
+
+
+    //前端暂时将+号和&替换为<plussign>和<andsign>，然后进行了特殊字符转义，这个方法用来先反转义，再反替换
+
+    public String dealPlusAndAnd(String str){
+        str=HtmlUtils.htmlUnescape(str);
+        return str.replaceAll("<plussign>", "+").replaceAll("<andsign>", "&");
+    }
+
+    /**
+     * 根据sql获取列名和查询参数名
+     * @param sql 查询sql
+     * @param response HttpServletResponse
+     */
+    @RequestMapping(value="/colandcond",method={RequestMethod.POST})
+    public void generateColAndConByQM(@RequestParam String sql, HttpServletResponse response){
+        try {
+            Map<String,List<Object>> map=queryModelMag.getColAndCond(dealPlusAndAnd(sql));
+            JsonResultUtils.writeSingleDataJson(map, response);
+        }
+        catch(Exception e) {
+
+            JsonResultUtils.writeErrorMessageJson(501, "SQL解析失败，请检查是否", response);
+
+        }
+    }
+
+    @RequestMapping(value="/{queryName}",method={RequestMethod.DELETE})
+    public void delete(HttpServletRequest request, @PathVariable String queryName,HttpServletResponse response){
+        QueryModel dbqm=queryModelMag.getObjectById(queryName);
+        if(null!=dbqm)
+            queryModelMag.deleteObjectById(queryName);
+        JsonResultUtils.writeSuccessJson(response);
+    }
+
 }
