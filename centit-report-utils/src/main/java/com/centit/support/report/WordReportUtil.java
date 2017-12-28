@@ -21,12 +21,16 @@ import java.util.Map;
 
 /**
  * Created by codefan on 17-8-10.
+ * xdocreport 是一个封装非常好的类库，所以已经没有必要再次封装，
+ * 这个类的目的只是告诉读者可以这样使用，在项目中除非非常简单可以直接使用这个类中的方法，否则都建议读者直接使用xdocreport
+ *
+ *
  * 模板进能用 Docx
  * 依赖开源项目 https://github.com/opensagres/xdocreport
  *             https://github.com/opensagres/xdocreport.samples
  * 示例代码 https://github.com/opensagres/xdocreport.samples/tree/master/samples ~
  *         /fr.opensagres.xdocreport.samples.docxandfreemarker/src/fr/opensagres/xdocreport/samples/docxandfreemarker
- * */
+ */
 
 @SuppressWarnings("unused")
 public abstract class WordReportUtil {
