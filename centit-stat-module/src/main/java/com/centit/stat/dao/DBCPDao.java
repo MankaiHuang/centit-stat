@@ -149,7 +149,7 @@ public class DBCPDao {
             if (currDatas == null){
                 page.setTotalRows(0);
                 return new ArrayList<>(0);
-            }else if(page.getPageSize()<=0 || currDatas.size()<page.getPageSize()) {
+            }else if(page.getPageNo()<=1 && (page.getPageSize()<=0 || currDatas.size()<page.getPageSize())) {
                 page.setTotalRows(currDatas.size());
             }else{
                 long totalRows=DatabaseAccess.queryTotalRows(conn, qap.getQuery(), qap.getParams());
