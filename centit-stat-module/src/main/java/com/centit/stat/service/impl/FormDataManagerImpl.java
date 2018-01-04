@@ -854,7 +854,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
     @Override
     public Integer queryCrossData(FormDataModel formData) {
-        return queryCrossData(formData, true);
+        return queryCrossData(formData, false);
     }
 
     @Override
