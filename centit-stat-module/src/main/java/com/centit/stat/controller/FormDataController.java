@@ -54,9 +54,9 @@ public class FormDataController extends BaseController {
             collectParams(request, formObj,true);
             JsonResultUtils.writeSingleDataJson(formObj, response,
                     JsonPropertyUtils.getIncludePropPreFilter(
-                            FormDataModel.class, new String[] { "modelName",
+                            FormDataModel.class, "modelName",
                                     "paramCount", "conditions",
-                                    "formNameFormat", "formName" }));
+                                    "formNameFormat", "formName"));
         } catch (Exception e) {
             JsonResultUtils.writeErrorMessageJson(e.getMessage(), response);
             e.printStackTrace();
@@ -325,7 +325,7 @@ public class FormDataController extends BaseController {
         //每个单元格值
         private Object[][] twodimen = null;
         //需要合并的区域列表
-        private List<int[]> needCombine = new ArrayList<int[]>();
+        private List<int[]> needCombine = new ArrayList<>();
 
         public TwoDimen(Object[][] twodimen2, List<int[]> combineList) {
             this.twodimen = twodimen2;
@@ -352,8 +352,7 @@ public class FormDataController extends BaseController {
 
     public TwoDimen convertLinesToTwoDimen(List<CTableLine> lines) {
         int xlen = 0;
-        for (int i = 0; i < lines.get(0).getCells().size(); i++) {
-            CTableCell cell = lines.get(0).getCells().get(i);
+        for (CTableCell cell : lines.get(0).getCells()) {
             if (cell.getColspan() > 0) {
                 xlen += cell.getColspan();
             } else {
@@ -364,28 +363,25 @@ public class FormDataController extends BaseController {
         // xlen:横向长度
         // ylen:纵向长度
         Object[][] twodimen = new Object[xlen][ylen];
-        List<int[]> combineList = new ArrayList<int[]>();
+        List<int[]> combineList = new ArrayList<>();
         // 每行line循环
         for (int y = 0; y < lines.size(); y++) {
             CTableLine line = lines.get(y);
-            int xIndex = 0;
+            int xIndex = line.getFirstCellCol();
             // 每个单元格循环
-            for (int x = 0; x < line.getCells().size(); x++) {
-                CTableCell cell = line.getCells().get(x);
+            for (CTableCell cell : line.getCells()){
                 Object value = cell.getValue();
                 // 单元格是纵向合并类型
                 if (cell.getRowspan() > 1) {
-                    int[] comb = new int[] { y, (y + cell.getRowspan() - 1), x,
-                            x };
+                    int[] comb = new int[] { y, (y + cell.getRowspan() - 1), xIndex,
+                        xIndex };
                     combineList.add(comb);
                     for (int k = 0; k < cell.getRowspan(); k++) {
                         // 非数字型统统取displayvalue
                         if (isNumType(value)) {
-                            twodimen[x][y + k] = cell.getValue();
+                            twodimen[xIndex][y + k] = cell.getValue();
                         } else {
-                            {
-                                twodimen[x][y + k] = cell.getDisplayValue();
-                            }
+                            twodimen[xIndex][y + k] = cell.getDisplayValue();
                         }
                     }
                     xIndex++;
@@ -407,9 +403,9 @@ public class FormDataController extends BaseController {
                 } else {
                     // 非数字型统统取displayvalue
                     if (isNumType(value)) {
-                        twodimen[x][y] = cell.getValue();
+                        twodimen[xIndex][y] = cell.getValue();
                     } else {
-                        twodimen[x][y] = cell.getDisplayValue();
+                        twodimen[xIndex][y] = cell.getDisplayValue();
                     }
                     xIndex++;
                 }
@@ -512,14 +508,14 @@ public class FormDataController extends BaseController {
                 }
                 endIndex++;
             }
-            if (null != combine && combine.size() > 0)
+            if (null != combine && combine.size() > 0) {
                 for (int i = 0; i < combine.size(); i++) {
                     int[] com = combine.get(i);
                     sheet.addMergedRegion(new CellRangeAddress(startIndex
-                            + com[0], startIndex + com[1], com[2], com[3]));// hang
-                                                                            // lie
+                        + com[0], startIndex + com[1], com[2], com[3]));// hang
+                    // lie
                 }
-
+            }
             return endIndex;
         }
 

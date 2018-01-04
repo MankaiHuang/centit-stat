@@ -604,12 +604,14 @@ public class FormDataManagerImpl implements FormDataManager {
         int rowspan = (columnData.size() > 1) ? (headColumns.size() + 1) : headColumns.size();
 
         // 设定固定列
+        int headBlank=0;
         for (QueryColumn col : columnHead) {
             CTableCell cell = CTableCell.createTableHeadCell(col.getColName(), col);
 
             cell.setRowspan(rowspan);
 
             thead.addCell(cell);
+            headBlank ++;
         }
 
         int index = 1;
@@ -626,13 +628,13 @@ public class FormDataManagerImpl implements FormDataManager {
             }
 
             if (index++ < headColumns.size()) {
-                thead.addLine();
+                thead.addLine(headBlank);
             }
         }
 
         // 添加最后一行标题
         if (dataLength > 1) {
-            thead.addLine();
+            thead.addLine(headBlank);
 
             for (int i = 0; i < dataColumns.size(); i++) {
                 for (QueryColumn col : columnData) {

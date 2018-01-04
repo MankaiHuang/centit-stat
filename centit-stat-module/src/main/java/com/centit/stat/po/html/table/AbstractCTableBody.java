@@ -43,9 +43,13 @@ public abstract class AbstractCTableBody extends AbstractCHtmlComponent{
         getLines().add(new CTableLine());
     }
 
+    public void addLine(int lineHeadBlankRows) {
+        getLines().add(new CTableLine(lineHeadBlankRows));
+    }
+
     public List<CTableLine> getLines() {
         if(null==lines)
-             lines = new ArrayList<CTableLine>();
+             lines = new ArrayList<>();
         return lines;
     }
 }

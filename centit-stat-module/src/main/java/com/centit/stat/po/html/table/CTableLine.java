@@ -15,11 +15,21 @@ import com.centit.stat.po.html.AbstractCHtmlComponent;
 public class CTableLine extends AbstractCHtmlComponent {
     public static final String TABLE_LINE_MODEL = "<tr${id}${class}${style}>${cells}</tr>";
 
+    public CTableLine(){
+        firstCellCol = 0;
+    }
+
+    public CTableLine(int lineHeadBlankRows){
+        firstCellCol = lineHeadBlankRows;
+    }
     /**
      * 单元格集合
      */
     private List<CTableCell> cells;
 
+
+
+    private int firstCellCol;
 
     /**
      * H:行头     N:普通行    T:行尾
@@ -67,5 +77,13 @@ public class CTableLine extends AbstractCHtmlComponent {
 
     public void setLineType(String lineType) {
         this.lineType = lineType;
+    }
+
+    public int getFirstCellCol() {
+        return firstCellCol;
+    }
+
+    public void setFirstCellCol(int firstCellCol) {
+        this.firstCellCol = firstCellCol;
     }
 }
