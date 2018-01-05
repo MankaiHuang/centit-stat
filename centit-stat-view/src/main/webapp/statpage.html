@@ -5,7 +5,7 @@
 <body>
 <div ng-controller="TwoDimenFormController">
 
-    <form id="queryForm" ng-if="queryformshow">
+    <form ng-if="queryformshow">
         <div class="searchboxs">
             <div ng-repeat="cond in conditions_create" ng-if="cond.condDisplayStyle!='H'">
                 <label
@@ -25,23 +25,17 @@
                        ng-if="cond.paramReferenceType =='0'||cond.paramReferenceType =='3'"/>
             </div>
         </div>
-        <div class="pagination">
-            每页大小
-            <select ng-model="page.pageSize" ng-change="resetPage()" style="width: 60px;height:22px;"
-                    ng-options="ps.key as ps.value for ps in pageSizeChoose"></select>
-            共 --{{page.totalRows}}--条记录•共--{{page.totalPage}}--页 当前第
-            <input style="width: 40px;" type="number" min="1" max="{{page.totalPage}}" ng-change="queryByParam()"
-                   ng-model="page.pageNo"/>
-            页
-        </div>
     </form>
+<!--<div class="btnsAndTables">-->
+    <!--<div class="btns">-->
     <div class="btnbox">
         <!-- <input clsss="searchbutton"  class="btn" type="button" ng-click="queryByParam()" value="统计"/> -->
         <input clsss="searchbutton" class="btn" type="button" ng-click="printTable()" value="打印"/>
-        <input clsss="searchbutton" class="btn" type="button" ng-click="exportToExcel()" value="导入excel"/>
+        <input clsss="searchbutton" class="btn" type="button" ng-click="exportToExcel()" value="导出excel"/>
         <!-- <input clsss="searchbutton"  class="btn" type="button" ng-click="showChart()" value="显示/隐藏统计图"/> -->
     </div>
     <chart-panel chartcols="chartcols"></chart-panel>
+    <!--</div>-->
     <div id="normalTableBody" class="print">
         <div class="tableTitle">{{data.formNameFormat}}</div>
         <table>
@@ -58,13 +52,24 @@
                 <td ng-if="datas.lineType=='T'&& datas.cells[0].display==true"></td>
                 <td ng-if="datas.lineType=='T'&& datas.cells[0].display==false">{{datas.cells[0].displayValue}}</td>
                 <td ng-if="datas.lineType!='T'">{{(page.pageNo-1)*page.pageSize+$index+1}}</td>
-                <td ng-repeat="data in datas.cells track by $index" colspan="{{data.colspan}}"
-                    rowspan="{{data.rowspan}}"
+                <td ng-repeat="data in datas.cells track by $index" colspan="{{data.colspan}}" rowspan="{{data.rowspan}}"
                     ng-if="data.rowspan!=-1 && data.display==true" style="{{data.cssStyle}}">{{data.displayValue}}
                 </td>
             </tr>
         </table>
     </div>
+<!--</div>-->
+    <form ng-if="paganitionShow">
+        <div class="pagination">
+            每页大小
+            <select ng-model="page.pageSize" ng-change="resetPage()" style="width: 60px;height:22px;"
+                    ng-options="ps.key as ps.value for ps in pageSizeChoose"></select>
+            共 --{{page.totalRows}}--条记录•共--{{page.totalPage}}--页 当前第
+            <input style="width: 40px;" type="number" min="1" max="{{page.totalPage}}" ng-change="queryByParam()"
+                   ng-model="page.pageNo"/>
+            页
+        </div>
+    </form>
 </div>
 
 <script src="ui/js/require.js"></script>

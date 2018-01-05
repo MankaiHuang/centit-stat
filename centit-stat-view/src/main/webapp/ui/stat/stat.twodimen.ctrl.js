@@ -281,7 +281,13 @@ define(['app', 'echarts'], function(model, echarts) {
         $scope.page.totalRows = result.data.totalRowsAll;
         $scope.page.totalPage = Math.ceil($scope.page.totalRows / $scope.page.pageSize);
 
-        //交叉报表不显示搜索栏
+        //交叉报表不显示分页
+        if ($scope.data.modelType != 5) {
+            $scope.paganitionShow = true;
+        }else{
+            $scope.paganitionShow = false;
+        }
+          // 交叉报表不显示搜索栏
         // if ($scope.data.modelType != 5) {
         //   $scope.queryformshow = true;
         // }
