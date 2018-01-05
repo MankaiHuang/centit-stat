@@ -324,6 +324,18 @@ define(['app', 'echarts'], function(model, echarts) {
       input.attr("name", "modelName");
       input.attr("value", $scope.queryName);
       form.append(input);
+
+        /*------------------加入查询参数 --------------------------*/
+        var queryParams = $scope.queryParams;
+        if(queryParams != undefined){
+            for (var key in queryParams) {
+                var input = $("<input type=text />");
+                input.attr("name", key);
+                input.attr("value", queryParams[key]);
+                form.append(input);
+            }
+        }
+
       //查询参数
       var qms = $scope.queryName;
       for (var key in qms) {
