@@ -4,7 +4,7 @@ create table Q_QueryModel  (
    ModelType            CHAR,
    OwnerType            CHAR,
    OwnerCode            VARCHAR2(64),
-   QUERYSQL             VARCHAR2(2048),
+   QUERYSQL             VARCHAR2(4000),
    QueryDESC            VARCHAR2(512),
    formNameFormat       VARCHAR2(256),
    resultName           VARCHAR2(64),
@@ -90,6 +90,8 @@ create table Q_QueryColumn  (
    COLFORMAT            VARCHAR2(64),
    LINKTYPE             VARCHAR(32),
    DEFAULTVALUE         VARCHAR(64),
+   cssstyle VARCHAR2(120),
+   CATALOGCODE VARCHAR2(64),
    constraint PK_Q_QUERYCOLUMN primary key (ModelName, colName)
 );
 
