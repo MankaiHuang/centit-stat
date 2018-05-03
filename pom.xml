@@ -2,30 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>framework-snapshot-dependencies</artifactId>
+        <groupId>com.centit.framework</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.centit.product</groupId>
     <artifactId>centit-stat</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <centit.stat.version>2.0.1-SNAPSHOT</centit.stat.version>
-        <jdk.version>1.8</jdk.version>
-
-        <centit.commons.version>2.2.5-SNAPSHOT</centit.commons.version>
-        <centit.persistence.version>1.0.2-SNAPSHOT</centit.persistence.version>
-        <centit.framework.version>4.1.1803</centit.framework.version>
-        <centit.ui.version>3.0.1-SNAPSHOT</centit.ui.version>
-        <centit.ip.version>1.0.2-SNAPSHOT</centit.ip.version>
-
-        <servlet-api.version>3.1.0</servlet-api.version>
-        <xdocreport.version>2.0.1</xdocreport.version>
-        <apache.poi.version>3.17</apache.poi.version>
-        <ojdbc6.version>11.2.0.4</ojdbc6.version>
-        <junit.version>4.12</junit.version>
-        <mysql.version>6.0.6</mysql.version>
-    </properties>
+    <version>2.1-SNAPSHOT</version>
 
     <name>com.centit.product:centit-stat</name>
     <packaging>pom</packaging>
@@ -87,36 +73,6 @@
         <module>centit-stat-client</module>
         <module>centit-report-utils</module>
     </modules>
-
-
-    <!-- mvn deploy -DpomFile=pom.xml -->
-    <!--
-            <distributionManagement>
-               <repository>
-                   <id>ossrh</id>
-                   <name>sonatype-releases</name>
-                   <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-               </repository>
-               <snapshotRepository>
-                   <id>ossrh</id>
-                   <name>sonatype-snapshots</name>
-                   <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-               </snapshotRepository>
-           </distributionManagement>
-    -->
-
-    <distributionManagement>
-        <repository>
-            <id>centit-releases</id>
-            <name>centit-release</name>
-            <url>http://develop.centit.com:8080/nexus/content/repositories/centit-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>centit-snapshots</id>
-            <name>centit-snapshots</name>
-            <url>http://develop.centit.com:8080/nexus/content/repositories/centit-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <build>
         <plugins>

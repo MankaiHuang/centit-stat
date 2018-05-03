@@ -1,4 +1,4 @@
-package com.centit.stat.listener;
+package com.centit.stat.config;
 
 import com.centit.framework.components.OperationLogCenter;
 import com.centit.framework.model.adapter.MessageSender;

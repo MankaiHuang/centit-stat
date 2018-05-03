@@ -5,16 +5,16 @@ import javax.persistence.Embeddable;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-
 @Embeddable
 
 public class QueryConditionId implements java.io.Serializable {
     private static final long serialVersionUID =  1L;
     @Column(name = "MODELNAME")
-     @NotBlank(message = "字段不能为空")
+    @NotBlank(message = "字段不能为空")
     private String modelName;
-     @Column(name = "CONDNAME")
-        @NotBlank(message = "字段不能为空")
+
+    @Column(name = "CONDNAME")
+    @NotBlank(message = "字段不能为空")
     private String condName;
 
     // Constructors

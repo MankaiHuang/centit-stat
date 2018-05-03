@@ -396,8 +396,8 @@ public class CTableCell extends AbstractCHtmlComponent {
             }
         }
 
-        String strRowspan = (0 == rowspan ? "" : " rowspan='" + rowspan + "'");
-        String strColspan = (0 == colspan ? "" : " colspan='" + colspan + "'");
+        String strRowspan = (rowspan <= 1 ? "" : " rowspan='" + rowspan + "'");
+        String strColspan = (colspan <= 1 ? "" : " colspan='" + colspan + "'");
         String strTarget = (StringUtils.isEmpty(linkTarget) ? "" : " target='" + linkTarget + "'");
         String strStyle = (StringUtils.isEmpty(getCssStyle()) ? "" : " style='" + getCssStyle() + "'");
         String strClass = (StringUtils.isEmpty(getCssClass()) ? "" : " class='" + getCssClass() + "'");
@@ -427,7 +427,7 @@ public class CTableCell extends AbstractCHtmlComponent {
         }
 
         // 替换返回
-        return html = html.replace("${id}", strId)
+        return html.replace("${id}", strId)
                 .replace("${class}", strClass)
                 .replace("${style}", strStyle)
                 .replace("${rowspan}", strRowspan)

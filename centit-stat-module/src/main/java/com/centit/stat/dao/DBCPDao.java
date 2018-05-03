@@ -96,7 +96,7 @@ public class DBCPDao {
     }
 
     public static List<Object[]> findObjectsNamedSql(DatabaseInfo dbinfo,QueryAndNamedParams queryAndParams){
-        List<Object[]> currDatas=new ArrayList<Object[]>();
+        List<Object[]> currDatas=new ArrayList<>();
         Connection conn=null;
         try {
             conn = getConn(dbinfo);
@@ -105,7 +105,9 @@ public class DBCPDao {
             e.printStackTrace();
         }finally{
             try {
-                conn.close();
+                if(conn!=null) {
+                    conn.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
