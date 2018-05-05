@@ -352,6 +352,7 @@ public abstract class ExcelImportUtil {
      * @param columnList 读取的列
      * @param rowList 读取的行
      * @return 返回二维数组
+     * @throws IOException  Stream操作异常
      */
     public static List<String[]> loadDataFromExcel(InputStream excelFile, ExcelTypeEnum excelType, String sheetName,
                                                    int[] columnList, int[] rowList)
@@ -384,7 +385,8 @@ public abstract class ExcelImportUtil {
      * @param columnList 读取的列
      * @param rowList 读取的行
      * @return 返回二维数组
-     */
+     * @throws IOException  异常
+     **/
     public static List<String[]> loadDataFromExcel(InputStream excelFile, ExcelTypeEnum excelType, int sheetIndex,
                                                    int[] columnList, int[] rowList)
             throws IOException {
@@ -403,6 +405,7 @@ public abstract class ExcelImportUtil {
      * @param columnList 读取的列
      * @param rowList 读取的行
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(String filePath, int sheetIndex,
                                                    int[] columnList, int[] rowList)
@@ -458,6 +461,7 @@ public abstract class ExcelImportUtil {
      * @param beginRow 起始行 包含 beginRow
      * @param endRow 起始行 不包含 endRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(InputStream excelFile, ExcelTypeEnum excelType, int sheetIndex,
                                                    int beginCol, int endCol, int beginRow, int endRow)
@@ -479,6 +483,7 @@ public abstract class ExcelImportUtil {
      * @param beginRow 起始行 包含 beginRow
      * @param endRow 起始行 不包含 endRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(String filePath, int sheetIndex,
                                                    int beginCol, int endCol, int beginRow, int endRow)
@@ -502,6 +507,7 @@ public abstract class ExcelImportUtil {
      * @param beginRow 起始行 包含 beginRow
      * @param endRow 起始行 不包含 endRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(InputStream excelFile, ExcelTypeEnum excelType, String sheetName,
                                                    int beginCol, int endCol, int beginRow, int endRow)
@@ -524,6 +530,7 @@ public abstract class ExcelImportUtil {
      * @param beginRow 起始行 包含 beginRow
      * @param endRow 起始行 不包含 endRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(String filePath, String sheetName,
                                                    int beginCol, int endCol, int beginRow, int endRow)
@@ -545,6 +552,7 @@ public abstract class ExcelImportUtil {
      * @param endCol 终止列 不包含 endCol
      * @param beginRow 起始行 包含 beginRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(InputStream excelFile, ExcelTypeEnum excelType, int sheetIndex,
                                                    int beginCol, int endCol, int beginRow)
@@ -565,6 +573,7 @@ public abstract class ExcelImportUtil {
      * @param endCol 终止列 不包含 endCol
      * @param beginRow 起始行 包含 beginRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(String filePath, int sheetIndex,
                                                    int beginCol, int endCol, int beginRow)
@@ -587,6 +596,7 @@ public abstract class ExcelImportUtil {
      * @param endCol 终止列 不包含 endCol
      * @param beginRow 起始行 包含 beginRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(InputStream excelFile, ExcelTypeEnum excelType, String sheetName,
                                                    int beginCol, int endCol, int beginRow)
@@ -608,6 +618,7 @@ public abstract class ExcelImportUtil {
      * @param endCol 终止列 不包含 endCol
      * @param beginRow 起始行 包含 beginRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(String filePath, String sheetName,
                                                    int beginCol, int endCol, int beginRow)
@@ -664,6 +675,7 @@ public abstract class ExcelImportUtil {
      * @param beginCol 起始列  包含 beginCol
      * @param beginRow 起始行 包含 beginRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(InputStream excelFile, ExcelTypeEnum excelType, int sheetIndex,
                                                    int beginCol,  int beginRow)
@@ -683,6 +695,7 @@ public abstract class ExcelImportUtil {
      * @param beginCol 起始列  包含 beginCol
      * @param beginRow 起始行 包含 beginRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(String filePath,int sheetIndex,
                                                    int beginCol, int beginRow)
@@ -704,6 +717,7 @@ public abstract class ExcelImportUtil {
      * @param beginCol 起始列  包含 beginCol
      * @param beginRow 起始行 包含 beginRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(InputStream excelFile, ExcelTypeEnum excelType, String sheetName,
                                                    int beginCol,  int beginRow)
@@ -724,6 +738,7 @@ public abstract class ExcelImportUtil {
      * @param beginCol 起始列  包含 beginCol
      * @param beginRow 起始行 包含 beginRow
      * @return 返回二维数组
+     * @throws IOException  异常
      */
     public static List<String[]> loadDataFromExcel(String filePath, String sheetName,
                                                    int beginCol, int beginRow)

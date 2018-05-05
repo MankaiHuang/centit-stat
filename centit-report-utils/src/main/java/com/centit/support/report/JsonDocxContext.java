@@ -31,23 +31,22 @@ public class JsonDocxContext implements IContext{
      *
      * @param key  主键
      * @param value Java model
-     * @return
+     * @return Object 返回旧值
      */
     @Override
     public Object put(String key, Object value) {
         if(docObject==null) {
             docObject = new JSONObject();
         }
-        docObject.put(key, value);
-        return null;
+        return docObject.put(key, value);
         //throw new IllegalAccessError("Unsupported!");
     }
 
     /**
      * Get the Java object with the given key which was registered and null otherwise.
      *
-     * @param key
-     * @return
+     * @param key 关键字，占位符
+     * @return 返回结果
      */
     @Override
     public Object get(String key) {
@@ -59,7 +58,7 @@ public class JsonDocxContext implements IContext{
     }
 
     /**
-     * @param contextMap
+     * @param contextMap 内容Map对象
      */
     @Override
     public void putMap(Map<String, Object> contextMap) {

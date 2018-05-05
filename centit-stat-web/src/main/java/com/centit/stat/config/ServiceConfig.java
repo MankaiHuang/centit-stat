@@ -15,7 +15,7 @@ import org.springframework.context.annotation.*;
  */
 @ComponentScan(basePackages = "com.centit",
         excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class))
-@Import({IPAppSystemBeanConfig.class, DataSourceConfig.class, HibernateConfig.class})
+@Import({IPAppSystemBeanConfig.class, HibernateConfig.class})
 @Configuration
 public class ServiceConfig {
 

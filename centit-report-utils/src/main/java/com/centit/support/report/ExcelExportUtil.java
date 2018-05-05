@@ -42,8 +42,10 @@ public abstract class ExcelExportUtil {
      * @param objLists     对象集合
      * @param header       Excel页头
      * @param property     需要显示的属性
+     * @throws IOException 文件操作异常
      */
-    public static void generateExcel(OutputStream outputStream, String sheetName, List<? extends Object> objLists, String[] header, String[] property) throws IOException {
+    public static void generateExcel(OutputStream outputStream, String sheetName,
+                                     List<? extends Object> objLists, String[] header, String[] property) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet(sheetName);
         generateExcelSheet(sheet, objLists, header, property);
@@ -64,8 +66,10 @@ public abstract class ExcelExportUtil {
      * @param sheetName    pageName 页面名称
      * @param objLists     对象集合
      * @param header       Excel页头
+     * @throws IOException 文件操作异常
      */
-    public static void generateExcel(OutputStream outputStream, String sheetName, List<Object[]> objLists, String[] header) throws IOException {
+    public static void generateExcel(OutputStream outputStream, String sheetName,
+                                     List<Object[]> objLists, String[] header) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet(sheetName);
         generateExcelSheet(sheet, objLists, header);
@@ -86,8 +90,10 @@ public abstract class ExcelExportUtil {
      * @param sheetName    pageName 页面名称
      * @param objLists     对象集合
      * @param objType      对象类型
-     */
-    public static void generateExcel(OutputStream outputStream, String sheetName, List<? extends Object> objLists, Class<?> objType) throws IOException {
+     * @throws IOException 文件操作异常
+     **/
+    public static void generateExcel(OutputStream outputStream, String sheetName,
+                                     List<? extends Object> objLists, Class<?> objType) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet(sheetName);
         generateExcelSheet(sheet, objLists, objType);
@@ -109,7 +115,8 @@ public abstract class ExcelExportUtil {
      * @param objLists     对象集合
      * @param header       Excel页头
      * @param property     需要显示的属性
-     */
+     * @throws IOException 文件操作异常
+     **/
     public static void generateExcel2003(OutputStream outputStream, String sheetName, List<? extends Object> objLists, String[] header, String[] property) throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet(sheetName);
@@ -117,7 +124,8 @@ public abstract class ExcelExportUtil {
         wb.write(outputStream);
     }
 
-    public static void generateExcel2003(OutputStream outputStream, List<? extends Object> objLists, String[] header, String[] property) throws IOException {
+    public static void generateExcel2003(OutputStream outputStream, List<? extends Object> objLists,
+                                         String[] header, String[] property) throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet();
         generateExcelSheet(sheet, objLists, header, property);
@@ -131,8 +139,10 @@ public abstract class ExcelExportUtil {
      * @param sheetName    pageName 页面名称
      * @param objLists     对象集合
      * @param header       Excel页头
-     */
-    public static void generateExcel2003(OutputStream outputStream, String sheetName, List<Object[]> objLists, String[] header) throws IOException {
+     * @throws IOException 文件操作异常
+     **/
+    public static void generateExcel2003(OutputStream outputStream, String sheetName,
+                                         List<Object[]> objLists, String[] header) throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet(sheetName);
         generateExcelSheet(sheet, objLists, header);
@@ -153,8 +163,10 @@ public abstract class ExcelExportUtil {
      * @param sheetName    pageName 页面名称
      * @param objLists     对象集合
      * @param objType      对象类型
-     */
-    public static void generateExcel2003(OutputStream outputStream, String sheetName, List<? extends Object> objLists, Class<?> objType) throws IOException {
+     * @throws IOException 文件操作异常
+     **/
+    public static void generateExcel2003(OutputStream outputStream, String sheetName,
+                                         List<? extends Object> objLists, Class<?> objType) throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet(sheetName);
         generateExcelSheet(sheet, objLists, objType);
@@ -202,9 +214,9 @@ public abstract class ExcelExportUtil {
      * @param objLists 对象集合
      * @param header   Excel页头
      * @param property 需要显示的属性
-     * @return InputStream excel 文件流
      */
-    public static void generateExcelSheet(Sheet sheet, List<? extends Object> objLists, String[] header, String[] property) {
+    public static void generateExcelSheet(Sheet sheet, List<? extends Object> objLists,
+                                          String[] header, String[] property) {
 
         int beginRow = 0;
         if (header != null && header.length > 0) {
@@ -228,7 +240,6 @@ public abstract class ExcelExportUtil {
      * @param sheet    excel页面
      * @param objLists 对象数组集合
      * @param header   Excel页头
-     * @return InputStream excel 文件流
      */
     public static void generateExcelSheet(Sheet sheet, List<Object[]> objLists, String[] header) {
         int beginRow = 0;

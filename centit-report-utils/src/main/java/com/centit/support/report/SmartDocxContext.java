@@ -32,7 +32,7 @@ public class SmartDocxContext implements IContext{
      *
      * @param key  主键
      * @param value Java model
-     * @return
+     * @return 返回 旧值
      */
     @Override
     public Object put(String key, Object value) {
@@ -45,8 +45,8 @@ public class SmartDocxContext implements IContext{
     /**
      * Get the Java object with the given key which was registered and null otherwise.
      *
-     * @param key
-     * @return
+     * @param key 占位符
+     * @return 对应的值
      */
     @Override
     public Object get(String key) {
@@ -62,7 +62,7 @@ public class SmartDocxContext implements IContext{
     }
 
     /**
-     * @param contextMap
+     * @param contextMap 对象map
      */
     @Override
     public void putMap(Map<String, Object> contextMap) {
