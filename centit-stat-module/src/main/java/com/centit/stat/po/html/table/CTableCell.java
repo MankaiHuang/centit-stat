@@ -96,6 +96,11 @@ public class CTableCell extends AbstractCHtmlComponent {
 
     private int colspan;
 
+
+
+    public CTableCell(){
+        this.rowspan = 1;
+    }
     /**
      * 和报表功能结合，创建表格单元格
      * @param orignValue 原始值
