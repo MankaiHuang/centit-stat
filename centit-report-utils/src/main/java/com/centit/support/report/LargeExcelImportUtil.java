@@ -68,24 +68,29 @@ public abstract class LargeExcelImportUtil {
         StylesTable styles = xssfReader.getStylesTable();
         XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
         InputStream stream = null;
+        int sheetIndex=0;
         while (iter.hasNext()) {
             try {
-                if(StringUtils.isBlank(sheetName) || StringUtils.equals(sheetName,iter.getSheetName())) {
-                    stream = iter.next();
-
+                stream = iter.next();
+                String currSheetName = iter.getSheetName();
+                if( StringUtils.isBlank(sheetName)
+                    || StringUtils.equals(sheetName,currSheetName)
+                    || StringUtils.equals(sheetName,Integer.toString(sheetIndex))) {
+                    //stream = iter.next();
                     XMLReader sheetParser = SAXHelper.newXMLReader();
-
                     ContentHandler handler = new XSSFSheetXMLHandler(styles, null, strings,
                         new XSSFSheetToMapHandler(beginRow, consumer) , new DataFormatter(), false);
                     sheetParser.setContentHandler(handler);
                     sheetParser.parse(new InputSource(stream));
                     return ;
                 }
-                stream = iter.next();
+                sheetIndex ++;
             } catch (Exception e) {
                 logger.error("parserSheetXml error: ", e);
             } finally {
-                stream.close();
+                if(stream!=null) {
+                    stream.close();
+                }
             }
         }
     }
@@ -121,21 +126,14 @@ public abstract class LargeExcelImportUtil {
             }
         }
 
-
         @Override
         public void cell(String cellReference, String cellValue, XSSFComment comment) {
-            /*if (cellReference == null) {
-                cellReference = new CellAddress(currentRowNumber, currentColNumber).formatAsString();
-            }*/
             int thisCol = (new CellReference(cellReference)).getCol();
             rowData.put(thisCol, cellValue);
-
         }
 
         @Override
         public void headerFooter(String text, boolean isHeader, String tagName) {
         }
-
     }
-
 }
