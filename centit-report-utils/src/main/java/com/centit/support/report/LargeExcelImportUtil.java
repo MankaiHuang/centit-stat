@@ -3,6 +3,7 @@ package com.centit.support.report;
 import com.centit.support.common.JavaBeanField;
 import com.centit.support.common.JavaBeanMetaData;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.util.CellReference;
@@ -16,17 +17,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * 只能处理xlsx
+ * 只能处理xlsx(xml格式的)
  */
 public abstract class LargeExcelImportUtil {
     private LargeExcelImportUtil() {
@@ -36,12 +36,18 @@ public abstract class LargeExcelImportUtil {
     protected static final Logger logger = LoggerFactory.getLogger(LargeExcelImportUtil.class);
 
     public static <T> void parserXSSFSheet(String xlsxFile, String sheetName, int beginRow,
+                                           Class<T> beanType,  Map<Integer,String > fieldDesc,
+                                           Consumer<T> consumer)
+        throws IOException, OpenXML4JException, SAXException  {
+        parserXSSFSheet(xlsxFile, sheetName, beginRow, -1, beanType, fieldDesc, consumer);
+    }
+    public static <T> void parserXSSFSheet(String xlsxFile, String sheetName, int beginRow, int endRow,
                                         Class<T> beanType,  Map<Integer,String > fieldDesc,
-                                        Consumer<T> consumer) throws Exception {
+                                        Consumer<T> consumer)
+        throws IOException, OpenXML4JException, SAXException  {
 
         JavaBeanMetaData metaData = JavaBeanMetaData.createBeanMetaDataFromType(beanType);
-
-        parserXSSFSheet(xlsxFile, sheetName, beginRow, (rowMap) -> {
+        parserXSSFSheet(xlsxFile, sheetName, beginRow, endRow, (rowMap) -> {
             try {
                 T rowObj = beanType.newInstance();
                 for(Map.Entry<Integer,String> ent : fieldDesc.entrySet() ){
@@ -61,7 +67,12 @@ public abstract class LargeExcelImportUtil {
     }
 
     public static void parserXSSFSheet(String xlsxFile, String sheetName, int beginRow, Consumer<Map<Integer, Object>> consumer)
-        throws Exception {
+        throws IOException, OpenXML4JException, SAXException  {
+        parserXSSFSheet(xlsxFile, sheetName, beginRow, -1, consumer);
+    }
+
+    public static void parserXSSFSheet(String xlsxFile, String sheetName, int beginRow, int endRow, Consumer<Map<Integer, Object>> consumer)
+        throws IOException, OpenXML4JException, SAXException {
         OPCPackage pkg = OPCPackage.open(new FileInputStream(new File(xlsxFile)));
         ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(pkg);
         XSSFReader xssfReader = new XSSFReader(pkg);
@@ -79,7 +90,7 @@ public abstract class LargeExcelImportUtil {
                     //stream = iter.next();
                     XMLReader sheetParser = SAXHelper.newXMLReader();
                     ContentHandler handler = new XSSFSheetXMLHandler(styles, null, strings,
-                        new XSSFSheetToMapHandler(beginRow, consumer) , new DataFormatter(), false);
+                        new XSSFSheetToMapHandler(beginRow, endRow, consumer) , new DataFormatter(), false);
                     sheetParser.setContentHandler(handler);
                     sheetParser.parse(new InputSource(stream));
                     return ;
@@ -107,9 +118,9 @@ public abstract class LargeExcelImportUtil {
             rowData= new HashMap<>(100);
         }
 
-        public XSSFSheetToMapHandler(int beginRow, Consumer<Map<Integer, Object> > consumer){
+        public XSSFSheetToMapHandler(int beginRow, int endRow, Consumer<Map<Integer, Object> > consumer){
             this.beginRow = beginRow;
-            this.endRow = -1;
+            this.endRow = endRow;
             this.rowData= new HashMap<>(100);
             this.consumer = consumer;
         }
@@ -121,7 +132,7 @@ public abstract class LargeExcelImportUtil {
 
         @Override
         public void endRow(int rowNum) {
-            if(rowNum>=beginRow && (this.endRow <0 || rowNum < this.endRow)) {
+            if(rowNum >= beginRow && (this.endRow < 0 || rowNum < this.endRow)) {
                 consumer.accept(rowData);
             }
         }
