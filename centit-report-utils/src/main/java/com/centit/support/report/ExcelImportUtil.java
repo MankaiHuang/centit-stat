@@ -31,7 +31,7 @@ public abstract class ExcelImportUtil {
 
     protected static final Logger logger = LoggerFactory.getLogger(ExcelImportUtil.class);
 
-    private static void setObjectFieldValue(Object object, JavaBeanField field , Cell cell){
+    public static void setObjectFieldValue(Object object, JavaBeanField field , Cell cell){
         switch (field.getFieldJavaType()) {
             case "int":
             case "Integer":
