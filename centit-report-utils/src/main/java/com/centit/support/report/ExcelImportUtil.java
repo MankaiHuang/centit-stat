@@ -335,7 +335,7 @@ public abstract class ExcelImportUtil {
                 //excelRow.getFirstCellNum()
                 for (int col : columnList) {
                     Cell cell = excelRow.getCell(col);
-                    rowObj[i++] = cell == null ? null : cell.getStringCellValue();
+                    rowObj[i++] = cell == null ? null : cell.toString();
                 }
                 datas.add(rowObj);
             }
@@ -438,7 +438,7 @@ public abstract class ExcelImportUtil {
             for(int col = beginCol; col <= endCol; col++ ){
                 Cell cell = excelRow.getCell(col);
                 if( cell != null) {
-                    rowObj[i] = cell.getStringCellValue();
+                    rowObj[i] =  cell.toString();// cell.getStringCellValue();
                     hasValue = true;
                 }
                 i++;
@@ -655,7 +655,7 @@ public abstract class ExcelImportUtil {
                 Cell cell = excelRow.getCell(col);
                 if( cell != null) {
                     hasValue = true;
-                    rowObj[i] = cell.getStringCellValue();
+                    rowObj[i] = cell.toString();
                 }
                 i++;
             }
