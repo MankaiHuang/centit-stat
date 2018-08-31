@@ -14,8 +14,8 @@ import com.centit.stat.po.html.table.CTablePanel;
 import com.centit.stat.service.FormDataManager;
 import com.centit.stat.service.FormDataModel;
 import com.centit.support.algorithm.GeneralAlgorithm;
-import com.centit.support.algorithm.ListOpt;
-import com.centit.support.algorithm.ListOpt.ParentChild;
+import com.centit.support.algorithm.CollectionsOpt;
+import com.centit.support.algorithm.CollectionsOpt.ParentChild;
 import com.centit.support.algorithm.StringBaseOpt;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.support.database.utils.QueryAndNamedParams;
@@ -84,7 +84,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
         // 树形结构
         if ("1".equals(formData.getIsTree())) {
-            ParentChild<Object[]> c = new ListOpt.ParentChild<Object[]>() {
+            ParentChild<Object[]> c = new CollectionsOpt.ParentChild<Object[]>() {
                 @Override
                 public boolean parentAndChild(Object[] p, Object[] c) {
                     return p[0].equals(c[1]);
@@ -92,7 +92,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
             };
 
-            ListOpt.sortAsTree(datas, c);
+            CollectionsOpt.sortAsTree(datas, c);
         }
         // 计算合计和平均
 
@@ -347,7 +347,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
         // 树形结构
         if ("1".equals(formData.getIsTree())) {
-            ParentChild<Object[]> c = new ListOpt.ParentChild<Object[]>() {
+            ParentChild<Object[]> c = new CollectionsOpt.ParentChild<Object[]>() {
 
                 @Override
                 public boolean parentAndChild(Object[] p, Object[] c) {
@@ -356,7 +356,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
             };
 
-            ListOpt.sortAsTree(compareDatas, c);
+            CollectionsOpt.sortAsTree(compareDatas, c);
         }
         // 计算合计
         if (needSum) {
@@ -979,7 +979,7 @@ public class FormDataManagerImpl implements FormDataManager {
         }
         // 树形结构
         if ("1".equals(formData.getIsTree())) {
-            ListOpt.sortAsTree(crossDatas, (p, c1) -> p[0].equals(c1[1]));
+            CollectionsOpt.sortAsTree(crossDatas, (p, c1) -> p[0].equals(c1[1]));
         }
         // 计算合计
         if (needSum) {

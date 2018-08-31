@@ -24,7 +24,7 @@ public class StatClientImpl implements StatClient{
     }
 
     public CloseableHttpClient  getHttpClient() throws Exception{
-        return  appSession.getHttpClient();
+        return  appSession
     }
 
     public void releaseHttpClient(CloseableHttpClient httpClient){
