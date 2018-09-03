@@ -1,10 +1,11 @@
 package com.centit.stat.config;
 
-import com.centit.framework.core.config.DataSourceConfig;
-import com.centit.framework.hibernate.config.HibernateConfig;
 import com.centit.framework.components.impl.NotificationCenterImpl;
 import com.centit.framework.components.impl.TextOperationLogWriterImpl;
-import com.centit.framework.ip.app.config.IPAppSystemBeanConfig;
+import com.centit.framework.config.SpringSecurityCasConfig;
+import com.centit.framework.config.SpringSecurityDaoConfig;
+import com.centit.framework.hibernate.config.HibernateConfig;
+import com.centit.framework.ip.app.config.IPOrStaticAppSystemBeanConfig;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,10 @@ import org.springframework.context.annotation.*;
  */
 @ComponentScan(basePackages = "com.centit",
         excludeFilters = @ComponentScan.Filter(value = org.springframework.stereotype.Controller.class))
-@Import({IPAppSystemBeanConfig.class, HibernateConfig.class})
+@Import({SpringSecurityDaoConfig.class,
+    SpringSecurityCasConfig.class,
+    IPOrStaticAppSystemBeanConfig.class,
+    HibernateConfig.class})
 @Configuration
 public class ServiceConfig {
 
