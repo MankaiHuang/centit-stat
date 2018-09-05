@@ -1,17 +1,16 @@
 package com.centit.stat.dao;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSONArray;
+import com.centit.framework.core.dao.CodeBook;
+import com.centit.framework.jdbc.dao.BaseDaoImpl;
+import com.centit.framework.jdbc.dao.DatabaseOptUtils;
+import com.centit.stat.po.QueryModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Repository;
 
-import com.centit.framework.core.dao.CodeBook;
-import com.centit.framework.hibernate.dao.BaseDaoImpl;
-import com.centit.framework.hibernate.dao.DatabaseOptUtils;
-import com.centit.stat.po.QueryModel;
+import java.util.HashMap;
+import java.util.Map;
 @Repository
 public class QueryModelDao extends BaseDaoImpl<QueryModel,String>
 {
@@ -54,8 +53,8 @@ public class QueryModelDao extends BaseDaoImpl<QueryModel,String>
         return filterField;
     }
 
-    public String  getWizardNo(){
-        return DatabaseOptUtils.getNextValueOfSequence(this,"S_WIZARDNO");
+    public String getWizardNo(){
+        return String.valueOf(DatabaseOptUtils.getSequenceNextValue(this,"S_WIZARDNO"));
     }
 
 }

@@ -1,23 +1,12 @@
 package com.centit.stat.po;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.Digits;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "Q_QUERYMODEL")
@@ -26,8 +15,6 @@ public class QueryModel implements java.io.Serializable {
 
     @Id
     @Column(name = "MODELNAME")
-    @GeneratedValue(generator = "assignedGenerator")
-    @GenericGenerator(name = "assignedGenerator", strategy = "assigned")
     private String modelName;
     /**
      * 数据库外键

@@ -1,13 +1,15 @@
 package com.centit.stat.service;
 
-import com.centit.framework.hibernate.service.BaseEntityManager;
+import com.alibaba.fastjson.JSONArray;
+import com.centit.framework.jdbc.service.BaseEntityManager;
 import com.centit.stat.po.QueryModel;
 
 import java.util.List;
 import java.util.Map;
 
-public interface QueryModelManager extends BaseEntityManager<QueryModel, String>{
-    public String  getWizardNo();
+public interface QueryModelManager extends BaseEntityManager<QueryModel, String> {
+    String  getWizardNo();
 
-    public Map<String, List<Object>> getColAndCond(String sql);
+    Map<String, List<Object>> getColAndCond(String sql);
+
 }

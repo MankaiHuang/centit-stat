@@ -1,12 +1,13 @@
 package com.centit.stat.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.centit.framework.common.JsonResultUtils;
 import com.centit.framework.common.ResponseMapData;
 import com.centit.framework.core.controller.BaseController;
-import com.centit.support.database.utils.PageDesc;
 import com.centit.stat.po.QueryModel;
 import com.centit.stat.service.QueryModelManager;
+import com.centit.support.database.utils.PageDesc;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 @Controller
@@ -32,12 +32,7 @@ public class QueryModelControl extends BaseController{
     @RequestMapping(value="",method={RequestMethod.GET})
     public void list(PageDesc pageDesc,String[] field,  String _search,HttpServletRequest request, HttpServletResponse response){
         Map<String, Object> searchColumn = convertSearchColumn(request);
-        List<QueryModel> listObjects = new ArrayList<QueryModel>();
-        if (null == _search) {
-            listObjects = queryModelMag.listObjects(searchColumn);
-        } else {
-            listObjects = queryModelMag.listObjects(searchColumn, pageDesc);
-        }
+        JSONArray listObjects = queryModelMag.listObjectsAsJson(searchColumn, pageDesc);
         SimplePropertyPreFilter simplePropertyPreFilter = null;
         if (!ArrayUtils.isEmpty(field)) {
             simplePropertyPreFilter = new SimplePropertyPreFilter(QueryModel.class, field);
@@ -74,7 +69,7 @@ public class QueryModelControl extends BaseController{
         qm.setQuerySql(dealPlusAndAnd(qm.getQuerySql()));
         if(null!=dbqm)
             dbqm.copyNotNullProperty(qm);
-        queryModelMag.saveObject(dbqm);
+        queryModelMag.updateObject(dbqm);
         JsonResultUtils.writeSingleDataJson(dbqm, response);
     }
 

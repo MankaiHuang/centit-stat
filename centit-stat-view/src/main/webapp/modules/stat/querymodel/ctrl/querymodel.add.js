@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿define(function(require) {
+﻿define(function(require) {
 	var Core = require('core/core');
 	var Page = require('core/page');
 	var Config = require('config');
