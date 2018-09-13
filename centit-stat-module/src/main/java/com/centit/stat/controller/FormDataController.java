@@ -277,6 +277,8 @@ public class FormDataController extends BaseController {
     private void queryDatabase(PageDesc page, FormDataModel formObj,
             HttpServletRequest request) {
 
+
+
         Map<String, String[]> paramMap = request.getParameterMap();
         Object oValue = paramMap.get("resultName");
         if (oValue != null) {

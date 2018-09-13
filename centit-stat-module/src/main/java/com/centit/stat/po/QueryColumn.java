@@ -63,9 +63,9 @@ public class QueryColumn implements java.io.Serializable {
     @Column(name = "LINKTYPE")
     @Length(min = 0, max = 64, message = "字段长度不能小于{min}大于{max}")
     private String linkType;
-    @ManyToOne
+//    @ManyToOne
     @JSONField(serialize=false)
-    @JoinColumn(name = "MODELNAME", insertable = false, updatable = false)
+//    @JoinColumn(name = "MODELNAME", insertable = false, updatable = false)
     private QueryModel queryModel;
 
     /**

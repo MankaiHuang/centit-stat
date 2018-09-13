@@ -81,10 +81,10 @@ public class QueryModel implements java.io.Serializable {
     @Column(name = "COLUMNSQL")
     @Length(min = 0, max = 2048, message = "字段长度不能小于{min}大于{max}")
     private String columnSql;
-    @OneToMany(mappedBy = "queryModel", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @OneToMany(mappedBy = "queryModel", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("colOrder")
     private List<QueryColumn> queryColumns = null;// new ArrayList<QueryColumn>();
-    @OneToMany(mappedBy = "queryModel", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @OneToMany(mappedBy = "queryModel", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("condOrder")
     private List<QueryCondition> queryConditions = null;// new ArrayList<QueryConditon>();
 

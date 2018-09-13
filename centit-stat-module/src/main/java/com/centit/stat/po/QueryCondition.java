@@ -69,9 +69,9 @@ public class QueryCondition implements java.io.Serializable {
     @Transient
     private Object condValue;
 
-    @ManyToOne
+//    @ManyToOne
     @JSONField(serialize=false)
-    @JoinColumn(name = "MODELNAME", insertable = false, updatable = false)
+//    @JoinColumn(name = "MODELNAME", insertable = false, updatable = false)
     private QueryModel queryModel;
 
     @Transient
