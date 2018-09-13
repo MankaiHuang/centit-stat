@@ -8,11 +8,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * 查询统计模型
+ */
 @Entity
 @Table(name = "Q_QUERYMODEL")
 public class QueryModel implements java.io.Serializable {
     private static final long serialVersionUID =  1L;
 
+    /**
+     * 模块名称
+     */
     @Id
     @Column(name = "MODELNAME")
     private String modelName;
