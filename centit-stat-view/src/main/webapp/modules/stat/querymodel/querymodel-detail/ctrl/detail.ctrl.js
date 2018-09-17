@@ -15,7 +15,24 @@ define(function(require) {
             if (this.form) return;
             var vm = this;
 
+            var columnSQLField = panel.find('#columnSql');
+            panel.find('#databaseType').combobox({
+                novalidate: true,
+                onChange:function(value){
+                    // 交叉表可以填写列sql
+                    if ('5' == value) {
+                        columnSQLField.show();
+                    }
+                    else {
+                        columnSQLField.hide();
+                        vm.columnSqlCM.setValue('');
+                    }
+                }
+            });
+
             var form = this.form = panel.find('form');
+            form.form('disableValidation')
+                .form('load', data);
 
             // 编辑模式下禁止修改编码
             if ('edit' == this.parent.mode) {
@@ -34,25 +51,11 @@ define(function(require) {
             });
 
             // 当交叉制表时才显示 列语句输入框
-            var columnSQLField = panel.find('#columnSql');
-            panel.find('#databaseType').combobox({
-                novalidate: true,
-                onChange:function(value){
-                    // 交叉表可以填写列sql
-                    if ('5' == value) {
-                        columnSQLField.show();
-                    }
-                    else {
-                        columnSQLField.hide();
-                        vm.columnSqlCM.setValue('');
-                    }
-                }
-            });
+
             if (data.modelType != '5') {
                 columnSQLField.hide();
             }
-            form.form('disableValidation')
-                .form('load', data);
+
 
         };
 

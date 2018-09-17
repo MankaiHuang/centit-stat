@@ -76,7 +76,7 @@ public class QueryModelControl extends BaseController {
     @RequestMapping(method = {RequestMethod.POST})
     public void create(@Valid QueryModel qm, HttpServletRequest request, HttpServletResponse response) {
         qm.setQuerySql(dealPlusAndAnd(qm.getQuerySql()));
-        queryModelMag.saveNewObject(qm);
+        queryModelMag.saveQueryAndReference(qm);
         JsonResultUtils.writeSingleDataJson(qm, response);
     }
 

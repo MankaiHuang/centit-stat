@@ -102,8 +102,8 @@ public class QueryModelManagerImpl extends BaseEntityManagerImpl<QueryModel, Str
     @Override
     public QueryModel getObjectWithReference(String modelName){
         QueryModel model = queryModelDao.getObjectById(modelName);
-        List<QueryColumn> columns = queryColumnDao.listObjectsByProperty("cid.modelName", modelName);
-        List<QueryCondition> conditions = queryConditionDao.listObjectsByProperty("cid.modelName", modelName);
+        List<QueryColumn> columns = queryColumnDao.listObjectsByProperty("modelName", modelName);
+        List<QueryCondition> conditions = queryConditionDao.listObjectsByProperty("modelName", modelName);
         model.setQueryColumns(columns);
         model.setQueryConditions(conditions);
         return model;
