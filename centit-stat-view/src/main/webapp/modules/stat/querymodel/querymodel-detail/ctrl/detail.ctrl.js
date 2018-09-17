@@ -16,8 +16,6 @@ define(function(require) {
             var vm = this;
 
             var form = this.form = panel.find('form');
-            form.form('disableValidation')
-                .form('load', data);
 
             // 编辑模式下禁止修改编码
             if ('edit' == this.parent.mode) {
@@ -53,6 +51,9 @@ define(function(require) {
             if (data.modelType != '5') {
                 columnSQLField.hide();
             }
+            form.form('disableValidation')
+                .form('load', data);
+
         };
 
         /**

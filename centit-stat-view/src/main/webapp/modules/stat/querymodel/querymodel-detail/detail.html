@@ -2,12 +2,8 @@
     <div class="fields three">
         <div class="field">
             <label>模板类型</label>
-            <select name="modelType" class="easyui-combobox" id="databaseType">
-                <option value="2">普通二维表</option>
-                <option value="3">同比分析</option>
-                <option value="4">环比分析</option>
-                <option value="5">交叉制表</option>
-            </select>
+            <input type="text"  name="modelType" class="easyui-combobox" id="databaseType" required
+                    target="dictionary" key="ModelType"/>
         </div>
         <div class="field required">
             <label>数据库选择</label>
