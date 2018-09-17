@@ -24,7 +24,7 @@ import com.centit.support.database.utils.QueryUtils;
 import com.centit.support.json.JSONOpt;
 
 public class FormDataModel implements java.io.Serializable {
-    private static final long serialVersionUID =  1L;
+    private static final long serialVersionUID = 1L;
     //模块名称，对应统计模块
     //private static final String ALL="N";//全选对应的key
     private String modelName;
@@ -37,7 +37,7 @@ public class FormDataModel implements java.io.Serializable {
     private List<QueryCondition> conditions;
     private List<Object[]> formData;
     private List<Object[]> crossTableColumns;
-    private String[]    rowLogicUrl;
+    private String[] rowLogicUrl;
 
     private Integer totalRows;
     private String formNameFormat;
@@ -60,7 +60,7 @@ public class FormDataModel implements java.io.Serializable {
     //不分页总条数
     private int totalRowsAll;
 
-    @JSONField(serialize=false)
+    @JSONField(serialize = false)
     private DatabaseInfo dbinfo;
 
     public String getColumnSql() {
@@ -117,13 +117,11 @@ public class FormDataModel implements java.io.Serializable {
     }
 
 
-
-    public FormDataModel()
-    {
-        formData=null;
-        paramCount=0;
-        conditions=null;
-        columns=null;
+    public FormDataModel() {
+        formData = null;
+        paramCount = 0;
+        conditions = null;
+        columns = null;
         additionRow = "0";
         rowDrawChart = "F";
         rowLogic = null;
@@ -134,8 +132,7 @@ public class FormDataModel implements java.io.Serializable {
         dataAnalyseSum = 0;
     }
 
-    public FormDataModel(String modelName,String fromNameFormat)
-    {
+    public FormDataModel(String modelName, String fromNameFormat) {
         this();
         this.modelName = modelName;
         this.formNameFormat = fromNameFormat;
@@ -167,30 +164,32 @@ public class FormDataModel implements java.io.Serializable {
     }
 
     public List<QueryColumn> getColumns() {
-        if(columns==null)
+        if (columns == null)
             columns = new ArrayList<QueryColumn>();
         return columns;
     }
+
     public QueryColumn getColumn(String sName) {
-        if(columns==null)
+        if (columns == null)
             return null;
-        for(QueryColumn col:columns){
-            if(sName.equals(col.getColName()))
+        for (QueryColumn col : columns) {
+            if (sName.equals(col.getColName()))
                 return col;
         }
         return null;
     }
+
     public List<QueryCondition> getConditions() {
-        if(conditions==null)
+        if (conditions == null)
             conditions = new ArrayList<QueryCondition>();
         return conditions;
     }
 
     public QueryCondition getCondition(String sName) {
-        if(conditions==null)
+        if (conditions == null)
             return null;
-        for(QueryCondition cond:conditions){
-            if(sName.equals(cond.getCondName()))
+        for (QueryCondition cond : conditions) {
+            if (sName.equals(cond.getCondName()))
                 return cond;
         }
         return null;
@@ -209,9 +208,8 @@ public class FormDataModel implements java.io.Serializable {
         return formData;
     }
 
-    public int getRowCount()
-    {
-        if(formData==null)
+    public int getRowCount() {
+        if (formData == null)
             return 0;
         return formData.size();
     }
@@ -229,40 +227,41 @@ public class FormDataModel implements java.io.Serializable {
         this.querySql = querySql;
     }
 
-    public static String pretreatmentQuerySql(String querySql,Map<String,String> condMap){
-         Lexer varMorp = new Lexer();
-         varMorp.setFormula(querySql);
-         String sDesFormula="";
-         int nPos=0;
-         String sWord = varMorp.getAWord();
+    public static String pretreatmentQuerySql(String querySql, Map<String, String> condMap) {
+        Lexer varMorp = new Lexer();
+        varMorp.setFormula(querySql);
+        String sDesFormula = "";
+        int nPos = 0;
+        String sWord = varMorp.getAWord();
 
-         while( sWord!=null && ! sWord.equals("") ){
-             if( sWord.equals("$")){
-                 int nEndPos = varMorp.getCurrPos();
-                 sWord = varMorp.getAWord();
-                 if(sWord.equals("{")){
-                     sWord = varMorp.getStringUntil("}");
-                     sDesFormula += querySql.substring(nPos, nEndPos-1);
-                     nPos = varMorp.getCurrPos();
-                     if(! StringBaseOpt.isNvl(sWord)){
-                         String sFilterSql = condMap.get(sWord.trim()) ;
-                         if(sFilterSql!=null)
-                             sDesFormula += condMap.get(sWord.trim()) + " ";
-                         else
-                             sDesFormula += " ";
-                     }
-                     sWord = varMorp.getAWord();
-                  }
-             }else
-                 sWord = varMorp.getAWord();
-         }
-         if(nPos<querySql.length())
-             sDesFormula += querySql.substring(nPos);
-         return sDesFormula;
+        while (sWord != null && !sWord.equals("")) {
+            if (sWord.equals("$")) {
+                int nEndPos = varMorp.getCurrPos();
+                sWord = varMorp.getAWord();
+                if (sWord.equals("{")) {
+                    sWord = varMorp.getStringUntil("}");
+                    sDesFormula += querySql.substring(nPos, nEndPos - 1);
+                    nPos = varMorp.getCurrPos();
+                    if (!StringBaseOpt.isNvl(sWord)) {
+                        String sFilterSql = condMap.get(sWord.trim());
+                        if (sFilterSql != null)
+                            sDesFormula += condMap.get(sWord.trim()) + " ";
+                        else
+                            sDesFormula += " ";
+                    }
+                    sWord = varMorp.getAWord();
+                }
+            } else
+                sWord = varMorp.getAWord();
+        }
+        if (nPos < querySql.length())
+            sDesFormula += querySql.substring(nPos);
+        return sDesFormula;
     }
 
     /**
      * 根据查询目录生成sql语句
+     *
      * @return QueryAndNamedParams
      */
     public QueryAndNamedParams makeStatQuery() {
@@ -272,17 +271,17 @@ public class FormDataModel implements java.io.Serializable {
 
     public QueryAndNamedParams makeQuery(String sql) {
 
-        Map<String,Object> params = new HashMap<String,Object>();
-        for(QueryCondition cond : getConditions()){
+        Map<String, Object> params = new HashMap<String, Object>();
+        for (QueryCondition cond : getConditions()) {
             params.put(cond.getCondName(), cond.getCondValue());
         }
 
-        QueryAndNamedParams statQuery = QueryUtils.translateQuery(sql,params);
+        QueryAndNamedParams statQuery = QueryUtils.translateQuery(sql, params);
         String querySql = addOrderParam(statQuery.getQuery(), params);
         statQuery.setSql(querySql);
-        Map<String, Object> statQueryParams=statQuery.getParams();
-        for(String key :statQueryParams.keySet()){
-            if(null!=params.get(key)){
+        Map<String, Object> statQueryParams = statQuery.getParams();
+        for (String key : statQueryParams.keySet()) {
+            if (null != params.get(key)) {
                 params.put(key, statQueryParams.get(key));
             }
         }
@@ -296,6 +295,7 @@ public class FormDataModel implements java.io.Serializable {
 
     /**
      * 根据查询目录生成sql语句,添加分页信息
+     *
      * @return QueryAndNamedParams
      */
     public QueryAndNamedParams makeColumnQuery() {
@@ -303,44 +303,44 @@ public class FormDataModel implements java.io.Serializable {
     }
 
     /**
-     *
      * 根据查询目录生成对比分析语句
-     * @param compareType   3 同比分析  4 环比分析 0 其他
-     * @param offset int
+     *
+     * @param compareType 3 同比分析  4 环比分析 0 其他
+     * @param offset      int
      * @return 时间
      */
-    public String makeCondCompareValue(String compareType, int offset)  {
+    public String makeCondCompareValue(String compareType, int offset) {
         String dateStr = "";
 
-        for(QueryCondition cond : getConditions()){
+        for (QueryCondition cond : getConditions()) {
             String sValue = StringBaseOpt.objectToString(cond.getCondValue());
-            if("3".equals(cond.getCompareType())){
+            if ("3".equals(cond.getCompareType())) {
                 try {
                     //如果是年份直接减1，否则转化为日志剪掉一年
-                    if(StringRegularOpt.isNumber(sValue)){
+                    if (StringRegularOpt.isNumber(sValue)) {
                         Integer preV = Integer.valueOf(sValue);
                         preV = preV + offset;
-                        cond.setCondValue( preV.toString());
-                    }else
+                        cond.setCondValue(preV.toString());
+                    } else
                         cond.setCondValue(DatetimeOpt.convertDatetimeToString(
-                            DatetimeOpt.addYears(DatetimeOpt.smartPraseDate(sValue), offset) ));
+                            DatetimeOpt.addYears(DatetimeOpt.smartPraseDate(sValue), offset)));
 
                     dateStr += cond.getCondValue() + "年";
-                }catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
 
                 }
-            }else if("4".equals(cond.getCompareType())){
+            } else if ("4".equals(cond.getCompareType())) {
                 try {
                     //如果是月份直接减1，否则转化为日志剪掉一月， 这边有一个问题，就是一月份无法做环比因为要涉及到更改对应的年份
                     //所以环比不能直接输入月份，而是应该用日期来做
-                    if(StringRegularOpt.isNumber(sValue)){
+                    if (StringRegularOpt.isNumber(sValue)) {
                         Integer preV = Integer.valueOf(sValue);
                         preV = preV + offset;
-                        cond.setCondValue( preV.toString());
-                    }else
+                        cond.setCondValue(preV.toString());
+                    } else
                         cond.setCondValue(DatetimeOpt.convertDatetimeToString(
-                            DatetimeOpt.addMonths(DatetimeOpt.smartPraseDate( sValue), offset) ));
-                }catch (NumberFormatException e) {
+                            DatetimeOpt.addMonths(DatetimeOpt.smartPraseDate(sValue), offset)));
+                } catch (NumberFormatException e) {
 
                 }
                 dateStr += cond.getCondValue() + "月";
@@ -353,14 +353,14 @@ public class FormDataModel implements java.io.Serializable {
     /**
      * 添加排序
      *
-     * @param sql sql
+     * @param sql    sql
      * @param params 参数
      * @return 拼接后的sql
      */
     private static String addOrderParam(String sql, Map<String, Object> params) {
-        String sqlSen=sql;
-        String orderField = (String)params.get("orderField");
-        String orderDirection = (String)params.get("orderDirection");
+        String sqlSen = sql;
+        String orderField = (String) params.get("orderField");
+        String orderDirection = (String) params.get("orderDirection");
         if (!StringUtils.isEmpty(orderField)) {
             sqlSen = QueryUtils.removeOrderBy(sql);
             sqlSen += " order by " + orderField + " " + orderDirection;
@@ -388,8 +388,10 @@ public class FormDataModel implements java.io.Serializable {
     public String getRowDrawChart() {
         return rowDrawChart;
     }
+
     /**
      * 是否按行 T 画统计图 F 不画
+     *
      * @param rowDarwChart 是否按行
      */
     public void setRowDrawChart(String rowDarwChart) {
@@ -415,8 +417,10 @@ public class FormDataModel implements java.io.Serializable {
     public String getAdditionRow() {
         return additionRow;
     }
+
     /**
      * 0 : 没有  1 合计  2 均值  3 合计 和 均值
+     *
      * @param additionRow 类型
      */
     public void setAdditionRow(String additionRow) {
@@ -431,7 +435,7 @@ public class FormDataModel implements java.io.Serializable {
         this.rowLogic = rowLogic;
     }
 
-    public FormDataModel copyModelMetaData(FormDataModel dataModel){
+    public FormDataModel copyModelMetaData(FormDataModel dataModel) {
         modelName = dataModel.getModelName();
         modelType = dataModel.getModelType();
         columns = dataModel.getColumns();
@@ -443,7 +447,7 @@ public class FormDataModel implements java.io.Serializable {
         drawChartBeginCol = dataModel.getDrawChartBeginCol();
         drawChartEndCol = dataModel.getDrawChartEndCol();
         additionRow = dataModel.getAdditionRow();
-        rowLogic =  dataModel.getRowLogic();
+        rowLogic = dataModel.getRowLogic();
         logicUrlFormat = dataModel.getLogicUrlFormat();
         paramCount = dataModel.getParamCount();
         retStartPos = dataModel.getRetStartPos();
@@ -453,11 +457,11 @@ public class FormDataModel implements java.io.Serializable {
         dataAnalyseSum = dataModel.getDataAnalyseSum();
         columnSql = dataModel.getColumnSql();
         isTree = dataModel.getIsTree();
-        this.dbinfo=dataModel.dbinfo;
+        this.dbinfo = dataModel.dbinfo;
         return this;
     }
 
-    public void loadFromQueryModel(QueryModel qm){
+    public void loadFromQueryModel(QueryModel qm) {
         modelName = qm.getModelName();
         modelType = qm.getModelType();
         //dbinfo=qm.getDatabase();
@@ -469,7 +473,7 @@ public class FormDataModel implements java.io.Serializable {
         drawChartBeginCol = qm.getDrawChartBeginCol();
         drawChartEndCol = qm.getDrawChartEndCol();
         additionRow = qm.getAdditionRow();
-        rowLogic =  qm.getRowLogic();
+        rowLogic = qm.getRowLogic();
         logicUrlFormat = qm.getLogicUrl();
         columnSql = qm.getColumnSql();
         rowGroupSum = 0;
@@ -477,68 +481,67 @@ public class FormDataModel implements java.io.Serializable {
         dataAnalyseSum = 0;
         isTree = qm.getIsTree();
 
-        if(columns==null)
-            columns= new ArrayList<QueryColumn>();
+        if (columns == null)
+            columns = new ArrayList<QueryColumn>();
         else
             columns.clear();
-        for(QueryColumn col:qm.getQueryColumns()){
+        for (QueryColumn col : qm.getQueryColumns()) {
             //R 行头  C 列头  D 数值
-            if("R".equals(col.getShowType())){
+            if ("R".equals(col.getShowType())) {
                 rowGroupSum++;
-            }else if("C".equals(col.getShowType())){
+            } else if ("C".equals(col.getShowType())) {
                 colGroupSum++;
-            }else
+            } else
                 dataAnalyseSum++;
 
-            columns.add( new QueryColumn().copy(col) );
+            columns.add(new QueryColumn().copy(col));
         }
 
-        if(conditions==null)
-            conditions= new ArrayList<QueryCondition>();
+        if (conditions == null)
+            conditions = new ArrayList<QueryCondition>();
         else
             conditions.clear();
-        for(QueryCondition qc:qm.getQueryConditions())
-            conditions.add( new QueryCondition().copy(qc));
-     }
+        for (QueryCondition qc : qm.getQueryConditions())
+            conditions.add(new QueryCondition().copy(qc));
+    }
 
     public void makeParamByFormat() {
         //替换标题
         formName = formNameFormat;
         logicUrl = logicUrlFormat;
 
-        if(conditions!=null)
-             for(QueryCondition cond:conditions){
+        if (conditions != null)
+            for (QueryCondition cond : conditions) {
                 String sName = cond.getCondName();
                 Object sValue = cond.getCondValue();
 
-                if(sValue!=null ){
-                    if(formName!=null){
-                      formName = formName.replaceAll(sName,StringBaseOpt.objectToString(sValue));
-                    }
-                    if(logicUrl!=null){
-                      logicUrl = logicUrl.replaceAll( "var_"+sName , StringBaseOpt.objectToString(sValue));
-                    }
-                }else{
-                    if(formName!=null){
+                if (sValue != null) {
+                    if (formName != null) {
                         formName = formName.replaceAll(sName, StringBaseOpt.objectToString(sValue));
-                     }
-                    if(logicUrl!=null){
-                        logicUrl = logicUrl.replaceAll( "var_"+sName , "");
-                     }
+                    }
+                    if (logicUrl != null) {
+                        logicUrl = logicUrl.replaceAll("var_" + sName, StringBaseOpt.objectToString(sValue));
+                    }
+                } else {
+                    if (formName != null) {
+                        formName = formName.replaceAll(sName, StringBaseOpt.objectToString(sValue));
+                    }
+                    if (logicUrl != null) {
+                        logicUrl = logicUrl.replaceAll("var_" + sName, "");
+                    }
                 }
             }
 
-        if(columns==null)
+        if (columns == null)
             return;
-        int n=0;
-        for(QueryColumn col:columns){
-            col.setColProperty("col"+n);
+        int n = 0;
+        for (QueryColumn col : columns) {
+            col.setColProperty("col" + n);
             n++;
         }
     }
 
-    public JSONObject toJsonData()
-    {
+    public JSONObject toJsonData() {
         JSONObject objJson = new JSONObject();
         JSONOpt.setAttribute(objJson, "modelName", modelName);
         JSONOpt.setAttribute(objJson, "modelType", modelType);
@@ -563,23 +566,23 @@ public class FormDataModel implements java.io.Serializable {
 //            }
 //        }
 
-        if(columns!=null){
-            i=0;
-            for(QueryColumn col:columns){
-                JSONOpt.setAttribute(objJson, "columns["+i+"]", col.toJsonData());
+        if (columns != null) {
+            i = 0;
+            for (QueryColumn col : columns) {
+                JSONOpt.setAttribute(objJson, "columns[" + i + "]", col.toJsonData());
                 i++;
             }
         }
 
-        if(formData!=null){
-            i=0;
+        if (formData != null) {
+            i = 0;
             JSONArray jarrayData = new JSONArray();
-            for(Object[] objs:formData){
-                int j=0;
+            for (Object[] objs : formData) {
+                int j = 0;
                 JSONArray jarray = new JSONArray();
-                for(Object obj:objs)
-                    jarray.add(j++,obj==null?"":obj.toString());
-                jarrayData.add(i++,jarray);
+                for (Object obj : objs)
+                    jarray.add(j++, obj == null ? "" : obj.toString());
+                jarrayData.add(i++, jarray);
             }
             objJson.put("fromData", jarrayData);
         }
@@ -622,6 +625,7 @@ public class FormDataModel implements java.io.Serializable {
     public void setRetMaxSize(int retMaxSize) {
         this.retMaxSize = retMaxSize;
     }
+
     public int getRowGroupSum() {
         return rowGroupSum;
     }
@@ -645,15 +649,19 @@ public class FormDataModel implements java.io.Serializable {
     public void setDataAnalyseSum(int dataAnalyseSum) {
         this.dataAnalyseSum = dataAnalyseSum;
     }
+
     /**
      * 2 ： 二维表  3 ：同比分析 4：环比分析 5：交叉制表
+     *
      * @return String
      */
     public String getModelType() {
         return modelType;
     }
+
     /**
      * 2 ： 二维表  3 ：同比分析 4：环比分析 5：交叉制表
+     *
      * @param modelType 模型种类
      */
     public void setModelType(String modelType) {
@@ -661,16 +669,16 @@ public class FormDataModel implements java.io.Serializable {
     }
 
     public int getDataColumnCount() {
-        if("3".equals(modelType) || "4".equals(modelType))
+        if ("3".equals(modelType) || "4".equals(modelType))
             return getColumns().size() * 2 - rowGroupSum;
-        if("5".equals(modelType))
-            return  rowGroupSum + getCrossTableColumns().size() *  dataAnalyseSum;
+        if ("5".equals(modelType))
+            return rowGroupSum + getCrossTableColumns().size() * dataAnalyseSum;
         return getColumns().size();
     }
 
     public List<Object[]> getCrossTableColumns() {
         if (null == crossTableColumns) {
-            crossTableColumns = new ArrayList<Object[]> ();
+            crossTableColumns = new ArrayList<Object[]>();
         }
         return crossTableColumns;
     }
@@ -679,7 +687,7 @@ public class FormDataModel implements java.io.Serializable {
         this.crossTableColumns = crossTableColumns;
     }
 
-    @JSONField(serialize=false)
+    @JSONField(serialize = false)
     public DatabaseInfo getDbinfo() {
         return dbinfo;
     }

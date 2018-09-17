@@ -47,16 +47,16 @@ public class FormDataController extends BaseController {
 
     @RequestMapping(value = "/meta/{modelName}", method = RequestMethod.GET)
     public void getMetaDate(@PathVariable String modelName,
-            HttpServletRequest request, HttpServletResponse response) {
+                            HttpServletRequest request, HttpServletResponse response) {
         FormDataModel formObj = new FormDataModel();
         formObj.copyModelMetaData(dataManager.getDataModel(modelName));
         try {
-            collectParams(request, formObj,true);
+            collectParams(request, formObj, true);
             JsonResultUtils.writeSingleDataJson(formObj, response,
-                    JsonPropertyUtils.getIncludePropPreFilter(
-                            FormDataModel.class, "modelName",
-                                    "paramCount", "conditions",
-                                    "formNameFormat", "formName"));
+                JsonPropertyUtils.getIncludePropPreFilter(
+                    FormDataModel.class, "modelName",
+                    "paramCount", "conditions",
+                    "formNameFormat", "formName"));
         } catch (Exception e) {
             JsonResultUtils.writeErrorMessageJson(e.getMessage(), response);
             e.printStackTrace();
@@ -65,50 +65,52 @@ public class FormDataController extends BaseController {
 
     /**
      * 统计入口，返回包装好的FormDataModel对象
+     *
      * @param modelName 传入统计模块代码
-     * @param page 分页信息，交叉表不支持分页，会自动忽略
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse
+     * @param page      分页信息，交叉表不支持分页，会自动忽略
+     * @param request   HttpServletRequest
+     * @param response  HttpServletResponse
      */
     @RequestMapping(value = "/{modelName}", method = RequestMethod.GET)
     public void doStat(@PathVariable String modelName, PageDesc page,
-            HttpServletRequest request, HttpServletResponse response) {
-            FormDataModel formObj = new FormDataModel();
-            FormDataModel fm=dataManager.getDataModel(modelName);
-            formObj.copyModelMetaData(fm);
-            queryDatabase(page, formObj, request);
-            JsonResultUtils.writeSingleDataJson(formObj, response);
+                       HttpServletRequest request, HttpServletResponse response) {
+        FormDataModel formObj = new FormDataModel();
+        FormDataModel fm = dataManager.getDataModel(modelName);
+        formObj.copyModelMetaData(fm);
+        queryDatabase(page, formObj, request);
+        JsonResultUtils.writeSingleDataJson(formObj, response);
     }
 
 
     /**
      * formdatamodel对象导入excel并推送至页面下载
-     * @param request HttpServletRequest
+     *
+     * @param request   HttpServletRequest
      * @param modelName 传入统计模块代码
-     * @param paging 是否分页
-     * @param page 分页信息
-     * @param response HttpServletResponse
+     * @param paging    是否分页
+     * @param page      分页信息
+     * @param response  HttpServletResponse
      */
     @RequestMapping(value = "/excels", method = RequestMethod.POST)
     public void exportToExcel(HttpServletRequest request, String modelName, boolean paging,
-            @Valid PageDesc page, HttpServletResponse response) {
+                              @Valid PageDesc page, HttpServletResponse response) {
         FormDataModel fdm = new FormDataModel();
         fdm.copyModelMetaData(dataManager.getDataModel(modelName));
 
-        queryDatabase(paging?page:null, fdm, request);
+        queryDatabase(paging ? page : null, fdm, request);
 
         response.reset();
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
 
-        SimpleDateFormat sdf=new SimpleDateFormat("YYYYMMddhhmm");
-        Date date=new Date();
-        String time=sdf.format(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddhhmm");
+        Date date = new Date();
+        String time = sdf.format(date);
         String fileName = StringUtils.isBlank(fdm.getFormNameFormat()) ? "未命名"
-                : fdm.getFormNameFormat()+time;
+            : fdm.getFormNameFormat() + time;
         HSSFWorkbook excel = exportToExcel(fdm);
         try {
             response.setHeader("Content-Disposition", "attachment;filename="
-                    + new String((fileName + ".xls").getBytes(), "iso-8859-1"));
+                + new String((fileName + ".xls").getBytes(), "iso-8859-1"));
             ServletOutputStream out = response.getOutputStream();
             excel.write(out);
         } catch (IOException e) {
@@ -129,92 +131,93 @@ public class FormDataController extends BaseController {
         TwoDimen resHead = convertLinesToTwoDimen(headLines);
         TwoDimen resBody = convertLinesToTwoDimen(bodyLines);
         return HSSFWorkbookOpt.exportToWorkbook(resHead.getTwodimen(),
-                resHead.getNeedCombine(), resBody.getTwodimen(),
-                resBody.getNeedCombine());
+            resHead.getNeedCombine(), resBody.getTwodimen(),
+            resBody.getNeedCombine());
     }
 
     /**
      * 下拉框对应表
-     * @param request HttpServletRequest
-     * @param formObj FormDataModel对象
+     *
+     * @param request            HttpServletRequest
+     * @param formObj            FormDataModel对象
      * @param collectComboValues boolean
      * @throws Exception Exception
      */
-    private void collectParams(HttpServletRequest request, FormDataModel formObj,boolean collectComboValues)
-            throws Exception {
+    private void collectParams(HttpServletRequest request, FormDataModel formObj, boolean collectComboValues)
+        throws Exception {
         Map<String, String[]> paramMap = request.getParameterMap();
         for (QueryCondition cond : formObj.getConditions()) {
             String sName = cond.getCondName();
             String style = cond.getParamReferenceType();
             // 通过SQL查询数字
-            if(collectComboValues){
+            if (collectComboValues) {
                 char rt = '0';
                 if (StringUtils.isNotBlank(style))
                     rt = style.charAt(0);
                 switch (rt) {
-                case '1': {// 数据字典设置下拉框
-                    String sql = "select datacode,datavalue from f_datadictionary where catalogcode=?";
-                    if (StringUtils.isNotBlank(sql)) {
-                        List<Object[]> datas = DBCPDao.findObjectsBySql(
+                    case '1': {// 数据字典设置下拉框
+                        String sql = "select datacode,datavalue from f_datadictionary where catalogcode=?";
+                        if (StringUtils.isNotBlank(sql)) {
+                            List<Object[]> datas = DBCPDao.findObjectsBySql(
                                 formObj.getDbinfo(), sql,
                                 cond.getParamReferenceData());
-                        for (Object[] data : datas) {
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("key", data[0]);
-                            map.put("value", data[1]);
-                            cond.getComboValues().add(map);
+                            for (Object[] data : datas) {
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("key", data[0]);
+                                map.put("value", data[1]);
+                                cond.getComboValues().add(map);
+                            }
                         }
                     }
-                }
                     break;
-                case '2': {// json表达式方式设置下拉框
-                    JSONObject json = JSON
+                    case '2': {// json表达式方式设置下拉框
+                        JSONObject json = JSON
                             .parseObject(cond.getParamReferenceData());
-                    if (json != null) {
-                        for (Map.Entry<String, Object> ent : json.entrySet()) {
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("key", ent.getKey());
-                            map.put("value", ent.getValue());
-                            cond.getComboValues().add(map);
+                        if (json != null) {
+                            for (Map.Entry<String, Object> ent : json.entrySet()) {
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("key", ent.getKey());
+                                map.put("value", ent.getValue());
+                                cond.getComboValues().add(map);
 
+                            }
                         }
                     }
-                }
                     break;
-                case '3': {// 存入数据库的下拉框
-                    String sql = cond.getParamReferenceData();
-                    if (StringUtils.isNotBlank(sql)) {
-                        List<Object[]> datas = DBCPDao.findObjectsBySql(
+                    case '3': {// 存入数据库的下拉框
+                        String sql = cond.getParamReferenceData();
+                        if (StringUtils.isNotBlank(sql)) {
+                            List<Object[]> datas = DBCPDao.findObjectsBySql(
                                 formObj.getDbinfo(), sql);
-                        for (Object[] data : datas) {
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("key", data[0]);
-                            map.put("value", data[1]);
+                            for (Object[] data : datas) {
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("key", data[0]);
+                                map.put("value", data[1]);
+                                cond.getComboValues().add(map);
+                            }
+                        }
+                    }
+                    break;
+                    case 'Y': {// 年份下拉框
+                        int currYear = DatetimeOpt.getYear(new Date());
+                        for (int i = 5; i > -45; i--) {
+                            Map<String, Object> map = new HashMap<String, Object>();
+                            map.put("key", String.valueOf(currYear + i) + "年");
+                            map.put("value", currYear + i);
                             cond.getComboValues().add(map);
                         }
                     }
-                }
                     break;
-                case 'Y': {// 年份下拉框
-                    int currYear = DatetimeOpt.getYear(new Date());
-                    for (int i = 5; i > -45; i--) {
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("key", String.valueOf(currYear + i) + "年");
-                        map.put("value", currYear + i);
-                        cond.getComboValues().add(map);
-                    }
-                }
-                    break;
-                case 'M':// 月份下拉框
-                    for (int i = 1; i < 13; i++) {
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("key", String.valueOf(+i) + "月");
-                        map.put("value", i);
-                        cond.getComboValues().add(map);
-                    }
-                    break;
-                default:
-                    break;
+                    case 'M':// 月份下拉框
+                        for (int i = 1; i < 13; i++) {
+                            Map<String, Object> map = new HashMap<String, Object>();
+                            map.put("key", String.valueOf(+i) + "月");
+                            map.put("value", i);
+                            cond.getComboValues().add(map);
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
             setDefaultValue(cond, paramMap);
@@ -228,11 +231,12 @@ public class FormDataController extends BaseController {
 
     /**
      * 覆盖默认值
-     * @param cond 查询条件
+     *
+     * @param cond     查询条件
      * @param paramMap 参数
      */
     private void setDefaultValue(QueryCondition cond,
-            Map<String, String[]> paramMap) {
+                                 Map<String, String[]> paramMap) {
         // String referenceStyle = cond.getParamReferenceType();
         String conditionType = cond.getParamType();
 
@@ -256,7 +260,7 @@ public class FormDataController extends BaseController {
             if (v != null && v.length > 0)
                 cond.setCondValue(v[0]);
         } else {// 有默认值按默认值计算
-                // Formula formula = new Formula();
+            // Formula formula = new Formula();
             if ("D".equals(conditionType) || "T".equals(conditionType)) {
                 cond.setCondValue(DatetimeOpt.smartPraseDate(value));
             } else if ("N".equals(conditionType)) {
@@ -270,13 +274,13 @@ public class FormDataController extends BaseController {
 
     /**
      * 从数据库中取元数据
-     * @param page 分页信息
+     *
+     * @param page    分页信息
      * @param formObj FormDataModel对象
      * @param request HttpServletRequest
      */
     private void queryDatabase(PageDesc page, FormDataModel formObj,
-            HttpServletRequest request) {
-
+                               HttpServletRequest request) {
 
 
         Map<String, String[]> paramMap = request.getParameterMap();
@@ -288,7 +292,7 @@ public class FormDataController extends BaseController {
         }
         // 获取参数
         try {
-            collectParams(request, formObj,true);
+            collectParams(request, formObj, true);
         } catch (Exception e) {
             // log.error("获取参数失败："+e.getMessage());
             e.printStackTrace();
@@ -298,7 +302,7 @@ public class FormDataController extends BaseController {
         // 普通二维报表
         if ("2".equals(modelType) || StringUtils.isEmpty(modelType)) {
             totalRows = dataManager.queryFormData(formObj, page);
-            formObj.setTotalRowsAll(page==null?totalRows:page.getTotalRows());
+            formObj.setTotalRowsAll(page == null ? totalRows : page.getTotalRows());
         }
 
         // 同比报表 环比报表
@@ -311,11 +315,9 @@ public class FormDataController extends BaseController {
         else if ("5".equals(modelType)) {
             totalRows = dataManager.queryCrossData(formObj);
             formObj.setTotalRowsAll(totalRows);
-        }
-
-        else {
+        } else {
             totalRows = dataManager.queryFormData(formObj, page);
-            formObj.setTotalRowsAll(page==null?totalRows:page.getTotalRows());
+            formObj.setTotalRowsAll(page == null ? totalRows : page.getTotalRows());
         }
         formObj.setTotalRows(totalRows);
 //        formObj.setTotalRowsAll(page.getTotalRows());
@@ -371,12 +373,12 @@ public class FormDataController extends BaseController {
             CTableLine line = lines.get(y);
             int xIndex = line.getFirstCellCol();
             // 每个单元格循环
-            for (CTableCell cell : line.getCells()){
+            for (CTableCell cell : line.getCells()) {
                 Object value = cell.getValue();
                 // 单元格是纵向合并类型
                 if (cell.getRowspan() > 1) {
-                    int[] comb = new int[] { y, (y + cell.getRowspan() - 1), xIndex,
-                        xIndex };
+                    int[] comb = new int[]{y, (y + cell.getRowspan() - 1), xIndex,
+                        xIndex};
                     combineList.add(comb);
                     for (int k = 0; k < cell.getRowspan(); k++) {
                         // 非数字型统统取displayvalue
@@ -390,8 +392,8 @@ public class FormDataController extends BaseController {
                 }
                 // 横向合并
                 else if (cell.getColspan() > 1) {
-                    int[] comb = new int[] { y, y, xIndex,
-                            xIndex + cell.getColspan() - 1 };
+                    int[] comb = new int[]{y, y, xIndex,
+                        xIndex + cell.getColspan() - 1};
                     combineList.add(comb);
                     for (int k = 0; k < cell.getColspan(); k++) {
                         // 非数字型统统取displayvalue
@@ -418,7 +420,7 @@ public class FormDataController extends BaseController {
 
     public boolean isNumType(Object value) {
         if (value instanceof BigDecimal || value instanceof Integer
-                || value instanceof Double || value instanceof Float)
+            || value instanceof Double || value instanceof Float)
             return true;
         else
             return false;
@@ -428,16 +430,15 @@ public class FormDataController extends BaseController {
     //excel操作类
     static class HSSFWorkbookOpt {
         /**
-         *
          * @param twodimenHead 二维数组
-         * @param headCombine int数组集合
+         * @param headCombine  int数组集合
          * @param twodimenBody 二维数组
-         * @param bodyCombine int数组集合
+         * @param bodyCombine  int数组集合
          * @return HSSFWorkbook
          */
         static HSSFWorkbook exportToWorkbook(Object[][] twodimenHead,
-                List<int[]> headCombine, Object[][] twodimenBody,
-                List<int[]> bodyCombine) {
+                                             List<int[]> headCombine, Object[][] twodimenBody,
+                                             List<int[]> bodyCombine) {
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = workbook.createSheet();// excel表
             sheet.setDefaultColumnWidth(20);
@@ -446,9 +447,9 @@ public class FormDataController extends BaseController {
             cellStyleHead.setWrapText(true);// 单元格包围文本
             cellStyleHead.setFillPattern(FillPatternType.FINE_DOTS);
             cellStyleHead.setFillForegroundColor(HSSFColor.HSSFColorPredefined.YELLOW
-                    .getIndex());// excel表头颜色，前景色和背景色要同事设置
+                .getIndex());// excel表头颜色，前景色和背景色要同事设置
             cellStyleHead.setFillBackgroundColor(HSSFColor.HSSFColorPredefined.YELLOW
-                    .getIndex());
+                .getIndex());
             cellStyleHead.setBorderBottom(BorderStyle.THIN);// excel表头边框
             cellStyleHead.setBorderTop(BorderStyle.THIN);
             cellStyleHead.setBorderLeft(BorderStyle.THIN);
@@ -460,24 +461,23 @@ public class FormDataController extends BaseController {
             cellStyleBody.setVerticalAlignment(VerticalAlignment.CENTER);
 
             int endIndex = addTwodimen(sheet, twodimenHead, 0, cellStyleHead,
-                    headCombine);
+                headCombine);
             addTwodimen(sheet, twodimenBody, endIndex, cellStyleBody,
-                    bodyCombine);
+                bodyCombine);
             return workbook;
         }
 
 
         /**
-         *
-         * @param sheet 表格
-         * @param twodimen 二位数组
+         * @param sheet      表格
+         * @param twodimen   二位数组
          * @param startIndex int
-         * @param cellStyle 表格样式
-         * @param combine 合计数据
+         * @param cellStyle  表格样式
+         * @param combine    合计数据
          * @return int 结束行
          */
         static int addTwodimen(HSSFSheet sheet, Object[][] twodimen,
-                int startIndex, HSSFCellStyle cellStyle, List<int[]> combine) {
+                               int startIndex, HSSFCellStyle cellStyle, List<int[]> combine) {
             Row row = null;
             Cell cell = null;
             Object value = null;
@@ -497,7 +497,7 @@ public class FormDataController extends BaseController {
                         cell.setCellType(CellType.NUMERIC);// 0:Number 1:String ...
                         cell.setCellValue((Integer) value);
                     } else if (value instanceof Double
-                            || value instanceof Float) {
+                        || value instanceof Float) {
                         cell.setCellType(CellType.NUMERIC);// 0:Number 1:String ...
                         cell.setCellValue((Double) value);
                     } else if (value instanceof BigDecimal) {

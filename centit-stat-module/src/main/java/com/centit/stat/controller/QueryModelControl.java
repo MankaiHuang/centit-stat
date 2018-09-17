@@ -20,13 +20,23 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 报表模块配置控制器
+ */
 @Controller
 @RequestMapping("/stat/querymodel")
 public class QueryModelControl extends BaseController {
     @Resource
     private QueryModelManager queryModelMag;
 
-
+    /**
+     * 模块列表
+     * @param pageDesc
+     * @param field
+     * @param _search
+     * @param request
+     * @param response
+     */
     @GetMapping
     public void list(PageDesc pageDesc, String[] field, String _search, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> searchColumn = convertSearchColumn(request);
@@ -45,22 +55,38 @@ public class QueryModelControl extends BaseController {
         JsonResultUtils.writeResponseDataAsJson(resData, response, simplePropertyPreFilter);
     }
 
-
+    /**
+     * 查询单个模块
+     * @param modelName 模块代码/名称
+     * @param request
+     * @param response
+     */
     @RequestMapping(value = "/{modelName}", method = {RequestMethod.GET})
     public void get(@PathVariable String modelName, HttpServletRequest request, HttpServletResponse response) {
         QueryModel qm = queryModelMag.getObjectWithReference(modelName);
         JsonResultUtils.writeSingleDataJson(qm, response);
     }
 
-
-    @RequestMapping(value = "", method = {RequestMethod.POST})
+    /**
+     * 新增模块
+     * @param qm
+     * @param request
+     * @param response
+     */
+    @RequestMapping(method = {RequestMethod.POST})
     public void create(@Valid QueryModel qm, HttpServletRequest request, HttpServletResponse response) {
         qm.setQuerySql(dealPlusAndAnd(qm.getQuerySql()));
         queryModelMag.saveNewObject(qm);
         JsonResultUtils.writeSingleDataJson(qm, response);
     }
 
-
+    /**
+     * 修改模块
+     * @param qm
+     * @param modelName
+     * @param request
+     * @param response
+     */
     @RequestMapping(value = "/{modelName}", method = {RequestMethod.PUT})
     public void update(@Valid QueryModel qm, @PathVariable String modelName, HttpServletRequest request, HttpServletResponse response) {
         QueryModel dbqm = queryModelMag.getObjectById(modelName);
@@ -91,17 +117,21 @@ public class QueryModelControl extends BaseController {
             Map<String, List<Object>> map = queryModelMag.getColAndCond(dealPlusAndAnd(sql));
             JsonResultUtils.writeSingleDataJson(map, response);
         } catch (Exception e) {
-
             JsonResultUtils.writeErrorMessageJson(501, "SQL解析失败，请检查是否", response);
-
         }
     }
 
-    @RequestMapping(value = "/{queryName}", method = {RequestMethod.DELETE})
-    public void delete(HttpServletRequest request, @PathVariable String queryName, HttpServletResponse response) {
-        QueryModel dbqm = queryModelMag.getObjectById(queryName);
+    /**
+     * 删除模块
+     * @param request
+     * @param modelName
+     * @param response
+     */
+    @RequestMapping(value = "/{modelName}", method = {RequestMethod.DELETE})
+    public void delete(HttpServletRequest request, @PathVariable String modelName, HttpServletResponse response) {
+        QueryModel dbqm = queryModelMag.getObjectById(modelName);
         if (null != dbqm)
-            queryModelMag.deleteObjectById(queryName);
+            queryModelMag.deleteObjectById(modelName);
         JsonResultUtils.writeSuccessJson(response);
     }
 

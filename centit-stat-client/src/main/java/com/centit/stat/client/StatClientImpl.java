@@ -2,6 +2,7 @@ package com.centit.stat.client;
 
 import com.centit.framework.appclient.AppSession;
 import com.centit.support.network.HttpExecutor;
+import com.centit.support.network.HttpExecutorContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class StatClientImpl implements StatClient{
     }
 
     public CloseableHttpClient  getHttpClient() throws Exception{
-        return  appSession
+        return  appSession.allocHttpClient();
     }
 
     public void releaseHttpClient(CloseableHttpClient httpClient){
@@ -52,7 +53,7 @@ public class StatClientImpl implements StatClient{
         }
 
         appSession.checkAccessToken(httpClient);
-        String jsonStr = HttpExecutor.simpleGet(httpClient,
+        String jsonStr = HttpExecutor.simpleGet(new HttpExecutorContext(),
                 appSession.completeQueryUrl("/service/stat/twodimenform/"+modelName), paramsWithPage);
         return jsonStr;
     }

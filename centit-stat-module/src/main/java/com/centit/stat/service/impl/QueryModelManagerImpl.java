@@ -5,7 +5,6 @@ import com.centit.stat.dao.QueryColumnDao;
 import com.centit.stat.dao.QueryConditionDao;
 import com.centit.stat.dao.QueryModelDao;
 import com.centit.stat.po.QueryColumn;
-import com.centit.stat.po.QueryColumnId;
 import com.centit.stat.po.QueryCondition;
 import com.centit.stat.po.QueryModel;
 import com.centit.stat.service.QueryModelManager;
@@ -47,7 +46,8 @@ public class QueryModelManagerImpl extends BaseEntityManagerImpl<QueryModel, Str
 
         for (String name : columnNames) {
             QueryColumn col = new QueryColumn();
-            col.setCid(new QueryColumnId("", name));
+            col.setModelName("");
+            col.setColName(name);
             colList.add(col);
         }
         ColAndCond.put("columns", colList);
@@ -82,7 +82,7 @@ public class QueryModelManagerImpl extends BaseEntityManagerImpl<QueryModel, Str
         List<QueryColumn> columns = queryModel.getQueryColumns();
         List<QueryCondition> conditions = queryModel.getQueryConditions();
         for(QueryColumn c : columns){
-            QueryColumn dbc = queryColumnDao.getObjectById(c.getCid());
+            QueryColumn dbc = queryColumnDao.getObjectById(c);
             if(dbc == null){
                 queryColumnDao.saveNewObject(c);
             }else{
@@ -90,7 +90,7 @@ public class QueryModelManagerImpl extends BaseEntityManagerImpl<QueryModel, Str
             }
         }
         for(QueryCondition c : conditions){
-            QueryCondition dbc = queryConditionDao.getObjectById(c.getCid());
+            QueryCondition dbc = queryConditionDao.getObjectById(c);
             if(dbc == null){
                 queryConditionDao.saveNewObject(c);
             }else{

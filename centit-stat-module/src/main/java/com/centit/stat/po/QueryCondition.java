@@ -4,42 +4,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 
 import org.hibernate.validator.constraints.Length;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "Q_QUERYCONDITION")
 
 public class QueryCondition implements java.io.Serializable {
-    private static final long serialVersionUID =  1L;
-    @EmbeddedId
-    private QueryConditionId cid;
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "MODELNAME")
+    @NotBlank(message = "字段不能为空")
+    private String modelName;
+
+    @Id
+    @Column(name = "CONDNAME")
+    @NotBlank(message = "字段不能为空")
+    private String condName;
 
     @Column(name = "CONDLABEL")
     @Length(max = 120, message = "字段长度不能大于{max}")
     private String condLabel;//参数提示
 
+    /**
+     * 参数显示样式 N:普通 nomal H 隐藏 hide R 只读 readonly
+     */
     @Column(name = "CONDDISPLAYSTYLE")
     @Length(max = 1, message = "字段长度不能大于{max}")
-    private String condDisplayStyle;//参数显示样式 N:普通 nomal H 隐藏 hide R 只读 readonly
+    private String condDisplayStyle;
 
+    /**
+     * 参数类型 S:文本 N数字  D：日期 T：时间戳（datetime)
+     */
     @Column(name = "PARAMTYPE")
     @Length(max = 1, message = "字段长度不能大于{max}")
-    private String paramType;//参数类型 S:文本 N数字  D：日期 T：时间戳（datetime)
+    private String paramType;
 
     @Column(name = "COMPARETYPE")
     @Length(max = 1, message = "字段长度不能大于{max}")
-     private String  compareType;//对比时间字段类 必需是时间字段， 3 同比分析  4 环比分析 0 其他
+    private String compareType;//对比时间字段类 必需是时间字段， 3 同比分析  4 环比分析 0 其他
 
     @Column(name = "PARAMREFERENCETYPE")
     @Length(max = 1, message = "字段长度不能大于{max}")
@@ -69,92 +78,59 @@ public class QueryCondition implements java.io.Serializable {
     @Transient
     private Object condValue;
 
-//    @ManyToOne
-    @JSONField(serialize=false)
+    //    @ManyToOne
+    @JSONField(serialize = false)
 //    @JoinColumn(name = "MODELNAME", insertable = false, updatable = false)
     private QueryModel queryModel;
 
     @Transient
-    private List<Map<String,Object>> comboValues;
+    private List<Map<String, Object>> comboValues;
+
     // Constructors
     public QueryCondition() {
         clearProperties();
     }
 
-    // 正常变量的构造函数
-    public QueryCondition(String modelName, String condName,String condLabel,String paramReferenceData,String condValue){
-        this.cid = new QueryConditionId(modelName,condName);
-        this.condLabel= condLabel;
-        this.condDisplayStyle= "N";
-        this.paramReferenceData=paramReferenceData;
-        this.condOrder = null;
-        this.compareType= "0";
+    public QueryCondition(String modelName, String condName) {
+        this.modelName = modelName;
+        this.condName = condName;
     }
 
-     //异常变量的构造函数
-     // condDisplayStyle N:普通 nomal H 隐藏 hide R 只读 readonly
-    public QueryCondition(String modelName, String condName,String condDisplayStyle, String condValue){
-        this(condName,condName,condDisplayStyle,null,condValue);
-    }
-
-
-    public QueryCondition(QueryConditionId id,String  condLabel,String  condDisplayStyle) {
-        this.cid = id;
-
-
-        this.condLabel= condLabel;
-        this.condDisplayStyle= condDisplayStyle;
-    }
-
-    public QueryCondition(QueryConditionId id
-            ,String condLabel, String paramReferenceData, String paramType, String paramValidateRegex, String paramReferenceType, String condDisplayStyle, String compareType, Integer condOrder, String paramValidateInfo) {
-        this.cid = id;
-        this.condLabel=condLabel;
-        this.paramType=paramType;
-        this.paramReferenceData=paramReferenceData;
-        this.paramReferenceType=paramReferenceType;
-        this.paramValidateInfo=paramValidateInfo;
-        this.paramValidateRegex=paramValidateRegex;
-        this.condLabel= condLabel;
-        this.condDisplayStyle= condDisplayStyle;
+    public QueryCondition(String modelName, String condName, String condLabel, String condDisplayStyle, String paramType, String compareType, String paramReferenceType, String paramReferenceData, String paramValidateRegex, String paramValidateInfo, String paramDefaultValue, @Digits(integer = 2, fraction = 0, message = "字段范围整数{integer}位小数{fraction}位") Integer condOrder, Object condValue, QueryModel queryModel, List<Map<String, Object>> comboValues) {
+        this.modelName = modelName;
+        this.condName = condName;
+        this.condLabel = condLabel;
+        this.condDisplayStyle = condDisplayStyle;
+        this.paramType = paramType;
         this.compareType = compareType;
+        this.paramReferenceType = paramReferenceType;
+        this.paramReferenceData = paramReferenceData;
+        this.paramValidateRegex = paramValidateRegex;
+        this.paramValidateInfo = paramValidateInfo;
+        this.paramDefaultValue = paramDefaultValue;
         this.condOrder = condOrder;
+        this.condValue = condValue;
+        this.queryModel = queryModel;
+        this.comboValues = comboValues;
     }
+// Property accessors
 
-    public QueryConditionId getCid() {
-        return this.cid;
-    }
-
-    public void setCid(QueryConditionId id) {
-        this.cid = id;
-    }
 
     public String getModelName() {
-        if(this.cid==null)
-            this.cid = new QueryConditionId();
-        return this.cid.getModelName();
+        return modelName;
     }
 
     public void setModelName(String modelName) {
-        if(this.cid==null)
-            this.cid = new QueryConditionId();
-        this.cid.setModelName(modelName);
+        this.modelName = modelName;
     }
 
     public String getCondName() {
-        if(this.cid==null)
-            this.cid = new QueryConditionId();
-        return this.cid.getCondName();
+        return condName;
     }
 
     public void setCondName(String condName) {
-        if(this.cid==null)
-            this.cid = new QueryConditionId();
-        this.cid.setCondName(condName);
+        this.condName = condName;
     }
-
-    // Property accessors
-
 
     public String getCondLabel() {
         return this.condLabel;
@@ -221,9 +197,10 @@ public class QueryCondition implements java.io.Serializable {
     }
 
     /**
-    * N:普通 nomal H 隐藏 hide R 只读 readonly
-    * @return String
-    */
+     * N:普通 nomal H 隐藏 hide R 只读 readonly
+     *
+     * @return String
+     */
     public String getCondDisplayStyle() {
         return this.condDisplayStyle;
     }
@@ -237,12 +214,13 @@ public class QueryCondition implements java.io.Serializable {
     public Integer getCondOrder() {
         return condOrder;
     }
+
     public void setCondOrder(Integer condOrder) {
         this.condOrder = condOrder;
     }
 
 
-    public QueryCondition copy(QueryCondition other){
+    public QueryCondition copy(QueryCondition other) {
         this.setModelName(other.getModelName());
         this.setCondName(other.getCondName());
         this.setParamReferenceData(other.getParamReferenceData());
@@ -251,62 +229,64 @@ public class QueryCondition implements java.io.Serializable {
         this.setParamValidateInfo(other.getParamValidateInfo());
         this.setParamValidateRegex(other.getParamValidateRegex());
         this.paramDefaultValue = other.getParamDefaultValue();
-           this.condValue = other.getCondValue();
-        this.condLabel= other.getCondLabel();
-        this.condDisplayStyle= other.getCondDisplayStyle();
+        this.condValue = other.getCondValue();
+        this.condLabel = other.getCondLabel();
+        this.condDisplayStyle = other.getCondDisplayStyle();
         this.condOrder = other.getCondOrder();
-        this.compareType= other.getCompareType();
+        this.compareType = other.getCompareType();
         return this;
     }
 
-    public QueryCondition copyNotNullProperty(QueryCondition other){
+    public QueryCondition copyNotNullProperty(QueryCondition other) {
 
-        if( other.getModelName() != null)
+        if (other.getModelName() != null)
             this.setModelName(other.getModelName());
-        if( other.getCondName() != null)
+        if (other.getCondName() != null)
             this.setCondName(other.getCondName());
-        if(other.getParamReferenceData()!=null)
+        if (other.getParamReferenceData() != null)
             this.setParamReferenceData(other.getParamReferenceData());
-        if(other.getParamReferenceType()!=null)
+        if (other.getParamReferenceType() != null)
             this.setParamReferenceType(other.getParamReferenceType());
-        if(other.getParamType()!=null)
+        if (other.getParamType() != null)
             this.setParamType(other.getParamType());
-        if(other.getParamValidateInfo()!=null)
+        if (other.getParamValidateInfo() != null)
             this.setParamValidateInfo(other.getParamValidateInfo());
-        if(other.getParamValidateRegex()!=null)
+        if (other.getParamValidateRegex() != null)
             this.setParamValidateRegex(other.getParamValidateRegex());
 
-        if(other.getParamDefaultValue()!=null)
+        if (other.getParamDefaultValue() != null)
             this.paramDefaultValue = other.getParamDefaultValue();
 
-           if(other.getCondValue()!=null)
+        if (other.getCondValue() != null)
             this.condValue = other.getCondValue();
 
-        if( other.getCondLabel() != null)
-            this.condLabel= other.getCondLabel();
-        if( other.getCompareType() != null)
-            this.compareType= other.getCompareType();
-        if( other.getCondDisplayStyle() != null)
-            this.condDisplayStyle= other.getCondDisplayStyle();
-        if (other.getCondOrder()!=null)
+        if (other.getCondLabel() != null)
+            this.condLabel = other.getCondLabel();
+        if (other.getCompareType() != null)
+            this.compareType = other.getCompareType();
+        if (other.getCondDisplayStyle() != null)
+            this.condDisplayStyle = other.getCondDisplayStyle();
+        if (other.getCondOrder() != null)
             this.condOrder = other.getCondOrder();
         return this;
     }
 
-    public QueryCondition clearProperties(){
-        this.paramReferenceData=null;
-        this.paramReferenceType=null;
-        this.paramType=null;
-        this.paramValidateRegex=null;
-        this.paramValidateInfo=null;
-        this.condLabel= null;
-        this.condDisplayStyle= "N";
+    public QueryCondition clearProperties() {
+        this.paramReferenceData = null;
+        this.paramReferenceType = null;
+        this.paramType = null;
+        this.paramValidateRegex = null;
+        this.paramValidateInfo = null;
+        this.condLabel = null;
+        this.condDisplayStyle = "N";
         this.condOrder = null;
-        this.compareType= "0";
+        this.compareType = "0";
         return this;
     }
+
     /**
      * 必需是时间字段， 3 同比分析  4 环比分析 0 其他
+     *
      * @return String
      */
     public String getCompareType() {
@@ -326,13 +306,13 @@ public class QueryCondition implements java.io.Serializable {
         this.queryModel = queryModel;
     }
 
-    public List<Map<String,Object>> getComboValues() {
-        if(comboValues==null)
-            comboValues = new ArrayList<Map<String,Object>>();
+    public List<Map<String, Object>> getComboValues() {
+        if (comboValues == null)
+            comboValues = new ArrayList<Map<String, Object>>();
         return comboValues;
     }
 
-    public void setComboValues(List<Map<String,Object>> comboValues) {
+    public void setComboValues(List<Map<String, Object>> comboValues) {
         this.comboValues = comboValues;
     }
 }

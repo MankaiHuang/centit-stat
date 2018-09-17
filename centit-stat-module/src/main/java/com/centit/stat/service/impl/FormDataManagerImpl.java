@@ -3,6 +3,7 @@ package com.centit.stat.service.impl;
 import com.centit.framework.ip.service.IntegrationEnvironment;
 import com.centit.stat.dao.DBCPDao;
 import com.centit.stat.dao.QueryColumnDao;
+import com.centit.stat.dao.QueryConditionDao;
 import com.centit.stat.dao.QueryModelDao;
 import com.centit.stat.po.QueryCell;
 import com.centit.stat.po.QueryColumn;
@@ -36,6 +37,9 @@ public class FormDataManagerImpl implements FormDataManager {
 
     @Resource
     private QueryColumnDao queryColumnDao;
+
+    @Resource
+    private QueryConditionDao queryConditionDao;
 
     @Resource
     public void setBaseDao(QueryModelDao baseDao) {
@@ -74,8 +78,10 @@ public class FormDataManagerImpl implements FormDataManager {
     @Override
     @Transactional(readOnly = true)
     strictfp public Integer queryFormData(FormDataModel formData, PageDesc page) {
-        List<QueryColumn> cs = queryColumnDao.listObjectsByProperty("cid.modelName", formData.getModelName());
+        //fixme start
+        List<QueryColumn> cs = queryColumnDao.listObjectsByProperty("modelName", formData.getModelName());
         formData.setColumns(cs);
+        //end
 
         List<Object[]> currDatas = new ArrayList<Object[]>();
         QueryAndNamedParams qap = formData.makeStatQuery();
@@ -296,8 +302,13 @@ public class FormDataManagerImpl implements FormDataManager {
     @Override
     @Transactional
     strictfp public Integer queryCompareData(FormDataModel formData, boolean needSum) {
-        List<QueryColumn> cs = queryColumnDao.listObjectsByProperty("cid.modelName", formData.getModelName());
+        //fixme start
+        List<QueryColumn> cs = queryColumnDao.listObjectsByProperty("modelName", formData.getModelName());
+        List<QueryCondition> cd = queryConditionDao.listObjectsByProperty("modelName", formData.getModelName());
         formData.setColumns(cs);
+        formData.setConditions(cd);
+        //end
+
         // 查询数据
         String currTitle = formData.makeCondCompareValue(formData.getModelType(), 0);
         QueryAndNamedParams qap = formData.makeStatQuery();
@@ -869,8 +880,10 @@ public class FormDataManagerImpl implements FormDataManager {
     @Override
     @Transactional
     strictfp public Integer queryCrossData(FormDataModel formData, boolean needSum) {
-        List<QueryColumn> cs = queryColumnDao.listObjectsByProperty("cid.modelName", formData.getModelName());
+        //fixme start
+        List<QueryColumn> cs = queryColumnDao.listObjectsByProperty("modelName", formData.getModelName());
         formData.setColumns(cs);
+        //end
 
         int dataCols = 0;
         int sumDataCols = 0;

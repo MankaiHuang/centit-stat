@@ -1,12 +1,6 @@
 package com.centit.stat.po;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 
 import org.hibernate.validator.constraints.Length;
@@ -14,29 +8,38 @@ import org.hibernate.validator.constraints.Length;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.centit.support.json.JSONOpt;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "Q_QUERYCOLUMN")
 public class QueryColumn implements java.io.Serializable {
-    private static final long serialVersionUID =  1L;
-    @EmbeddedId
-    private QueryColumnId cid;
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "MODELNAME")
+    @NotBlank(message = "字段不能为空")
+    private String modelName;
+
+    @Id
+    @Column(name = "COLNAME")
+    @NotBlank(message = "字段不能为空")
+    private String colName;
 
     /**
      * 数据操作 0：无操作  1：合计  2：平均  3：平均 合计
      */
     @Column(name = "OPTTYPE")
-    private String  optType;
+    private String optType;
     @Column(name = "DRAWCHART")
-    private String  drawChart;
+    private String drawChart;
     @Column(name = "COLTYPE")
-    private String  colType;
+    private String colType;
     @Column(name = "COLFORMAT")
     @Length(min = 0, max = 120, message = "字段长度不能小于{min}大于{max}")
     private String colFormat;
     @Column(name = "COLLOGIC")
     @Length(min = 0, max = 120, message = "字段长度不能小于{min}大于{max}")
-    private String  colLogic;
+    private String colLogic;
     @Column(name = "COLORDER")
     @Digits(integer = 2, fraction = 0, message = "字段范围整数{integer}位小数{fraction}位")
     private Integer colOrder;
@@ -63,8 +66,8 @@ public class QueryColumn implements java.io.Serializable {
     @Column(name = "LINKTYPE")
     @Length(min = 0, max = 64, message = "字段长度不能小于{min}大于{max}")
     private String linkType;
-//    @ManyToOne
-    @JSONField(serialize=false)
+    //    @ManyToOne
+    @JSONField(serialize = false)
 //    @JoinColumn(name = "MODELNAME", insertable = false, updatable = false)
     private QueryModel queryModel;
 
@@ -74,16 +77,20 @@ public class QueryColumn implements java.io.Serializable {
     @Column(name = "CSSSTYLE")
     @Length(min = 0, max = 120, message = "字段长度不能小于{min}大于{max}")
     private String cssStyle;
+
     public String getCssStyle() {
         // TODO Auto-generated method stub
         return this.cssStyle;
     }
+
     public void setCssStyle(String cssStyle) {
         this.cssStyle = cssStyle;
     }
+
     public String getLinkType() {
         return linkType;
     }
+
     public void setLinkType(String linkType) {
         this.linkType = linkType;
     }
@@ -91,103 +98,65 @@ public class QueryColumn implements java.io.Serializable {
     public String getCatalogCode() {
         return catalogCode;
     }
+
     public void setCatalogCode(String catalogCode) {
         this.catalogCode = catalogCode;
     }
+
     // Constructors
     public QueryColumn() {
     }
 
-    public QueryColumn(QueryColumnId id
-
-        ) {
-        this.cid = id;
-
-
+    public QueryColumn(String modelName, String colName) {
+        this.modelName = modelName;
+        this.colName = colName;
     }
 
-    public QueryColumn(Integer colOrder, String colName,String colType,String colFormat, String optType,String drawChart,String colLogic, String isShow){
-        this.cid = new QueryColumnId();
-        this.cid.setColName(colName);
+    public QueryColumn(String modelName, String colName, String optType, String drawChart, String colType, String colFormat, String colLogic, @Digits(integer = 2, fraction = 0, message = "字段范围整数{integer}位小数{fraction}位") Integer colOrder, String isShow, String catalogCode, String showType, Double averageValue, Double sumValue, String colProperty, String linkType, QueryModel queryModel, String cssStyle) {
+        this.modelName = modelName;
+        this.colName = colName;
         this.optType = optType;
-        this.colType = colType;
         this.drawChart = drawChart;
-        this.averageValue = 0.0;
-        this.sumValue = 0.0;
-        this.colLogic = colLogic;
-        this.isShow = isShow;
+        this.colType = colType;
         this.colFormat = colFormat;
+        this.colLogic = colLogic;
         this.colOrder = colOrder;
-        this.cssStyle="";
-    }
-
-    public QueryColumn(String colName,String colType,String optType,String drawChart){
-        this(0, colName,colType,optType,"",drawChart,null,"T");
-    }
-
-    public QueryColumn(String colName,String colType,String optType){
-        this(0, colName,colType,optType,"","F",null,"T");
-    }
-
-    public QueryColumn(String colName,String colType){
-        this(0, colName,colType,"","0","F",null,"T");
-    }
-
-
-    public QueryColumn(QueryColumnId id
-
-    ,String  optType,String  drawChart,String  colType,String  colLogic,Integer colorder,String isShow,String showType) {
-        this.cid = id;
-
-        this.optType= optType;
-        this.drawChart= drawChart;
-        this.colType= colType;
-        this.colLogic= colLogic;
-        this.colOrder=colorder;
         this.isShow = isShow;
-        this.showType= showType;
-
+        this.catalogCode = catalogCode;
+        this.showType = showType;
+        this.averageValue = averageValue;
+        this.sumValue = sumValue;
+        this.colProperty = colProperty;
+        this.linkType = linkType;
+        this.queryModel = queryModel;
+        this.cssStyle = cssStyle;
     }
 
-    public QueryColumnId getCid() {
-        return this.cid;
-    }
-
-    public void setCid(QueryColumnId id) {
-        this.cid = id;
-    }
     public String getIsShow() {
         return isShow;
     }
+
     public void setIsShow(String isShow) {
         this.isShow = isShow;
     }
+
     public String getModelName() {
-        if(this.cid==null)
-            this.cid = new QueryColumnId();
-        return this.cid.getModelName();
+        return modelName;
     }
 
     public void setModelName(String modelName) {
-        if(this.cid==null)
-            this.cid = new QueryColumnId();
-        this.cid.setModelName(modelName);
+        this.modelName = modelName;
     }
 
     public String getColName() {
-        if(this.cid==null)
-            this.cid = new QueryColumnId();
-        return this.cid.getColName();
+        return colName;
     }
 
     public void setColName(String colName) {
-        if(this.cid==null)
-            this.cid = new QueryColumnId();
-        this.cid.setColName(colName);
+        this.colName = colName;
     }
 
-
-    // Property accessors
+// Property accessors
 
     public String getOptType() {
         return this.optType;
@@ -224,91 +193,99 @@ public class QueryColumn implements java.io.Serializable {
     public Integer getColOrder() {
         return colOrder;
     }
+
     public void setColOrder(Integer colorder) {
         this.colOrder = colorder;
     }
 
-    public QueryColumn copy(QueryColumn other){
+    public QueryColumn copy(QueryColumn other) {
 
         this.setModelName(other.getModelName());
         this.setColName(other.getColName());
 
-        this.optType= other.getOptType();
-        this.drawChart= other.getDrawChart();
-        this.colType= other.getColType();
-        this.colLogic= other.getColLogic();
-        this.colOrder=other.getColOrder();
+        this.optType = other.getOptType();
+        this.drawChart = other.getDrawChart();
+        this.colType = other.getColType();
+        this.colLogic = other.getColLogic();
+        this.colOrder = other.getColOrder();
         this.isShow = other.getIsShow();
-        this.showType= other.getShowType();
+        this.showType = other.getShowType();
         this.colFormat = other.getColFormat();
         this.linkType = other.getLinkType();
-        this.cssStyle=other.getCssStyle();
-        this.catalogCode=other.getCatalogCode();
+        this.cssStyle = other.getCssStyle();
+        this.catalogCode = other.getCatalogCode();
         return this;
     }
 
-    public QueryColumn copyNotNullProperty(QueryColumn other){
+    public QueryColumn copyNotNullProperty(QueryColumn other) {
 
-        if( other.getModelName() != null)
+        if (other.getModelName() != null)
             this.setModelName(other.getModelName());
-        if( other.getColName() != null)
+        if (other.getColName() != null)
             this.setColName(other.getColName());
-        if(other.getCssStyle()!=null)
+        if (other.getCssStyle() != null)
             this.setCssStyle(other.getCssStyle());
-        if( other.getOptType() != null)
-            this.optType= other.getOptType();
-        if( other.getDrawChart() != null)
-            this.drawChart= other.getDrawChart();
-        if( other.getColType() != null)
-            this.colType= other.getColType();
-        if( other.getColLogic() != null)
-            this.colLogic= other.getColLogic();
-        if( other.getColOrder() != null)
-            this.colOrder= other.getColOrder();
-        if( other.getIsShow() != null)
-            this.isShow= other.getIsShow();
-        if( other.getShowType() != null)
-            this.showType= other.getShowType();
-        if(other.getLinkType()!=null)
+        if (other.getOptType() != null)
+            this.optType = other.getOptType();
+        if (other.getDrawChart() != null)
+            this.drawChart = other.getDrawChart();
+        if (other.getColType() != null)
+            this.colType = other.getColType();
+        if (other.getColLogic() != null)
+            this.colLogic = other.getColLogic();
+        if (other.getColOrder() != null)
+            this.colOrder = other.getColOrder();
+        if (other.getIsShow() != null)
+            this.isShow = other.getIsShow();
+        if (other.getShowType() != null)
+            this.showType = other.getShowType();
+        if (other.getLinkType() != null)
             this.linkType = other.getLinkType();
         if (other.getColFormat() != null) {
             this.colFormat = other.getColFormat();
         }
-        if(other.getCatalogCode()!=null)
-            {this.catalogCode=other.getCatalogCode();}
+        if (other.getCatalogCode() != null) {
+            this.catalogCode = other.getCatalogCode();
+        }
         return this;
     }
 
-    public QueryColumn clearProperties(){
+    public QueryColumn clearProperties() {
 
-        this.optType= null;
-        this.drawChart= null;
-        this.colType= null;
-        this.colLogic= null;
-        this.colOrder=null;
-        this.isShow=null;
-        this.showType="D";
+        this.optType = null;
+        this.drawChart = null;
+        this.colType = null;
+        this.colLogic = null;
+        this.colOrder = null;
+        this.isShow = null;
+        this.showType = "D";
         this.colFormat = null;
         this.linkType = null;
-        this.cssStyle=null;
-        this.catalogCode=null;
+        this.cssStyle = null;
+        this.catalogCode = null;
         return this;
     }
+
     public String getColFormat() {
         return colFormat;
     }
+
     public void setColFormat(String colFormat) {
         this.colFormat = colFormat;
     }
+
     /**
      * R 行头  C 列头  D 数值
+     *
      * @return 显示类型
      */
     public String getShowType() {
         return showType;
     }
+
     /**
      * R 行头  C 列头  D 数值
+     *
      * @param showType 显示类型
      */
     public void setShowType(String showType) {
@@ -318,24 +295,28 @@ public class QueryColumn implements java.io.Serializable {
     public Double getAverageValue() {
         return averageValue;
     }
+
     public void setAverageValue(Double averageValue) {
         this.averageValue = averageValue;
     }
+
     public Double getSumValue() {
         return sumValue;
     }
+
     public void setSumValue(Double sumValue) {
         this.sumValue = sumValue;
     }
+
     public String getColProperty() {
         return colProperty;
     }
+
     public void setColProperty(String colProperty) {
         this.colProperty = colProperty;
     }
 
-    public JSONObject toJsonData()
-    {
+    public JSONObject toJsonData() {
         JSONObject objJson = new JSONObject();
         JSONOpt.setAttribute(objJson, "colName", this.getColName());
         JSONOpt.setAttribute(objJson, "averageValue", averageValue);
@@ -352,9 +333,11 @@ public class QueryColumn implements java.io.Serializable {
 
         return objJson;
     }
+
     public QueryModel getQueryModel() {
         return queryModel;
     }
+
     public void setQueryModel(QueryModel queryModel) {
         this.queryModel = queryModel;
     }
