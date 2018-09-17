@@ -100,9 +100,44 @@
             "optId": "system",
             "catalogType": "L",
             "catalogDesc": "T:真true，F:假false"
+        },
+        {
+            "catalogCode": "ModelType",
+            "catalogName": "模板类型",
+            "optId": "system",
+            "catalogType": "L",
+            "catalogDesc": "T:真true，F:假false"
         }
     ],
     "dataDictionaries": [
+        {
+            "catalogCode": "ModelType",
+            "dataCode": "2",
+            "dataValue": "普通二维表",
+            "dataTag": "N",
+            "dataOrder": "2"
+        },
+        {
+            "catalogCode": "ModelType",
+            "dataCode": "3",
+            "dataValue": "同比分析",
+            "dataTag": "N",
+            "dataOrder": "3"
+        },
+        {
+            "catalogCode": "ModelType",
+            "dataCode": "4",
+            "dataValue": "环比分析",
+            "dataTag": "N",
+            "dataOrder": "4"
+        },
+        {
+            "catalogCode": "ModelType",
+            "dataCode": "5",
+            "dataValue": "交叉制表",
+            "dataTag": "N",
+            "dataOrder": "5"
+        },
         {
             "catalogCode": "YesOrNo",
             "dataCode": "Y",
