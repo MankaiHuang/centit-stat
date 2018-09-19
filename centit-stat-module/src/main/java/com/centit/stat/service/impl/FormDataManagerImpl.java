@@ -15,6 +15,7 @@ import com.centit.stat.po.html.table.CTableCell;
 import com.centit.stat.po.html.table.CTablePanel;
 import com.centit.stat.service.FormDataManager;
 import com.centit.stat.service.FormDataModel;
+import com.centit.stat.service.QueryModelManager;
 import com.centit.support.algorithm.CollectionsOpt;
 import com.centit.support.algorithm.CollectionsOpt.ParentChild;
 import com.centit.support.algorithm.GeneralAlgorithm;
@@ -48,6 +49,9 @@ public class FormDataManagerImpl implements FormDataManager {
 
     @Resource
     protected IntegrationEnvironment integrationEnvironment;
+
+    @Resource
+    private QueryModelManager queryModelManager;
     /*
      * (non-Javadoc)
      *
@@ -58,7 +62,7 @@ public class FormDataManagerImpl implements FormDataManager {
     public FormDataModel getDataModel(String modelName) {
         FormDataModel formModel = new FormDataModel();
         formModel.setModelName(modelName);
-        QueryModel qm = baseDao.getObjectById(modelName);
+        QueryModel qm = queryModelManager.getObjectWithReference(modelName);
         if (qm != null) {
             formModel.loadFromQueryModel(qm);
             formModel.setDbinfo(
@@ -302,13 +306,6 @@ public class FormDataManagerImpl implements FormDataManager {
     @Override
     @Transactional
     strictfp public Integer queryCompareData(FormDataModel formData, boolean needSum) {
-        //fixme start
-        List<QueryColumn> cs = queryColumnDao.listObjectsByProperty("modelName", formData.getModelName());
-        List<QueryCondition> cd = queryConditionDao.listObjectsByProperty("modelName", formData.getModelName());
-        formData.setColumns(cs);
-        formData.setConditions(cd);
-        //end
-
         // 查询数据
         String currTitle = formData.makeCondCompareValue(formData.getModelType(), 0);
         QueryAndNamedParams qap = formData.makeStatQuery();
