@@ -41,11 +41,13 @@
 
     <div class="field required" id="querySql">
         <label>查询语句 <a class="easyui-linkbutton" iconCls="icon-black icon-black-full_screen" plain="true"></a></label>
-        <textarea name="querySql" id="querySqlText"></textarea>
+        <!--<textarea name="querySql" id="querySqlText"></textarea>-->
+        <input class="easyui-textbox" name="querySql" data-options="multiline:true" id="querySqlText" style="height:60px"/>
     </div>
 
     <div class="field" id="columnSql" class="querymodel-details">
         <label>列查询语句 <a class="easyui-linkbutton" iconCls="icon-black icon-black-full_screen" plain="true"></a></label>
-        <textarea name="columnSql" id="columnSqlText"></textarea>
+        <!--<textarea name="columnSql" id="columnSqlText"></textarea>-->
+        <input class="easyui-textbox" name="columnSql" data-options="multiline:true" id="columnSqlText" style="height:60px"/>
     </div>
 </form>

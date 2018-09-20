@@ -52,6 +52,8 @@ define(function(require) {
 
             // 当交叉制表时才显示 列语句输入框
 
+
+
             if (data.modelType != '5') {
                 columnSQLField.hide();
             }
