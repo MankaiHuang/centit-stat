@@ -39,8 +39,8 @@ define(function(require) {
                 this.frozeModelName();
             }
 
-            // sql输入框
-            var querySqlCM = this.querySqlCM = CodeMirror.fromTextArea(document.getElementById("querySqlText"), codeMirrorOptions);
+            // sql输入框 放大功能
+           var querySqlCM = this.querySqlCM = CodeMirror.fromTextArea(document.getElementById("querySqlText"), codeMirrorOptions);
             var columnSqlCM = this.columnSqlCM = CodeMirror.fromTextArea(document.getElementById("columnSqlText"), codeMirrorOptions);
 
             panel.find('#querySql .easyui-linkbutton').on('click', function() {
