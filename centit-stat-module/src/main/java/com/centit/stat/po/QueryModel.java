@@ -12,7 +12,7 @@ import java.util.List;
  * 查询统计模型
  */
 @Entity
-@Table(name = "Q_QUERYMODEL")
+@Table(name = "Q_QUERY_MODEL")
 public class QueryModel implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -20,7 +20,7 @@ public class QueryModel implements java.io.Serializable {
      * 模块名称/模块代码
      */
     @Id
-    @Column(name = "MODELNAME")
+    @Column(name = "MODEL_NAME")
     private String modelName;
     /**
      * 数据库外键
@@ -33,90 +33,94 @@ public class QueryModel implements java.io.Serializable {
     /**
      * 2 ： 二维表  3 ：同比分析 4：环比分析 5：交叉制表
      */
-    @Column(name = "MODELTYPE")
+    @Column(name = "MODEL_TYPE")
     private String modelType;
 
     /**
      * 属主类别
      */
-    @Column(name = "OWNERTYPE")
+    @Column(name = "OWNER_TYPE")
     private String ownerType;
 
     /**
      * 属主代码
      */
-    @Column(name = "OWNERCODE")
+    @Column(name = "OWNER_CODE")
     @Length(min = 0, max = 8, message = "字段长度不能小于{min}大于{max}")
     private String ownerCode;
 
     /**
      * 查询语句
      */
-    @Column(name = "QUERYSQL")
+    @Column(name = "QUERY_SQL")
 //    @Length(min = 0, max = 4000, message = "字段长度不能小于{min}大于{max}")
     private String querySql;
 
     /**
      * 查询描述
      */
-    @Column(name = "QUERYDESC")
+    @Column(name = "QUERY_DESC")
     @Length(min = 0, max = 512, message = "字段长度不能小于{min}大于{max}")
     private String queryDesc;
 
     /**
      * 模块中文名
      */
-    @Column(name = "FORMNAMEFORMAT")
+    @Column(name = "FORM_NAME_FORMAT")
     @Length(min = 0, max = 256, message = "字段长度不能小于{min}大于{max}")
-    private String formNameFormat;
+    private String formNameFormat;// 关于&{year}的统计
 
     /**
      * 返回页面
      */
-    @Column(name = "RESULTNAME")
+    @Column(name = "RESULT_NAME")
     @Length(min = 0, max = 64, message = "字段长度不能小于{min}大于{max}")
     private String resultName;
 
     /**
      * 是否按行画图
      */
-    @Column(name = "ROWDRAWCHART")
+    @Column(name = "ROW_DRAW_CHART")
     private String rowDrawChart;
 
     /**
      * 画图数据起始列
      */
-    @Column(name = "DRAWCHARTBEGINCOL")
+    @Column(name = "DRAW_CHART_BEGIN_COL")
     @Digits(integer = 4, fraction = 0, message = "字段范围整数{integer}位小数{fraction}位")
     private Integer drawChartBeginCol;
-    @Column(name = "DRAWCHARTENDCOL")
+    @Column(name = "DRAW_CHART_END_COL")
     @Digits(integer = 4, fraction = 0, message = "字段范围整数{integer}位小数{fraction}位")
     private Integer drawChartEndCol;
-    @Column(name = "ADDITIONROW")
+    @Column(name = "ADDITION_ROW")
     private String additionRow;
-    @Column(name = "ROWLOGIC")
+    @Column(name = "ROW_LOGIC")
     @Length(min = 0, max = 64, message = "字段长度不能小于{min}大于{max}")
     private String rowLogic;
-    @Column(name = "ROWLOGICVALUE")
+    @Column(name = "ROW_LOGIC_VALUE")
     @Digits(integer = 4, fraction = 0, message = "字段范围整数{integer}位小数{fraction}位")
     private Long rowLogicValue;
-    @Column(name = "LOGICURL")
+    @Column(name = "LOGIC_URL")
     @Length(min = 0, max = 512, message = "字段长度不能小于{min}大于{max}")
     private String logicUrl;
-    @Column(name = "ISTREE")
+    @Column(name = "IS_TREE")
     @Length(min = 0, max = 8, message = "字段长度不能小于{min}大于{max}")
     private String isTree;
     @Column(name = "WIZARD_NO")
     @Length(min = 0, max = 32, message = "字段长度不能小于{min}大于{max}")
     private String wizardNo;
-    @Column(name = "COLUMNSQL")
+    @Column(name = "COLUMN_SQL")
     @Length(min = 0, max = 2048, message = "字段长度不能小于{min}大于{max}")
     private String columnSql;
-    //    @OneToMany(mappedBy = "queryModel", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToMany(targetEntity = QueryColumn.class, mappedBy = "queryModel", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("colOrder")
+    @JoinColumn(name = "MODEL_NAME", referencedColumnName = "MODEL_NAME")
     private List<QueryColumn> queryColumns = null;// new ArrayList<QueryColumn>();
-    //    @OneToMany(mappedBy = "queryModel", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToMany(targetEntity = QueryCondition.class, mappedBy = "queryModel", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("condOrder")
+    @JoinColumn(name = "MODEL_NAME", referencedColumnName = "MODEL_NAME")
     private List<QueryCondition> queryConditions = null;// new ArrayList<QueryConditon>();
 
     // Constructors

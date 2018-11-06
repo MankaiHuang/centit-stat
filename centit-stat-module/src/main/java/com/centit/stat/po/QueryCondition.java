@@ -13,65 +13,65 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-@Table(name = "Q_QUERYCONDITION")
+@Table(name = "Q_QUERY_CONDITION")
 
 public class QueryCondition implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "MODELNAME")
+    @Column(name = "MODEL_NAME")
     @NotBlank(message = "字段不能为空")
     private String modelName;
 
     @Id
-    @Column(name = "CONDNAME")
+    @Column(name = "COND_NAME")
     @NotBlank(message = "字段不能为空")
     private String condName;
 
-    @Column(name = "CONDLABEL")
+    @Column(name = "COND_LABEL")
     @Length(max = 120, message = "字段长度不能大于{max}")
     private String condLabel;//参数提示
 
     /**
      * 参数显示样式 N:普通 nomal H 隐藏 hide R 只读 readonly
      */
-    @Column(name = "CONDDISPLAYSTYLE")
+    @Column(name = "COND_DISPLAY_STYLE")
     @Length(max = 1, message = "字段长度不能大于{max}")
     private String condDisplayStyle;
 
     /**
      * 参数类型 S:文本 N数字  D：日期 T：时间戳（datetime)
      */
-    @Column(name = "PARAMTYPE")
+    @Column(name = "PARAM_TYPE")
     @Length(max = 1, message = "字段长度不能大于{max}")
     private String paramType;
 
-    @Column(name = "COMPARETYPE")
+    @Column(name = "COMPARE_TYPE")
     @Length(max = 1, message = "字段长度不能大于{max}")
     private String compareType;//对比时间字段类 必需是时间字段， 3 同比分析  4 环比分析 0 其他
 
-    @Column(name = "PARAMREFERENCETYPE")
+    @Column(name = "PARAM_REFERENCE_TYPE")
     @Length(max = 1, message = "字段长度不能大于{max}")
     private String paramReferenceType;//参数应用类型 0：没有：1： 数据字典 2：JSON表达式 3：sql语句  Y：年份 M：月份
 
-    @Column(name = "PARAMREFERENCEDATA")
+    @Column(name = "PARAM_REFERENCE_DATA")
     @Length(max = 1000, message = "字段长度不能大于{max}")
     private String paramReferenceData;//参数应用数据 根据paramReferenceType类型（1,2,3）填写对应值
 
 
-    @Column(name = "PARAMVALIDATEREGEX")
+    @Column(name = "PARAM_VALIDATE_REGEX")
     @Length(max = 200, message = "字段长度不能大于{max}")
     private String paramValidateRegex;//参数约束表达式 regex表达式
 
-    @Column(name = "PARAMVALIDATEINFO")
+    @Column(name = "PARAM_VALIDATE_INFO")
     @Length(max = 200, message = "字段长度不能大于{max}")
     private String paramValidateInfo;//参数约束提示 约束不通过提示信息
 
-    @Column(name = "PARAMDEFAULTVALUE")
+    @Column(name = "PARAM_DEFAULT_VALUE")
     @Length(max = 200, message = "字段长度不能大于{max}")
     private String paramDefaultValue;//查询变量默认值
 
-    @Column(name = "CONDORDER")
+    @Column(name = "COND_ORDER")
     @Digits(integer = 2, fraction = 0, message = "字段范围整数{integer}位小数{fraction}位")
     private Integer condOrder;
 

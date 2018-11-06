@@ -11,47 +11,47 @@ import com.centit.support.json.JSONOpt;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-@Table(name = "Q_QUERYCOLUMN")
+@Table(name = "Q_QUERY_COLUMN")
 public class QueryColumn implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "MODELNAME")
+    @Column(name = "MODEL_NAME")
     @NotBlank(message = "字段不能为空")
     private String modelName;
 
     @Id
-    @Column(name = "COLNAME")
+    @Column(name = "COL_NAME")
     @NotBlank(message = "字段不能为空")
     private String colName;
 
     /**
      * 数据操作 0：无操作  1：合计  2：平均  3：平均 合计
      */
-    @Column(name = "OPTTYPE")
+    @Column(name = "OPT_TYPE")
     private String optType;
-    @Column(name = "DRAWCHART")
+    @Column(name = "DRAW_CHART")
     private String drawChart;
-    @Column(name = "COLTYPE")
+    @Column(name = "COL_TYPE")
     private String colType;
-    @Column(name = "COLFORMAT")
+    @Column(name = "COL_FORMAT")
     @Length(min = 0, max = 120, message = "字段长度不能小于{min}大于{max}")
     private String colFormat;
-    @Column(name = "COLLOGIC")
+    @Column(name = "COL_LOGIC")
     @Length(min = 0, max = 120, message = "字段长度不能小于{min}大于{max}")
     private String colLogic;
-    @Column(name = "COLORDER")
+    @Column(name = "COL_ORDER")
     @Digits(integer = 2, fraction = 0, message = "字段范围整数{integer}位小数{fraction}位")
     private Integer colOrder;
-    @Column(name = "ISSHOW")
+    @Column(name = "IS_SHOW")
     private String isShow;
 
-    @Column(name = "CATALOGCODE")
+    @Column(name = "CATALOG_CODE")
     private String catalogCode;
     /**
      * R 行头  C 列头  D 数值
      */
-    @Column(name = "SHOWTYPE")
+    @Column(name = "SHOW_TYPE")
     private String showType;
     @Transient
     private Double averageValue;
@@ -63,7 +63,7 @@ public class QueryColumn implements java.io.Serializable {
     /**
      * 链接类型 navTab dialog blank等
      */
-    @Column(name = "LINKTYPE")
+    @Column(name = "LINK_TYPE")
     @Length(min = 0, max = 64, message = "字段长度不能小于{min}大于{max}")
     private String linkType;
     //    @ManyToOne
@@ -74,7 +74,7 @@ public class QueryColumn implements java.io.Serializable {
     /**
      * 用于指定单元格样式
      */
-    @Column(name = "CSSSTYLE")
+    @Column(name = "CSS_STYLE")
     @Length(min = 0, max = 120, message = "字段长度不能小于{min}大于{max}")
     private String cssStyle;
 
