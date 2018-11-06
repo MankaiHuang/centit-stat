@@ -314,7 +314,7 @@ define(['app', 'echarts'], function(model, echarts) {
     $scope.exportToExcel = function () {
       //TODO:这边不知道除了用form还有没有什么更好的办法实现后台推送一个下载到页面接受
       var form = $("<form>");
-      form.attr('action', ContextPath + "/service/stat/twodimenform/excels");
+      form.attr('action', ContextPath + "service/stat/twodimenform/excels");
       form.attr('style', 'display:none');
       form.attr('target', '');
       form.attr('method', 'post');

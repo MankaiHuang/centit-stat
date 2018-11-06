@@ -66,47 +66,18 @@ public class QueryModelManagerImpl extends BaseEntityManagerImpl<QueryModel, Str
     @Transactional
     public void saveQueryAndReference(QueryModel queryModel){
         super.saveNewObject(queryModel);
-        List<QueryColumn> columns = queryModel.getQueryColumns();
-        List<QueryCondition> conditions = queryModel.getQueryConditions();
-        for(QueryColumn c : columns){
-            queryColumnDao.saveNewObject(c);
-        }
-        for(QueryCondition c : conditions){
-            queryConditionDao.saveNewObject(c);
-        }
+        queryModelDao.saveObjectReferences(queryModel);
     }
 
     @Override
     public void updateObjectAndReference(QueryModel queryModel){
         super.updateObject(queryModel);
-        List<QueryColumn> columns = queryModel.getQueryColumns();
-        List<QueryCondition> conditions = queryModel.getQueryConditions();
-        for(QueryColumn c : columns){
-            QueryColumn dbc = queryColumnDao.getObjectById(c);
-            if(dbc == null){
-                queryColumnDao.saveNewObject(c);
-            }else{
-                queryColumnDao.updateObject(c);
-            }
-        }
-        for(QueryCondition c : conditions){
-            QueryCondition dbc = queryConditionDao.getObjectById(c);
-            if(dbc == null){
-                queryConditionDao.saveNewObject(c);
-            }else{
-                queryConditionDao.updateObject(c);
-            }
-        }
+        queryModelDao.saveObjectReferences(queryModel);
     }
 
     @Override
     public QueryModel getObjectWithReference(String modelName){
-        QueryModel model = queryModelDao.getObjectById(modelName);
-        List<QueryColumn> columns = queryColumnDao.listObjectsByProperty("modelName", modelName);
-        List<QueryCondition> conditions = queryConditionDao.listObjectsByProperty("modelName", modelName);
-        model.setQueryColumns(columns);
-        model.setQueryConditions(conditions);
-        return model;
+        return queryModelDao.getObjectWithReferences(modelName);
     }
 
 }

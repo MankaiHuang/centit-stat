@@ -82,10 +82,6 @@ public class FormDataManagerImpl implements FormDataManager {
     @Override
     @Transactional(readOnly = true)
     strictfp public Integer queryFormData(FormDataModel formData, PageDesc page) {
-        //fixme start
-        List<QueryColumn> cs = queryColumnDao.listObjectsByProperty("modelName", formData.getModelName());
-        formData.setColumns(cs);
-        //end
 
         List<Object[]> currDatas = new ArrayList<Object[]>();
         QueryAndNamedParams qap = formData.makeStatQuery();
@@ -877,10 +873,6 @@ public class FormDataManagerImpl implements FormDataManager {
     @Override
     @Transactional
     strictfp public Integer queryCrossData(FormDataModel formData, boolean needSum) {
-        //fixme start
-        List<QueryColumn> cs = queryColumnDao.listObjectsByProperty("modelName", formData.getModelName());
-        formData.setColumns(cs);
-        //end
 
         int dataCols = 0;
         int sumDataCols = 0;
