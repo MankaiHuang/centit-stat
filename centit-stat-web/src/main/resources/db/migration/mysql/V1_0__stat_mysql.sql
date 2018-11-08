@@ -46,7 +46,7 @@ create table Q_LIST_Model
    page_type            char(1) comment 'T/F',
    page_size            numeric(4,0),
    creator              varchar(32),
-   creat_time           datetime,
+   create_time           datetime,
    primary key (Model_Name)
 );
 
@@ -76,7 +76,7 @@ create table Q_List_OPERATOR
    opt_Type             char(1) comment '更改、查看、警告 用来控制样式',
    opt_hint             varchar(200),
    opt_ORDER            numeric(2,0),
-   OPT_UTL_FORMAT       varchar(500) comment '连接url模板，需要根据值转换',
+   OPT_URL_FORMAT       varchar(500) comment '连接url模板，需要根据值转换',
    primary key (Model_Name, opt_Name)
 );
 
@@ -91,7 +91,7 @@ create table Q_Query_Column
    draw_Chart           char(1) comment ' T 画统计图 F 不画',
    col_Type             char(1),
    col_Logic            varchar(120),
-   COLOR_DER            numeric(2,0),
+   COL_ORDER            numeric(2,0),
    IS_SHOW              char(1),
    COL_FORMAT           varchar(64),
    LINK_TYPE            varchar(32),
@@ -166,7 +166,7 @@ create table Q_REPORT_SQL
    Query_DESC           varchar(512),
    query_type           char(1) comment 'S: 只有一个值 V：向量只有一行 T 表格',
    creator              varchar(32),
-   creat_time           datetime,
+   create_time           datetime,
    primary key (SQL_ID)
 );
 

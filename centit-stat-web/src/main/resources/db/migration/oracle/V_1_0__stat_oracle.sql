@@ -67,7 +67,7 @@ create table "Q_LIST_Model"
    "page_type"          CHAR(1),
    "page_size"          NUMBER(4,0),
    "creator"            VARCHAR2(32),
-   "creat_time"         DATE,
+   "create_time"         DATE,
    constraint PK_Q_LIST_MODEL primary key ("Model_Name")
 );
 
@@ -119,7 +119,7 @@ create table "Q_List_OPERATOR"
    "opt_Type"           CHAR(1),
    "opt_hint"           VARCHAR2(200),
    "opt_ORDER"          NUMBER(2,0),
-   OPT_UTL_FORMAT       VARCHAR2(500),
+   OPT_URL_FORMAT       VARCHAR2(500),
    constraint PK_Q_LIST_OPERATOR primary key ("Model_Name", "opt_Name")
 );
 
@@ -141,7 +141,7 @@ create table "Q_Query_Column"
    "draw_Chart"         CHAR(1),
    "col_Type"           CHAR(1),
    "col_Logic"          VARCHAR2(120),
-   COLOR_DER            NUMBER(2,0),
+   COL_ORDER            NUMBER(2,0),
    IS_SHOW              CHAR(1),
    COL_FORMAT           VARCHAR2(64),
    LINK_TYPE            VARCHAR2(32),
@@ -271,7 +271,7 @@ create table Q_REPORT_SQL
    "Query_DESC"         VARCHAR2(512),
    "query_type"         CHAR(1),
    "creator"            VARCHAR2(32),
-   "creat_time"         DATE,
+   "create_time"         DATE,
    constraint PK_Q_REPORT_SQL primary key (SQL_ID)
 );
 
