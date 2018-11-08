@@ -18,7 +18,8 @@ define(function(require) {
             var columnSQLField = panel.find('#columnSql');
             panel.find('#databaseType').combobox({
                 novalidate: true,
-                onChange:function(value){
+
+               /* onChange:function(value){
                     // 交叉表可以填写列sql
                     if ('5' == value) {
                         columnSQLField.show();
@@ -27,9 +28,8 @@ define(function(require) {
                         columnSQLField.hide();
                         vm.columnSqlCM.setValue('');
                     }
-                }
+                }*/
             });
-
             var form = this.form = panel.find('form');
             form.form('disableValidation')
                 .form('load', data);
@@ -54,9 +54,9 @@ define(function(require) {
 
 
 
-            if (data.modelType != '5') {
-                columnSQLField.hide();
-            }
+            // if (data.modelType != '5') {
+            //     columnSQLField.hide();
+            // }
 
 
         };

@@ -485,7 +485,7 @@ public class FormDataManagerImpl implements FormDataManager {
      */
     private static List<List<QueryCell>> parseColumns(List<Object[]> dataColumns) {
 
-        List<List<QueryCell>> columns = new ArrayList<List<QueryCell>>();
+        List<List<QueryCell>> columns = new ArrayList<>();
 
         List<List<String>> newDataColumns = swapColumnRow(dataColumns);
 
@@ -545,7 +545,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
         List<String> datas = newDataColumns.get(newDataColumns.size() - 1);
 
-        List<QueryCell> cells = new ArrayList<QueryCell>();
+        List<QueryCell> cells = new ArrayList<>();
         for (String title : datas) {
 
             QueryCell cell = new QueryCell();
@@ -561,12 +561,11 @@ public class FormDataManagerImpl implements FormDataManager {
 
     /**
      * 数组行列互换
-     *
-     * @param array
-     * @return
+     * 输入：[1,2],[3,4],[5,6]
+     * 输出：[1,3,5],[2,4,6]
      */
     private static List<List<String>> swapColumnRow(List<Object[]> array) {
-        List<List<String>> newArray = new ArrayList<List<String>>();
+        List<List<String>> newArray = new ArrayList<>();
 
         int rowLength = array.size();
 
@@ -579,11 +578,11 @@ public class FormDataManagerImpl implements FormDataManager {
 
         for (int i = 0; i < colLength; i++) {
 
-            List<String> data = new ArrayList<String>();
+            List<String> data = new ArrayList<>();
 
             for (int j = 0; j < rowLength; j++) {
 
-                data.add((String) array.get(j)[i]);
+                data.add(String.valueOf(array.get(j)[i]));
 
             }
 
@@ -879,8 +878,8 @@ public class FormDataManagerImpl implements FormDataManager {
         int rowGroup = formData.getRowGroupSum();
         int colGroup = formData.getColGroupSum();
         int dataAnalyseSum = formData.getDataAnalyseSum();
-        List<Object[]> dataColumns = new ArrayList<Object[]>();
-        List<Object[]> sumDataColumns = new ArrayList<Object[]>();
+        List<Object[]> dataColumns = new ArrayList<>();
+        List<Object[]> sumDataColumns = new ArrayList<>();
 
         String columnSql = formData.getColumnSql();
         if (columnSql != null && !"".equals(columnSql)) {
@@ -914,6 +913,7 @@ public class FormDataManagerImpl implements FormDataManager {
             }
         }
 
+        //根据sql查询数据
         List<Object[]> currDatas = DBCPDao.findObjectsNamedSql(formData.getDbinfo(), formData.makeStatQuery());
 
         // List<Object[]> currDatas =this.findDataBySql(formData.getQuerySql());
