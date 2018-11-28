@@ -1,5 +1,8 @@
 package com.centit.stat.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.ip.service.IntegrationEnvironment;
 import com.centit.stat.dao.DBCPDao;
 import com.centit.stat.dao.QueryColumnDao;
@@ -27,10 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class FormDataManagerImpl implements FormDataManager {
@@ -483,11 +483,11 @@ public class FormDataManagerImpl implements FormDataManager {
      * @param dataColumns
      * @return
      */
-    private static List<List<QueryCell>> parseColumns(List<Object[]> dataColumns) {
+    private static List<List<QueryCell>> parseColumns(List<Object[]> dataColumns, String jsonFormat) {
 
         List<List<QueryCell>> columns = new ArrayList<>();
 
-        List<List<String>> newDataColumns = swapColumnRow(dataColumns);
+        List<List<String>> newDataColumns = swapColumnRow(dataColumns, jsonFormat);
 
         if (0 == newDataColumns.size()) {
             return columns;
@@ -564,7 +564,12 @@ public class FormDataManagerImpl implements FormDataManager {
      * 输入：[1,2],[3,4],[5,6]
      * 输出：[1,3,5],[2,4,6]
      */
-    private static List<List<String>> swapColumnRow(List<Object[]> array) {
+    private static List<List<String>> swapColumnRow(List<Object[]> array, String jsonFormat) {
+        JSONObject arr = null;
+        if(StringUtils.isNotBlank(jsonFormat)){
+            arr = (JSONObject) JSON.parse(jsonFormat);
+        }
+
         List<List<String>> newArray = new ArrayList<>();
 
         int rowLength = array.size();
@@ -582,7 +587,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
             for (int j = 0; j < rowLength; j++) {
 
-                data.add(String.valueOf(array.get(j)[i]));
+                data.add(transferJson(String.valueOf(array.get(j)[i]), arr));
 
             }
 
@@ -592,6 +597,17 @@ public class FormDataManagerImpl implements FormDataManager {
         return newArray;
     }
 
+    public static String transferJson(String key, JSONObject arr){
+        if(arr == null)
+            return key;
+        for(Map.Entry<String,Object> o : arr.entrySet()){
+            if(Objects.equals(key, o.getKey())){
+                return String.valueOf(o.getValue());
+            }
+        }
+        return key;
+    }
+
     /**
      * 解析表头
      *
@@ -599,10 +615,10 @@ public class FormDataManagerImpl implements FormDataManager {
      * @param dataColumns
      * @return
      */
-    private static CTableBodyTHead parseCrossThead(List<QueryColumn> columns, List<Object[]> dataColumns) {
+    private static CTableBodyTHead parseCrossThead(List<QueryColumn> columns, List<Object[]> dataColumns, String jsonFormat) {
         CTableBodyTHead thead = new CTableBodyTHead();
 
-        List<List<QueryCell>> headColumns = parseColumns(dataColumns);
+        List<List<QueryCell>> headColumns = parseColumns(dataColumns, jsonFormat);
 
         // 表格头固定列
         List<QueryColumn> columnHead = parseQueryColumn(columns, "R");
@@ -829,6 +845,13 @@ public class FormDataManagerImpl implements FormDataManager {
         return list;
     }
 
+    /**
+     * 比较两个数据的前n位是否都相等
+     * @param obj1 数组一
+     * @param obj2 数据二
+     * @param nSize n
+     * @return true-相等;false-不相等
+     */
     private static boolean equalsObjects(Object[] obj1, Object[] obj2, int nSize) {
         for (int i = 0; i < nSize; i++) {
             if (obj1[i] != null || obj2[i] != null) {
@@ -873,7 +896,9 @@ public class FormDataManagerImpl implements FormDataManager {
     @Transactional
     strictfp public Integer queryCrossData(FormDataModel formData, boolean needSum) {
 
+        //列数
         int dataCols = 0;
+        //统计列数（合计列）
         int sumDataCols = 0;
         int rowGroup = formData.getRowGroupSum();
         int colGroup = formData.getColGroupSum();
@@ -882,15 +907,22 @@ public class FormDataManagerImpl implements FormDataManager {
         List<Object[]> sumDataColumns = new ArrayList<>();
 
         String columnSql = formData.getColumnSql();
-        if (columnSql != null && !"".equals(columnSql)) {
+     /*   if(StringUtils.isNotBlank(columnSql)){
+            JSONObject arr = (JSONObject) JSON.parse(columnSql);
+            for(Map.Entry<String, Object> entry : arr.entrySet()){
+                dataColumns.add(new Object[]{entry.getKey()});
+            }
+        }
+        dataCols = dataColumns.size();*/
+        /*if (columnSql != null && !"".equals(columnSql)) {
             List<Object[]> colList = DBCPDao.findObjectsNamedSql(formData.getDbinfo(), formData.makeColumnQuery());
             if (colList != null && colList.size() > 0) {
                 for (int i = 0; i < colList.size(); i++) {
                     Object[] col;
-                    if (colGroup == 1) {
-                        col = new Object[1];
-                        col[0] = colList.get(i);
-                    } else
+//                    if (colGroup == 1) {
+//                        col = new Object[1];
+//                        col[0] = colList.get(i);
+//                    } else
                         col = colList.get(i);
 
                     int nf = foundCrossColumn(dataColumns, col, dataCols, colGroup);
@@ -911,22 +943,24 @@ public class FormDataManagerImpl implements FormDataManager {
                 dataColumns.addAll(sumDataColumns);
                 dataCols = dataColumns.size();
             }
-        }
+        }*/
+
+
 
         //根据sql查询数据
         List<Object[]> currDatas = DBCPDao.findObjectsNamedSql(formData.getDbinfo(), formData.makeStatQuery());
 
-        // List<Object[]> currDatas =this.findDataBySql(formData.getQuerySql());
-        List<Object[]> crossDatas = new ArrayList<Object[]>();
+        List<Object[]> crossDatas = new ArrayList<>();
         int currDc = currDatas.size();
 
         if (dataCols == 0) {
             for (int i = 0; i < currDc; i++) {
                 Object[] col = new Object[colGroup];
                 Object[] curData = currDatas.get(i);
-                for (int j = 0; j < colGroup; j++)
-                    col[j] = curData[j + rowGroup];
-                int nf = foundCrossColumn(dataColumns, col, dataCols, colGroup);
+                for (int j = 0; j < colGroup; j++) {
+                    col[j] = curData[j + rowGroup];//fixme 单行列头 列头字段必须排第二个...， 为什么不用列头字段的排序号
+                }
+                int nf = foundCrossColumn(dataColumns, col, dataCols, colGroup);//去除重复列头
                 if (nf < 0) {
                     dataColumns.add(col);
                     dataCols++;
@@ -935,7 +969,7 @@ public class FormDataManagerImpl implements FormDataManager {
                 col2[0] = "合计";
                 for (int j = 1; j < colGroup; j++)
                     col2[j] = col[j];
-                nf = foundCrossColumn(sumDataColumns, col2, sumDataCols, colGroup);
+                nf = foundCrossColumn(sumDataColumns, col2, sumDataCols, colGroup);//去重，只留一个合计
                 if (nf < 0) {
                     sumDataColumns.add(col2);
                     sumDataCols++;
@@ -946,12 +980,12 @@ public class FormDataManagerImpl implements FormDataManager {
         }
 
         formData.setCrossTableColumns(dataColumns);
-        int dataColCount = rowGroup + dataCols * dataAnalyseSum;
+        int dataColCount = rowGroup + dataCols * dataAnalyseSum;//总列数 = 行头数 + 列头数 * 数据列数
 
         Object[] rowData = new Object[dataColCount];
         if (currDc > 0) {
             Object[] curData = currDatas.get(0);
-            initCrossRowData(rowData, curData, rowGroup, dataColCount);
+            initCrossRowData(rowData, curData, rowGroup, dataColCount);//fixme 行头必须是排前面的字段？
         }
 
         for (int i = 0; i < currDc; i++) {
@@ -1015,7 +1049,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
             crossDatas.add(sumData);
         }
-        CTableBodyTHead thead = parseCrossThead(columns, dataColumns);
+        CTableBodyTHead thead = parseCrossThead(columns, dataColumns,columnSql);
         List<Map<String, Object>> dataMap = parseDataMap(crossDatas, columns, formData.getConditions());
         CTableBodyTBody tbody = parseCrossTbodyConbined(crossDatas, columns, dataMap, dataColumns);
 
