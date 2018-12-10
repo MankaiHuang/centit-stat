@@ -1,5 +1,8 @@
 package com.centit.stat.list.po;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,6 +22,8 @@ import java.io.Serializable;
  *    param_Default_Value  varchar(200) comment '参数默认值',
  *    cond_Order           numeric(2,0),
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "Q_LIST_CONDITION")
 public class ListCondition implements Serializable {

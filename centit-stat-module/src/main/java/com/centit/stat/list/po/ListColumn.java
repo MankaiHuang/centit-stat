@@ -1,5 +1,8 @@
 package com.centit.stat.list.po;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,6 +23,8 @@ import java.io.Serializable;
  *    catalog_value_code   varchar(64) comment '数据字典值对应的 代码',
  *    catalog_value_title  varchar(120) comment '数据字典值对应的 表头',
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "Q_LIST_COLUMN")
 public class ListColumn implements Serializable {

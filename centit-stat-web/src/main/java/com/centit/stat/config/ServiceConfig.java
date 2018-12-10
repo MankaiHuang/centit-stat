@@ -8,6 +8,8 @@ import com.centit.framework.ip.app.config.IPOrStaticAppSystemBeanConfig;
 import com.centit.framework.jdbc.config.JdbcConfig;
 import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
+import com.centit.framework.security.model.CentitPasswordEncoder;
+import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 
@@ -25,6 +27,11 @@ public class ServiceConfig {
 
     @Value("${app.home:./}")
     private String appHome;
+
+    @Bean(name = "passwordEncoder")
+    public CentitPasswordEncoder centitPasswordEncoder(){
+        return new StandardPasswordEncoderImpl();
+    }
 
     @Bean
     public NotificationCenter notificationCenter() {

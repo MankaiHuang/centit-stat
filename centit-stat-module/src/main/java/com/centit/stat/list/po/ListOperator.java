@@ -1,5 +1,8 @@
 package com.centit.stat.list.po;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,6 +16,8 @@ import javax.persistence.Table;
  *    opt_ORDER            numeric(2,0),
  *    OPT_URL_FORMAT       varchar(500) comment '连接url模板，需要根据值转换',
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "Q_LIST_OPERATOR")
 public class ListOperator {
