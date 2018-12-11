@@ -62,7 +62,7 @@ create table Q_List_Column
    SHOW_TYPE            char(1) comment 'H:不显示，S：显示； V：显示数据字段对应值；D：和数据字典对应值一起显示',
    COL_FORMAT           varchar(64),
    LINK_TYPE            char(1) comment 'T/F',
-   LINK_UTL_FORMAT      varchar(500) comment '连接url模板，需要根据值转换',
+   LINK_URL_FORMAT      varchar(500) comment '连接url模板，需要根据值转换',
    catalog_code         varchar(64),
    catalog_value_code   varchar(64) comment '数据字典值对应的 代码',
    catalog_value_title  varchar(120) comment '数据字典值对应的 表头',

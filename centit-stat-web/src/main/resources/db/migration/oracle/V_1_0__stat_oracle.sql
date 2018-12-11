@@ -90,7 +90,7 @@ create table "Q_List_Column"
    SHOW_TYPE            CHAR(1),
    COL_FORMAT           VARCHAR2(64),
    LINK_TYPE            CHAR(1),
-   LINK_UTL_FORMAT      VARCHAR2(500),
+   LINK_URL_FORMAT      VARCHAR2(500),
    "catalog_code"       VARCHAR2(64),
    "catalog_value_code" VARCHAR2(64),
    "catalog_value_title" VARCHAR2(120),

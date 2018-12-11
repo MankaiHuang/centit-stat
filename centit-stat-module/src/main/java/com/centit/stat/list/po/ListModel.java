@@ -80,7 +80,7 @@ public class ListModel implements Serializable {
     @Column(name = "QUERY_DESC")
     private String queryDesc;
 
-    @ApiModelProperty(name = "pageType", value = "分页类别")
+    @ApiModelProperty(name = "pageType", value = "是否分页")
     @Column(name = "PAGE_TYPE")
     private String pageType;
 
@@ -96,10 +96,12 @@ public class ListModel implements Serializable {
     @Column(name = "CREATE_TIME")
     private Date createTime;
 
+    @ApiModelProperty(name = "columns", value = "列", reference = "columns")
     @OneToMany(targetEntity = ListColumn.class)
     @JoinColumn(name = "modelName", referencedColumnName = "modelName")
     private List<ListColumn> columns;
 
+    @ApiModelProperty(value = "查询条件", dataType = "List")
     @OneToMany(targetEntity = ListCondition.class)
     @JoinColumn(name = "modelName", referencedColumnName = "modelName")
     private List<ListCondition> conditions;

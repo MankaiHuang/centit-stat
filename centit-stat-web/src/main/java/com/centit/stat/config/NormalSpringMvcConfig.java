@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import(WebConfig.class)
-@ComponentScan(basePackages = {"com.centit.stat.query.controller"},
+@ComponentScan(basePackages = {"com.centit.stat.** .controller"},
         includeFilters = {@ComponentScan.Filter(value= org.springframework.stereotype.Controller.class)},
         useDefaultFilters = false)
 public class NormalSpringMvcConfig extends BaseSpringMvcConfig {

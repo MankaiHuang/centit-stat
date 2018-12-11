@@ -58,7 +58,7 @@ public class FormDataManagerImpl implements FormDataManager {
      * String)
      */
     @Transactional(readOnly = true)
-    public FormDataModel getDataModel(String modelName) {
+    public FormDataModel   getDataModel(String modelName) {
         FormDataModel formModel = new FormDataModel();
         formModel.setModelName(modelName);
         QueryModel qm = queryModelManager.getObjectWithReference(modelName);
