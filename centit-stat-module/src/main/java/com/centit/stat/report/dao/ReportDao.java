@@ -12,4 +12,5 @@ public class ReportDao extends BaseDaoImpl<ReportModel, String> {
     public Map<String, String> getFilterField() {
         return null;
     }
+
 }

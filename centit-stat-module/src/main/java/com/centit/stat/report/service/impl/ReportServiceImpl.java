@@ -1,5 +1,6 @@
 package com.centit.stat.report.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.common.ObjectException;
 import com.centit.framework.ip.po.DatabaseInfo;
@@ -9,10 +10,13 @@ import com.centit.stat.report.dao.ReportDao;
 import com.centit.stat.report.po.ReportModel;
 import com.centit.stat.report.po.ReportSql;
 import com.centit.stat.report.service.ReportService;
-import com.centit.support.algorithm.CollectionsOpt;
+import com.centit.support.database.utils.DatabaseAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -43,14 +47,31 @@ public class ReportServiceImpl implements ReportService {
             String type = reportSql.getQueryType();//S: 只有一个值 V：向量只有一行 T 表格
             switch (type){
                 case "S":
-//                    DBCPDao.findObjectsNamedSql()
+                    try {
+                        Connection connection = DBCPDao.getConn(databaseInfo);
+                        Object data = DatabaseAccess.getScalarObjectQuery(connection, sql);
+                        result.put(propertyName, data);
+                    }catch (SQLException | IOException e){
+                        //连接数据库失败
+                    }
                     break;
                 case "V":
-//                    JSONObject a = DBCPDao.findObjectsNamedSql(databaseInfo, sql, CollectionsOpt.createHashMap());
-//                    result.put(propertyName, a);
+                    try {
+                        Connection connection = DBCPDao.getConn(databaseInfo);
+                        JSONObject data = DatabaseAccess.getObjectAsJSON(connection, sql);
+                        result.put(propertyName, data);
+                    }catch (SQLException | IOException e){
+                        //连接数据库失败
+                    }
                     break;
                 case "T":
-
+                    try {
+                        Connection connection = DBCPDao.getConn(databaseInfo);
+                        JSONArray data = DatabaseAccess.findObjectsAsJSON(connection, sql);
+                        result.put(propertyName, data);
+                    }catch (SQLException | IOException e){
+                        //连接数据库失败
+                    }
                     break;
                 default:
                     throw new ObjectException("查询类型不明确!");

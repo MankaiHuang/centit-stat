@@ -1,21 +1,17 @@
 package com.centit.stat.query.dao;
 
+import com.centit.framework.ip.po.DatabaseInfo;
+import com.centit.support.database.jsonmaptable.GeneralJsonObjectDao;
+import com.centit.support.database.jsonmaptable.JsonObjectDao;
+import com.centit.support.database.utils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.centit.support.database.jsonmaptable.GeneralJsonObjectDao;
-import com.centit.support.database.jsonmaptable.JsonObjectDao;
-import com.centit.support.database.utils.PageDesc;
-import com.centit.framework.ip.po.DatabaseInfo;
-import com.centit.support.database.utils.DataSourceDescription;
-import com.centit.support.database.utils.DatabaseAccess;
-import com.centit.support.database.utils.DbcpConnectPools;
-import com.centit.support.database.utils.QueryAndNamedParams;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DBCPDao {
     public static final Logger logger = LoggerFactory.getLogger(DBCPDao.class);
@@ -116,7 +112,7 @@ public class DBCPDao {
     }
 
     // 从连接池中获取链接
-    private static Connection getConn(DatabaseInfo dbinfo) throws Exception {
+    public static Connection getConn(DatabaseInfo dbinfo) throws SQLException {
            DataSourceDescription desc=new DataSourceDescription();
            desc.setConnUrl(dbinfo.getDatabaseUrl());
            desc.setUsername(dbinfo.getUsername());
