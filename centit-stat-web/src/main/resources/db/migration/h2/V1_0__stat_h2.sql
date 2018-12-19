@@ -160,6 +160,7 @@ create table Q_REPORT_SQL
 (
    Model_Name           varchar(64) not null,
    SQL_ID               varchar(32) not null,
+   PARENT_SQL_ID        varchar(32),
    property_NAME        varchar(64),
    Database_Code        varchar(32),
    QUERY_SQL            varchar(4000),

@@ -2,6 +2,7 @@ package com.centit.stat.report.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.common.ResponseData;
+import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.stat.report.po.ReportModel;
 import com.centit.stat.report.service.ReportService;
 import com.centit.support.report.JsonDocxContext;
@@ -34,6 +35,13 @@ public class ReportController {
     public ResponseData createReportModel(ReportModel model){
         reportService.createReportModel(model);
         return ResponseData.makeSuccessResponse();
+    }
+
+    @ApiOperation(value = "报表文书数据")
+    @GetMapping(value = "/data/{modelName}")
+    @WrapUpResponseBody()
+    public JSONObject reportData(@PathVariable String modelName){
+        return reportService.queryData(modelName);
     }
 
     @ApiOperation(value = "下载报表文书")

@@ -1,5 +1,6 @@
 package com.centit.stat.report.po;
 
+import com.centit.stat.report.service.ReportService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +29,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "Q_REPORT_SQL")
-public class ReportSql {
-    @Id
+public class ReportSql implements Serializable {
+
     @Column(name = "MODEL_NAME")
     @ApiModelProperty(value = "模块名称")
     public String modelName;
@@ -37,6 +39,10 @@ public class ReportSql {
     @Column(name = "SQL_ID")
     @ApiModelProperty(value = "查询语句ID")
     public String sqlId;
+
+    @Column(name = "PARENT_SQL_ID")
+    @ApiModelProperty(value = "父查询语句ID")
+    public String parentSqlId;
 
     @Column(name = "PROPERTY_NAME")
     @ApiModelProperty(value = "数据属性")
@@ -62,6 +68,10 @@ public class ReportSql {
     @Column(name = "CREATE_TIME")
     @ApiModelProperty(value = "创建时间")
     public Date createTime;
+
+    @OneToMany(targetEntity = ReportSql.class)
+    @JoinColumn(name = "sqlId", referencedColumnName = "parentSqlId")
+    List<ReportSql> children;
 
     @OneToMany(targetEntity = ReportSqlColumn.class)
     @JoinColumn(name = "sqlId", referencedColumnName = "sqlId")

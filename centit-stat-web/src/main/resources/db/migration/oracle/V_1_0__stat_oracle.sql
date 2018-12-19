@@ -265,6 +265,7 @@ create table Q_REPORT_SQL
 (
    "Model_Name"         VARCHAR2(64)         not null,
    SQL_ID               VARCHAR2(32)         not null,
+   PARENT_SQL_ID        VARCHAR2(32),
    "property_NAME"      VARCHAR2(64),
    "Database_Code"      VARCHAR2(32),
    QUERY_SQL            VARCHAR2(4000),
