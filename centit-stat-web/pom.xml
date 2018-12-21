@@ -13,6 +13,11 @@
     <packaging>war</packaging>
 
     <dependencies>
+        
+        <dependency>
+            <groupId>com.centit.framework</groupId>
+            <artifactId>framework-session</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
