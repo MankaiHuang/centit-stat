@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /*Name	Code	Comment	Data Type	Length	Precision	Primary	Foreign Key	Mandatory
 包ID	RESOURCE_ID		VARCHAR2(64)	64		TRUE	TRUE	TRUE
@@ -24,7 +25,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Q_DATA_RESOURCE_PARAM")
 @ApiModel(value = "数据包参数")
-public class DataResourceParam {
+public class DataResourceParam implements Serializable {
+
+    private static final long serialVersionUID = 7093824507690734538L;
 
     @Id
     @Column(name = "RESOURCE_ID")
@@ -38,13 +41,13 @@ public class DataResourceParam {
     private String paramLabel;
 
     @Column(name = "PARAM_Display_Style")
-    private char paramDisplayStyle;
+    private String paramDisplayStyle;
 
     @Column(name = "PARAM_TYPE")
     private String paramType;
 
     @Column(name = "PARAM_REFERENCE_TYPE")
-    private char paramReferenceType;
+    private String paramReferenceType;
 
     @Column(name = "PARAM_REFERENCE_DATA")
     private String paramReferenceData;
