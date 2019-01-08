@@ -96,15 +96,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
         // 树形结构
         if ("1".equals(formData.getIsTree())) {
-            ParentChild<Object[]> c = new CollectionsOpt.ParentChild<Object[]>() {
-                @Override
-                public boolean parentAndChild(Object[] p, Object[] c) {
-                    return p[0].equals(c[1]);
-                }
-
-            };
-
-            CollectionsOpt.sortAsTree(datas, c);
+            CollectionsOpt.sortAsTree(datas, (p, c) -> p[0].equals(c[1]));
         }
         // 计算合计和平均
 
@@ -304,6 +296,7 @@ public class FormDataManagerImpl implements FormDataManager {
         // 查询数据
         String currTitle = formData.makeCondCompareValue(formData.getModelType(), 0);
         QueryAndNamedParams qap = formData.makeStatQuery();
+        // TODO  链接两次数据库 需要优化
         List<Object[]> currDatas = DBCPDao.findObjectsNamedSql(formData.getDbinfo(), qap);
 
         String prevTitle = formData.makeCondCompareValue(formData.getModelType(), -1);
