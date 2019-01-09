@@ -1,5 +1,6 @@
 package com.centit.stat.resource.po;
 
+import com.centit.support.database.metadata.SimpleTableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,13 +35,23 @@ public class DataResourceColumn implements Serializable {
 
     @Column(name = "IS_STAT_DATA")
     @ApiModelProperty(value = "是否是统计数据")
-    private char isStatData;
+    private String isStatData;
 
     @Column(name = "DATA_TYPE")
-    @ApiModelProperty(value = "数据类型")
+    @ApiModelProperty(value = "数据类型", hidden = true)
     private String dataType;
 
     @Column(name = "CATALOG_CODE")
     @ApiModelProperty(value = "对应数据字典代码")
     private String catalogCode;
+
+    public DataResourceColumn(String columnCode, String columnName) {
+        this.columnCode = columnCode;
+        this.columnName = columnName;
+    }
+
+    @ApiModelProperty(value = "字段属性名")
+    public String getPropertyName(){
+        return SimpleTableField.mapPropName(getColumnCode());
+    }
 }

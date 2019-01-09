@@ -78,6 +78,9 @@ public class FormDataManagerImpl implements FormDataManager {
      * stat.twodimenform.FormDataModel, boolean)
      */
 
+    /**
+     * 二维表
+     */
     @Override
     @Transactional(readOnly = true)
     strictfp public Integer queryFormData(FormDataModel formData, PageDesc page) {
@@ -101,13 +104,11 @@ public class FormDataManagerImpl implements FormDataManager {
                 public boolean parentAndChild(Object[] p, Object[] c) {
                     return p[0].equals(c[1]);
                 }
-
             };
-
             CollectionsOpt.sortAsTree(datas, c);
         }
-        // 计算合计和平均
 
+        // 计算合计和平均
         Object[] sumData = new Object[formData.getDataColumnCount()];
         Object[] avgData = new Object[formData.getDataColumnCount()];
         // sumData[0]=isPaging?"本页合计":"合计";
@@ -360,14 +361,11 @@ public class FormDataManagerImpl implements FormDataManager {
         // 树形结构
         if ("1".equals(formData.getIsTree())) {
             ParentChild<Object[]> c = new CollectionsOpt.ParentChild<Object[]>() {
-
                 @Override
                 public boolean parentAndChild(Object[] p, Object[] c) {
                     return p[0].equals(c[1]);
                 }
-
             };
-
             CollectionsOpt.sortAsTree(compareDatas, c);
         }
         // 计算合计

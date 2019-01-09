@@ -1,5 +1,6 @@
 package com.centit.stat.resource.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.stat.resource.po.DataResource;
@@ -57,5 +58,14 @@ public class ResourceController {
         return dataResourceService.getDataResource(resourceId);
     }
 
-
+    @ApiOperation(value = "生成表格数据")
+    @GetMapping(value = "/table")
+    @WrapUpResponseBody
+    public JSONObject generateTable(String databaseCode, String sql, PageDesc pageDesc){
+        JSONObject table = new JSONObject();
+        table.put("column", dataResourceService.generateColumn(databaseCode, sql));
+        table.put("objList", dataResourceService.queryData(databaseCode, sql, pageDesc));
+        table.put("pageDesc", pageDesc);
+        return table;
+    }
 }

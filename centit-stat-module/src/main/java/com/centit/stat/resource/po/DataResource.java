@@ -1,5 +1,6 @@
 package com.centit.stat.resource.po;
 
+import com.centit.framework.core.dao.DictionaryMap;
 import com.centit.support.database.orm.GeneratorCondition;
 import com.centit.support.database.orm.GeneratorTime;
 import com.centit.support.database.orm.GeneratorType;
@@ -53,6 +54,7 @@ public class DataResource implements Serializable {
 
     @Column(name = "RECORDER")
     @ApiModelProperty(value = "修改人", hidden = true)
+    @DictionaryMap(fieldName = "recorderName", value = "userCode")
     private String recorder;
 
     @Column(name = "RECORDER_DATE")
@@ -63,4 +65,8 @@ public class DataResource implements Serializable {
     @OneToMany(targetEntity = DataResourceColumn.class)
     @JoinColumn(name = "resourceId", referencedColumnName = "resourceId")
     private List<DataResourceColumn> columns;
+
+    @OneToMany(targetEntity = DataResourceParam.class)
+    @JoinColumn(name = "resourceId", referencedColumnName = "resourceId")
+    private List<DataResourceParam> params;
 }

@@ -1,6 +1,7 @@
 package com.centit.stat.resource.po;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -31,36 +32,47 @@ public class DataResourceParam implements Serializable {
 
     @Id
     @Column(name = "RESOURCE_ID")
+    @ApiModelProperty(hidden = true)
     private String resourceId;
 
     @Id
     @Column(name = "PARAM_NAME")
+    @ApiModelProperty(value = "参数名")
     private String paramName;
 
     @Column(name = "PARAM_LABEL")
+    @ApiModelProperty(value = "参数中文名")
     private String paramLabel;
 
     @Column(name = "PARAM_Display_Style")
+    @ApiModelProperty(value = "参数展示样式（N:普通 normal; H 隐藏 hide; R 只读 readonly）")
     private String paramDisplayStyle;
 
     @Column(name = "PARAM_TYPE")
+    @ApiModelProperty(value = "参数类型（S:文本 N:数字  D：日期 T：时间戳（datetime)）")
     private String paramType;
 
     @Column(name = "PARAM_REFERENCE_TYPE")
+    @ApiModelProperty(value = "参数引用类型（0：没有：1： 数据字典 2：JSON表达式 3：sql语句  Y：年份 M：月份）")
     private String paramReferenceType;
 
     @Column(name = "PARAM_REFERENCE_DATA")
+    @ApiModelProperty(value = "参数引用数据（根据paramReferenceType类型（1,2,3）填写对应值）")
     private String paramReferenceData;
 
     @Column(name = "PARAM_VALIDATE_REGEX")
+    @ApiModelProperty(value = "参数约束表达式（regex表达式）")
     private String paramValidateRegex;
 
     @Column(name = "PARAM_VALIDATE_INFO")
+    @ApiModelProperty(value = "参数约束提示（约束不通过提示信息）")
     private String paramValidateInfo;
 
     @Column(name = "PARAM_DEFAULT_VALUE")
+    @ApiModelProperty(value = "参数默认值")
     private String paramDefaultValue;
 
     @Column(name = "PARAM_ORDER")
+    @ApiModelProperty(value = "条件序号")
     private int paramOrder;
 }

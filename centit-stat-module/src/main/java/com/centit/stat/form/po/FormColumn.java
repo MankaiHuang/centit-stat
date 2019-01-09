@@ -1,5 +1,7 @@
 package com.centit.stat.form.po;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -16,6 +18,7 @@ import javax.persistence.Table;
 字段序号	column_order		number(4,0)	4		FALSE	FALSE	FALSE*/
 @Data
 @Entity
+@ApiModel
 @Table(name = "Q_FORM_COLUMN")
 public class FormColumn {
 
@@ -24,10 +27,14 @@ public class FormColumn {
     private String formId;
     @Column(name = "COLUMN_CODE")
     private String columnCode;
+
+    @ApiModelProperty(value = "0:无操作 1:合计 2:平均 3:平均合计")
     @Column(name = "OPT_TYPE")
-    private char optType;
+    private String optType;
+
+    @ApiModelProperty(value = "R:行头、 C:列头、 D:数据")
     @Column(name = "COLUMN_TYPE")
-    private char columnType;
+    private String columnType;
     @Column(name = "MINE_URL_FORMAT")
     private String mineUrlFormat;
     @Column(name = "COLUMN_ORDER")

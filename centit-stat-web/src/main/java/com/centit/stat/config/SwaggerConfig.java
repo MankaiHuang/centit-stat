@@ -31,9 +31,9 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
     private ApiInfo buildApiInf(){
         return new ApiInfoBuilder()
-            .title("框架接口")
+            .title("统计报表接口")
             .termsOfServiceUrl("https://ndxt.github.io")
-            .description("南大先腾框架接口")
+            .description("统计报表接口")
             .contact(new Contact("codefan", "https://ndxt.github.io", "codefan@centit.com"))
             .build();
     }

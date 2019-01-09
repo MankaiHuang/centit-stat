@@ -1,6 +1,8 @@
 package com.centit.stat.resource.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.centit.stat.resource.po.DataResource;
+import com.centit.stat.resource.po.DataResourceColumn;
 import com.centit.support.database.utils.PageDesc;
 
 import java.util.List;
@@ -20,4 +22,8 @@ public interface DataResourceService {
     List<DataResource> listDataResource(Map<String, Object> params, PageDesc pageDesc);
 
     DataResource getDataResource(String resourceId);
+
+    List<DataResourceColumn> generateColumn(String databaseCode, String sql);
+
+    JSONArray queryData(String databaseCode, String sql, PageDesc pageDesc);
 }
