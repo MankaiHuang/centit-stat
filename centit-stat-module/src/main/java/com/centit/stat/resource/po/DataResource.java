@@ -1,5 +1,6 @@
 package com.centit.stat.resource.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.centit.framework.core.dao.DictionaryMap;
 import com.centit.support.database.orm.GeneratorCondition;
 import com.centit.support.database.orm.GeneratorTime;
@@ -57,10 +58,11 @@ public class DataResource implements Serializable {
     @DictionaryMap(fieldName = "recorderName", value = "userCode")
     private String recorder;
 
-    @Column(name = "RECORDER_DATE")
+    @Column(name = "RECORD_DATE")
     @ApiModelProperty(value = "修改时间", hidden = true)
     @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
-    private Date recorderDate;
+    @JSONField(serialize = false)
+    private Date recordDate;
 
     @OneToMany(targetEntity = DataResourceColumn.class)
     @JoinColumn(name = "resourceId", referencedColumnName = "resourceId")

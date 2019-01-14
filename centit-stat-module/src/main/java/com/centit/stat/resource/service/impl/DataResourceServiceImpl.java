@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -89,5 +90,10 @@ public class DataResourceServiceImpl implements DataResourceService {
         }catch (SQLException | IOException e){
             throw new ObjectException("连接数据库出错！");
         }
+    }
+
+    @Override
+    public Set<String> generateParam(String sql) {
+        return QueryUtils.getSqlTemplateParameters(sql);
     }
 }

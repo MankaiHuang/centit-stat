@@ -24,19 +24,26 @@ public class FormColumn {
 
     @Id
     @Column(name = "FORM_ID")
+    @ApiModelProperty(hidden = true)
     private String formId;
+
+    @ApiModelProperty(value = "字段代码")
     @Column(name = "COLUMN_CODE")
     private String columnCode;
 
-    @ApiModelProperty(value = "0:无操作 1:合计 2:平均 3:平均合计")
+    @ApiModelProperty(value = "数据操作 0:无操作 1:合计 2:平均 3:平均合计")
     @Column(name = "OPT_TYPE")
     private String optType;
 
-    @ApiModelProperty(value = "R:行头、 C:列头、 D:数据")
+    @ApiModelProperty(value = "表头属性 R:行头、 C:列头、 D:数据")
     @Column(name = "COLUMN_TYPE")
     private String columnType;
+
+    @ApiModelProperty(value = "数据钻取连接url模板 模板可以引用行数据和数据包查询参数")
     @Column(name = "MINE_URL_FORMAT")
     private String mineUrlFormat;
+
+    @ApiModelProperty(value = "字段序号")
     @Column(name = "COLUMN_ORDER")
     private int columnOrder;
 }

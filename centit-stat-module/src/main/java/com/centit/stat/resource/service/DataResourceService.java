@@ -5,8 +5,10 @@ import com.centit.stat.resource.po.DataResource;
 import com.centit.stat.resource.po.DataResourceColumn;
 import com.centit.support.database.utils.PageDesc;
 
+import javax.persistence.SecondaryTable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface DataResourceService {
 
@@ -26,4 +28,6 @@ public interface DataResourceService {
     List<DataResourceColumn> generateColumn(String databaseCode, String sql);
 
     JSONArray queryData(String databaseCode, String sql, PageDesc pageDesc);
+
+    Set<String> generateParam(java.lang.String sql);
 }

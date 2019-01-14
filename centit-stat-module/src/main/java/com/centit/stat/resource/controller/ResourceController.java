@@ -1,22 +1,27 @@
 package com.centit.stat.resource.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.stat.resource.po.DataResource;
 import com.centit.stat.resource.service.DataResourceService;
 import com.centit.support.database.utils.PageDesc;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
-@Api(value = "数据包")
+@Api(value = "数据包", tags = "数据包")
 @RestController
 @RequestMapping(value = "data_resource")
-public class ResourceController {
+public class ResourceController extends BaseController {
 
     @Autowired
     private DataResourceService dataResourceService;
@@ -47,7 +52,7 @@ public class ResourceController {
     @GetMapping
     @WrapUpResponseBody
     public PageQueryResult<DataResource> listDataResource(PageDesc pageDesc){
-        List<DataResource> list = dataResourceService.listDataResource(null, pageDesc);
+        List<DataResource> list = dataResourceService.listDataResource(new HashMap<>(), pageDesc);
         return PageQueryResult.createResult(list, pageDesc);
     }
 
@@ -59,6 +64,10 @@ public class ResourceController {
     }
 
     @ApiOperation(value = "生成表格数据")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(name = "databaseCode", value = "数据库代码", required = true),
+        @ApiImplicitParam(name = "sql", value = "查询SQL", required = true)
+    })
     @GetMapping(value = "/table")
     @WrapUpResponseBody
     public JSONObject generateTable(String databaseCode, String sql, PageDesc pageDesc){
@@ -67,5 +76,13 @@ public class ResourceController {
         table.put("objList", dataResourceService.queryData(databaseCode, sql, pageDesc));
         table.put("pageDesc", pageDesc);
         return table;
+    }
+
+    @ApiOperation(value = "生成参数名称列表")
+    @ApiImplicitParam(name = "sql", value = "查询SQL", required = true)
+    @GetMapping(value = "/param")
+    @WrapUpResponseBody
+    public Set<String> generateParam(String sql ){
+        return dataResourceService.generateParam(sql);
     }
 }

@@ -39,7 +39,7 @@
             "created": "u0000000"
         },
         {
-            "databaseCode": "0000000001",
+            "databaseCode": "0000000063",
             "osId": "CONTRACT",
             "databaseName": "组织机构数据库",
             "databaseUrl": "jdbc:mysql://192.168.128.32/frameworkdb?useUnicode=true&characterEncoding=utf-8",
