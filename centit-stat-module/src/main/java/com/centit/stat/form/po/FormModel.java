@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /*
@@ -20,7 +21,9 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "Q_FORM_MODEL")
-public class FormModel {
+public class FormModel implements Serializable {
+
+    private static final long serialVersionUID = 6075169482385433049L;
 
     @Id
     @Column(name = "FORM_ID")

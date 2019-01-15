@@ -80,15 +80,20 @@ public class DataResourceServiceImpl implements DataResourceService {
     }
 
     @Override
-    public JSONArray queryData(String databaseCode, String sql, PageDesc pageDesc) {
+    public JSONArray queryData(String databaseCode, String sql, Map<String, Object> params, PageDesc pageDesc) {
         DatabaseInfo databaseInfo = integrationEnvironment.getDatabaseInfo(databaseCode);
+        QueryAndParams qap = QueryAndParams.createFromQueryAndNamedParams(new QueryAndNamedParams(sql, params));
+//        if(qap.getParams() == null || qap.getParams().length == 0){
+//            sql = sql.substring(0, sql.toLowerCase().indexOf("where"));
+//        }
         try (Connection connection = DbcpConnectPools.getDbcpConnect(
             new DataSourceDescription(databaseInfo.getDatabaseUrl(), databaseInfo.getUsername(), databaseInfo.getClearPassword()))){
 
-            return DatabaseAccess.findObjectsAsJSON(connection, sql, null, pageDesc.getPageNo(), pageDesc.getPageSize());
+//            return DatabaseAccess.findObjectsByNamedSqlAsJSON(connection, sql, params, null, pageDesc.getPageNo(), pageDesc.getPageSize());
+            return DatabaseAccess.findObjectsAsJSON(connection, qap.getQuery(), qap.getParams(), pageDesc.getPageNo(), pageDesc.getPageSize());
 
         }catch (SQLException | IOException e){
-            throw new ObjectException("连接数据库出错！");
+            throw new ObjectException("查询数据出错！");
         }
     }
 

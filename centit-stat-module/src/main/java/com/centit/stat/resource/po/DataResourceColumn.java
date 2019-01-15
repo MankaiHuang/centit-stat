@@ -45,6 +45,9 @@ public class DataResourceColumn implements Serializable {
     @ApiModelProperty(value = "对应数据字典代码")
     private String catalogCode;
 
+    public DataResourceColumn() {
+    }
+
     public DataResourceColumn(String columnCode, String columnName) {
         this.columnCode = columnCode;
         this.columnName = columnName;

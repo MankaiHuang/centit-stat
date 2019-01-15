@@ -41,7 +41,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Api(value = "生成统计报表", tags = "报表元数据")
+//@Api(value = "生成统计报表", tags = "报表元数据")
 @Controller
 @RequestMapping("/stat/twodimenform")
 public class FormDataController extends BaseController {
@@ -49,7 +49,7 @@ public class FormDataController extends BaseController {
     @Resource
     protected FormDataManager dataManager;
 
-    @ApiOperation(value = "统计报表模块元数据")
+    //@ApiOperation(value = "统计报表模块元数据")
     @ApiImplicitParam(name = "modelName", value = "模块名称")
     @RequestMapping(value = "/meta/{modelName}", method = RequestMethod.GET)
     public void getMetaDate(@PathVariable String modelName,
@@ -77,7 +77,7 @@ public class FormDataController extends BaseController {
      * @param request   HttpServletRequest
      * @param response  HttpServletResponse
      */
-    @ApiOperation(value = "统计数据")
+    //@ApiOperation(value = "统计数据")
     @RequestMapping(value = "/{modelName}", method = RequestMethod.GET)
     public void doStat(@PathVariable String modelName, PageDesc page,
                        HttpServletRequest request, HttpServletResponse response) {
@@ -98,7 +98,7 @@ public class FormDataController extends BaseController {
      * @param page      分页信息
      * @param response  HttpServletResponse
      */
-    @ApiOperation(value = "excel下载")
+    //@ApiOperation(value = "excel下载")
     @RequestMapping(value = "/excels", method = RequestMethod.POST)
     public void exportToExcel(HttpServletRequest request, String modelName, boolean paging,
                               @Valid PageDesc page, HttpServletResponse response) {

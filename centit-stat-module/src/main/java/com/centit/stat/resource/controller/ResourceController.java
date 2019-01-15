@@ -14,8 +14,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Api(value = "数据包", tags = "数据包")
@@ -70,10 +72,11 @@ public class ResourceController extends BaseController {
     })
     @GetMapping(value = "/table")
     @WrapUpResponseBody
-    public JSONObject generateTable(String databaseCode, String sql, PageDesc pageDesc){
+    public JSONObject generateTable(String databaseCode, String sql, PageDesc pageDesc, HttpServletRequest request){
+        Map<String, Object> params = collectRequestParameters(request);
         JSONObject table = new JSONObject();
         table.put("column", dataResourceService.generateColumn(databaseCode, sql));
-        table.put("objList", dataResourceService.queryData(databaseCode, sql, pageDesc));
+        table.put("objList", dataResourceService.queryData(databaseCode, sql, params, pageDesc));
         table.put("pageDesc", pageDesc);
         return table;
     }
