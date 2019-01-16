@@ -1,16 +1,9 @@
 package com.centit.stat.query.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.centit.framework.ip.po.DatabaseInfo;
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.centit.framework.ip.po.DatabaseInfo;
 import com.centit.stat.query.po.QueryColumn;
 import com.centit.stat.query.po.QueryCondition;
 import com.centit.stat.query.po.QueryModel;
@@ -22,6 +15,12 @@ import com.centit.support.compiler.Lexer;
 import com.centit.support.database.utils.QueryAndNamedParams;
 import com.centit.support.database.utils.QueryUtils;
 import com.centit.support.json.JSONOpt;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FormDataModel implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
@@ -305,18 +304,17 @@ public class FormDataModel implements java.io.Serializable {
     /**
      * 根据查询目录生成对比分析语句
      *
-     * @param compareType 3 同比分析  4 环比分析 0 其他
-     * @param offset      int
+     * @param offset int
      * @return 时间
      */
-    public String makeCondCompareValue(String compareType, int offset) {
+    public String makeCondCompareValue(int offset) {
         String dateStr = "";
 
         for (QueryCondition cond : getConditions()) {
             String sValue = StringBaseOpt.objectToString(cond.getCondValue());
-            if ("3".equals(cond.getCompareType())) {
+            if ("3".equals(cond.getCompareType())) {//同比分析
                 try {
-                    //如果是年份直接减1，否则转化为日志剪掉一年
+                    //如果是年份直接减1，否则转化为日期剪掉一年
                     if (StringRegularOpt.isNumber(sValue)) {
                         Integer preV = Integer.valueOf(sValue);
                         preV = preV + offset;
@@ -329,9 +327,9 @@ public class FormDataModel implements java.io.Serializable {
                 } catch (NumberFormatException e) {
 
                 }
-            } else if ("4".equals(cond.getCompareType())) {
+            } else if ("4".equals(cond.getCompareType())) {//环比分析
                 try {
-                    //如果是月份直接减1，否则转化为日志剪掉一月， 这边有一个问题，就是一月份无法做环比因为要涉及到更改对应的年份
+                    //如果是月份直接减1，否则转化为日期剪掉一月， 这边有一个问题，就是一月份无法做环比因为要涉及到更改对应的年份
                     //所以环比不能直接输入月份，而是应该用日期来做
                     if (StringRegularOpt.isNumber(sValue)) {
                         Integer preV = Integer.valueOf(sValue);

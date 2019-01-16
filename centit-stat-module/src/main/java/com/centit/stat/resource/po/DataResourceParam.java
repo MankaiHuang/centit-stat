@@ -1,5 +1,6 @@
 package com.centit.stat.resource.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -33,6 +34,7 @@ public class DataResourceParam implements Serializable {
     @Id
     @Column(name = "RESOURCE_ID")
     @ApiModelProperty(hidden = true)
+    @JSONField(serialize = false)
     private String resourceId;
 
     @Id

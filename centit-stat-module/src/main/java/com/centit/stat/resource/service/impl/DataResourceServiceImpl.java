@@ -61,7 +61,7 @@ public class DataResourceServiceImpl implements DataResourceService {
 
     @Override
     public DataResource getDataResource(String resourceId) {
-        return dataResourceDao.getObjectById(resourceId);
+        return dataResourceDao.getObjectWithReferences(resourceId);
     }
 
     public List<DataResourceColumn> mapSql2Column(String sql) {

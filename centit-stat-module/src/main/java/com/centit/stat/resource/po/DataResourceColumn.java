@@ -1,5 +1,6 @@
 package com.centit.stat.resource.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.centit.support.database.metadata.SimpleTableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,6 +23,7 @@ public class DataResourceColumn implements Serializable {
     @Id
     @Column(name = "RESOURCE_ID")
     @ApiModelProperty(hidden = true)
+    @JSONField(serialize = false)
     private String resourceId;
 
     @Id

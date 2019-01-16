@@ -302,15 +302,16 @@ public class FormDataManagerImpl implements FormDataManager {
     @Override
     @Transactional
     strictfp public Integer queryCompareData(FormDataModel formData, boolean needSum) {
-        // 查询数据
-        String currTitle = formData.makeCondCompareValue(formData.getModelType(), 0);
+        // 查询当前数据
+        String currTitle = formData.makeCondCompareValue(0);
         QueryAndNamedParams qap = formData.makeStatQuery();
         List<Object[]> currDatas = DBCPDao.findObjectsNamedSql(formData.getDbinfo(), qap);
 
-        String prevTitle = formData.makeCondCompareValue(formData.getModelType(), -1);
+        //查询对比数据
+        String prevTitle = formData.makeCondCompareValue(-1);
         qap = formData.makeStatQuery();
         List<Object[]> prevDatas = DBCPDao.findObjectsNamedSql(formData.getDbinfo(), qap);
-        List<Object[]> compareDatas = new ArrayList<Object[]>();
+        List<Object[]> compareDatas = new ArrayList<>();
 
         // 列信息
         List<QueryColumn> cols = formData.getColumns();
@@ -828,17 +829,15 @@ public class FormDataManagerImpl implements FormDataManager {
      * @return
      */
     private static List<QueryColumn> parseQueryColumn(List<QueryColumn> cols, String showType) {
-        if (null == showType)
+        if (null == showType) {
             return cols;
-
-        List<QueryColumn> list = new ArrayList<QueryColumn>();
-
+        }
+        List<QueryColumn> list = new ArrayList<>();
         for (QueryColumn col : cols) {
             if (showType.equals(col.getShowType())) {
                 list.add(col);
             }
         }
-
         return list;
     }
 
