@@ -5,6 +5,7 @@ import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.stat.resource.po.DataResource;
+import com.centit.stat.resource.po.DataResourceParam;
 import com.centit.stat.resource.service.DataResourceService;
 import com.centit.support.database.utils.PageDesc;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -32,6 +34,7 @@ public class ResourceController extends BaseController {
     @PostMapping
     @WrapUpResponseBody
     public void createDataResource(DataResource dataResource){
+        dataResource.setQuerySql(HtmlUtils.htmlUnescape(dataResource.getQuerySql()));
         dataResourceService.createDataResource(dataResource);
     }
 
@@ -40,6 +43,7 @@ public class ResourceController extends BaseController {
     @WrapUpResponseBody
     public void updateDataResource(@PathVariable String resourceId, DataResource dataResource){
         dataResource.setResourceId(resourceId);
+        dataResource.setQuerySql(HtmlUtils.htmlUnescape(dataResource.getQuerySql()));
         dataResourceService.updateDataResource(dataResource);
     }
 
@@ -72,12 +76,11 @@ public class ResourceController extends BaseController {
     })
     @GetMapping(value = "/table")
     @WrapUpResponseBody
-    public JSONObject generateTable(String databaseCode, String sql, PageDesc pageDesc, HttpServletRequest request){
+    public JSONObject generateTable(String databaseCode, String sql, HttpServletRequest request){
         Map<String, Object> params = collectRequestParameters(request);
         JSONObject table = new JSONObject();
-        table.put("column", dataResourceService.generateColumn(databaseCode, sql));
-        table.put("objList", dataResourceService.queryData(databaseCode, sql, params, pageDesc));
-        table.put("pageDesc", pageDesc);
+        table.put("column", dataResourceService.generateColumn(databaseCode, HtmlUtils.htmlUnescape(sql)));
+        table.put("objList", dataResourceService.queryData(databaseCode, HtmlUtils.htmlUnescape(sql), params));
         return table;
     }
 
@@ -87,5 +90,26 @@ public class ResourceController extends BaseController {
     @WrapUpResponseBody
     public Set<String> generateParam(String sql ){
         return dataResourceService.generateParam(sql);
+    }
+
+    @ApiOperation(value = "统计数据")
+    @ApiImplicitParam(name = "resourceId", value = "数据包ID", required = true)
+    @GetMapping(value = "/stat/{resourceId}")
+    @WrapUpResponseBody
+    public JSONObject stat(HttpServletRequest request, @PathVariable String resourceId){
+        JSONObject table = new JSONObject();
+        DataResource resource = dataResourceService.getDataResource(resourceId);
+        Map<String, Object> params = collectRequestParameters(request);
+        if(resource.getParams() != null) {
+            for (DataResourceParam param : resource.getParams()) {
+                if (!params.containsKey(param.getParamName())) {
+                    params.put(param.getParamName(), param.getParamDefaultValue());
+                }
+            }
+        }
+        table.put("column", resource.getColumns());
+        table.put("param", resource.getParams());
+        table.put("objList", dataResourceService.queryData(resource.getDatabaseCode(), HtmlUtils.htmlUnescape(resource.getQuerySql()), params));
+        return table;
     }
 }

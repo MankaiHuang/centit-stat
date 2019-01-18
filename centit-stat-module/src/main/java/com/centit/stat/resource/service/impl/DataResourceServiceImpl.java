@@ -64,36 +64,29 @@ public class DataResourceServiceImpl implements DataResourceService {
         return dataResourceDao.getObjectWithReferences(resourceId);
     }
 
-    public List<DataResourceColumn> mapSql2Column(String sql) {
-        List<String> fields = QueryUtils.getSqlFiledNames(sql);
-        return null;
-    }
-
     @Override
     public List<DataResourceColumn> generateColumn(String databaseCode, String sql) {
         List<DataResourceColumn> columns = new ArrayList<>();
         List<String> fields = QueryUtils.getSqlFiledNames(sql);
         for(String field : fields){
-            columns.add(new DataResourceColumn(field, ""));
+            columns.add(new DataResourceColumn(field, ""));//todo 根据列名从元数据获取中文名
         }
         return columns;
     }
 
     @Override
-    public JSONArray queryData(String databaseCode, String sql, Map<String, Object> params, PageDesc pageDesc) {
+    public JSONArray queryData(String databaseCode, String sql, Map<String, Object> params) {
         DatabaseInfo databaseInfo = integrationEnvironment.getDatabaseInfo(databaseCode);
         QueryAndParams qap = QueryAndParams.createFromQueryAndNamedParams(new QueryAndNamedParams(sql, params));
-//        if(qap.getParams() == null || qap.getParams().length == 0){
-//            sql = sql.substring(0, sql.toLowerCase().indexOf("where"));
-//        }
+
         try (Connection connection = DbcpConnectPools.getDbcpConnect(
             new DataSourceDescription(databaseInfo.getDatabaseUrl(), databaseInfo.getUsername(), databaseInfo.getClearPassword()))){
 
-//            return DatabaseAccess.findObjectsByNamedSqlAsJSON(connection, sql, params, null, pageDesc.getPageNo(), pageDesc.getPageSize());
-            return DatabaseAccess.findObjectsAsJSON(connection, qap.getQuery(), qap.getParams(), pageDesc.getPageNo(), pageDesc.getPageSize());
+            return DatabaseAccess.findObjectsAsJSON(connection, qap.getQuery(), qap.getParams());
 
         }catch (SQLException | IOException e){
-            throw new ObjectException("查询数据出错！");
+            logger.error("执行查询出错，SQL：{},Param:{}", qap.getQuery(), qap.getParams());
+            throw new ObjectException("执行查询出错!");
         }
     }
 

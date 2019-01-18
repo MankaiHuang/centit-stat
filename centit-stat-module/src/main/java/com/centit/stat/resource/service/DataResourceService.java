@@ -27,7 +27,7 @@ public interface DataResourceService {
 
     List<DataResourceColumn> generateColumn(String databaseCode, String sql);
 
-    JSONArray queryData(String databaseCode, String sql, Map<String, Object> params, PageDesc pageDesc);
+    JSONArray queryData(String databaseCode, String sql, Map<String, Object> params);
 
     Set<String> generateParam(java.lang.String sql);
 }
