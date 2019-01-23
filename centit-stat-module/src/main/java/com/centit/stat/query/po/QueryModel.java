@@ -12,7 +12,7 @@ import java.util.List;
  * 查询统计模型
  */
 @Entity
-@Table(name = "Q_QUERY_MODEL")
+//@Table(name = "Q_QUERY_MODEL")
 public class QueryModel implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 

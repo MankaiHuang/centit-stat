@@ -21,6 +21,7 @@ public class ChartServiceImpl implements ChartService {
     @Override
     public void createChartModel(ChartModel chartModel) {
         chartModelDao.saveNewObject(chartModel);
+        chartModelDao.saveObjectReferences(chartModel);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class ChartServiceImpl implements ChartService {
 
     @Override
     public ChartModel getChart(String chartId) {
-        return chartModelDao.getObjectById(chartId);
+        return chartModelDao.getObjectWithReferences(chartId);
     }
 
     @Override
@@ -41,5 +42,6 @@ public class ChartServiceImpl implements ChartService {
     @Override
     public void updateChart(ChartModel chartModel) {
         chartModelDao.updateObject(chartModel);
+        chartModelDao.saveObjectReferences(chartModel);
     }
 }
