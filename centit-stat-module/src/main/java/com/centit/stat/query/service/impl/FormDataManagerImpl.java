@@ -122,7 +122,7 @@ public class FormDataManagerImpl implements FormDataManager {
         }
         for (int i = 1; i < formData.getDataColumnCount(); i++) {
             int size = 0;
-            String optType = columns.get(i).getOptType();
+            String optType = columns.get(i).getOptType();//0：无操作  1：合计  2：平均  3：平均 合计
             if ("1".equals(optType) || "3".equals(optType)) {
                 needSum = true;
             }

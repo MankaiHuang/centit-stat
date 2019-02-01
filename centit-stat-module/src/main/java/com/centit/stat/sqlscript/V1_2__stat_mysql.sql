@@ -24,7 +24,6 @@ create table Q_CHART_RESOURCE_Column
 (
    chart_ID             varchar(64) not null,
    column_code          varchar(64) not null,
-   show_type            char(1) comment '显示类型 X轴：X；Y轴：Y',
    primary key (chart_ID, column_code)
 );
 

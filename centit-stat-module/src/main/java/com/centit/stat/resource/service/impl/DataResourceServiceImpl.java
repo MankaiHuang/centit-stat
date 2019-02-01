@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.centit.framework.common.ObjectException;
 import com.centit.framework.ip.po.DatabaseInfo;
 import com.centit.framework.ip.service.IntegrationEnvironment;
+import com.centit.stat.resource.dao.DataResourceColumnDao;
 import com.centit.stat.resource.dao.DataResourceDao;
 import com.centit.stat.resource.po.DataResource;
 import com.centit.stat.resource.po.DataResourceColumn;
@@ -31,6 +32,9 @@ public class DataResourceServiceImpl implements DataResourceService {
 
     @Autowired
     private DataResourceDao dataResourceDao;
+
+    @Autowired
+    private DataResourceColumnDao resourceColumnDao;
 
     @Autowired
     private IntegrationEnvironment integrationEnvironment;
@@ -93,5 +97,10 @@ public class DataResourceServiceImpl implements DataResourceService {
     @Override
     public Set<String> generateParam(String sql) {
         return QueryUtils.getSqlTemplateParameters(sql);
+    }
+
+    @Override
+    public void updateResourceColumn(DataResourceColumn column) {
+        resourceColumnDao.updateObject(column);
     }
 }

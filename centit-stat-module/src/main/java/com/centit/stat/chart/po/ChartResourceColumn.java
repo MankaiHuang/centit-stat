@@ -27,9 +27,4 @@ public class ChartResourceColumn {
     @Column(name = "COLUMN_CODE")
     @ApiModelProperty(value = "列代码")
     private String columnCode;
-
-    @ApiModelProperty(value = "显示类型(X轴:X;Y轴:Y)")
-    @Pattern(regexp = "[XY]")
-    @Column(name = "SHOW_TYPE")
-    private String showType;
 }

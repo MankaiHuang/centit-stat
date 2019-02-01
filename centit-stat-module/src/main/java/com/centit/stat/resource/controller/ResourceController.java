@@ -1,12 +1,15 @@
 package com.centit.stat.resource.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.stat.resource.po.DataResource;
+import com.centit.stat.resource.po.DataResourceColumn;
 import com.centit.stat.resource.po.DataResourceParam;
 import com.centit.stat.resource.service.DataResourceService;
+import com.centit.support.data.core.DataSet;
 import com.centit.support.database.utils.PageDesc;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -111,5 +114,27 @@ public class ResourceController extends BaseController {
         table.put("param", resource.getParams());
         table.put("objList", dataResourceService.queryData(resource.getDatabaseCode(), HtmlUtils.htmlUnescape(resource.getQuerySql()), params));
         return table;
+    }
+
+    @ApiOperation(value = "修改数据包列")
+    @ApiImplicitParams(value = {
+        @ApiImplicitParam(name = "resourceId", value = "数据包ID", required = true),
+        @ApiImplicitParam(name = "columnCode", value = "列代码", required = true)
+    })
+    @PutMapping(value = "/{resourceId}/{columnCode}")
+    @WrapUpResponseBody
+    public void updateResourceColumn(@PathVariable String resourceId, @PathVariable String columnCode, DataResourceColumn column){
+        column.setResourceId(resourceId);
+        column.setColumnCode(columnCode);
+        dataResourceService.updateResourceColumn(column);
+    }
+
+    /**
+     * 一个数据包的数据 用一个DataSet来包装
+     * @return
+     */
+    public DataSet queryData(){
+
+        return null;
     }
 }

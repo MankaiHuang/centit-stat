@@ -30,4 +30,6 @@ public interface DataResourceService {
     JSONArray queryData(String databaseCode, String sql, Map<String, Object> params);
 
     Set<String> generateParam(java.lang.String sql);
+
+    void updateResourceColumn(DataResourceColumn column);
 }
