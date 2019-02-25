@@ -19,7 +19,6 @@ import com.centit.stat.query.service.FormDataManager;
 import com.centit.stat.query.service.FormDataModel;
 import com.centit.stat.query.service.QueryModelManager;
 import com.centit.support.algorithm.CollectionsOpt;
-import com.centit.support.algorithm.CollectionsOpt.ParentChild;
 import com.centit.support.algorithm.GeneralAlgorithm;
 import com.centit.support.algorithm.StringBaseOpt;
 import com.centit.support.database.utils.PageDesc;
@@ -76,8 +75,8 @@ public class FormDataManagerImpl implements FormDataManager {
      * @see
      * com.centit.stat.twodimenform.FormDataManager#queryFormData(com.centit.
      * stat.twodimenform.FormDataModel, boolean)
+     * 二维表
      */
-
     @Override
     @Transactional(readOnly = true)
     strictfp public Integer queryFormData(FormDataModel formData, PageDesc page) {
@@ -98,8 +97,8 @@ public class FormDataManagerImpl implements FormDataManager {
         if ("1".equals(formData.getIsTree())) {
             CollectionsOpt.sortAsTree(datas, (p, c) -> p[0].equals(c[1]));
         }
-        // 计算合计和平均
 
+        // 计算合计和平均
         Object[] sumData = new Object[formData.getDataColumnCount()];
         Object[] avgData = new Object[formData.getDataColumnCount()];
         // sumData[0]=isPaging?"本页合计":"合计";
@@ -113,7 +112,7 @@ public class FormDataManagerImpl implements FormDataManager {
         }
         for (int i = 1; i < formData.getDataColumnCount(); i++) {
             int size = 0;
-            String optType = columns.get(i).getOptType();
+            String optType = columns.get(i).getOptType();//0：无操作  1：合计  2：平均  3：平均 合计
             if ("1".equals(optType) || "3".equals(optType)) {
                 needSum = true;
             }
@@ -293,16 +292,16 @@ public class FormDataManagerImpl implements FormDataManager {
     @Override
     @Transactional
     strictfp public Integer queryCompareData(FormDataModel formData, boolean needSum) {
-        // 查询数据
-        String currTitle = formData.makeCondCompareValue(formData.getModelType(), 0);
+        // 查询当前数据
+        String currTitle = formData.makeCondCompareValue(0);
         QueryAndNamedParams qap = formData.makeStatQuery();
-        // TODO  链接两次数据库 需要优化
         List<Object[]> currDatas = DBCPDao.findObjectsNamedSql(formData.getDbinfo(), qap);
 
-        String prevTitle = formData.makeCondCompareValue(formData.getModelType(), -1);
+        //查询对比数据
+        String prevTitle = formData.makeCondCompareValue(-1);
         qap = formData.makeStatQuery();
         List<Object[]> prevDatas = DBCPDao.findObjectsNamedSql(formData.getDbinfo(), qap);
-        List<Object[]> compareDatas = new ArrayList<Object[]>();
+        List<Object[]> compareDatas = new ArrayList<>();
 
         // 列信息
         List<QueryColumn> cols = formData.getColumns();
@@ -352,16 +351,7 @@ public class FormDataManagerImpl implements FormDataManager {
 
         // 树形结构
         if ("1".equals(formData.getIsTree())) {
-            ParentChild<Object[]> c = new CollectionsOpt.ParentChild<Object[]>() {
-
-                @Override
-                public boolean parentAndChild(Object[] p, Object[] c) {
-                    return p[0].equals(c[1]);
-                }
-
-            };
-
-            CollectionsOpt.sortAsTree(compareDatas, c);
+            CollectionsOpt.sortAsTree(compareDatas, (p,c) -> p[0].equals(c[1]));
         }
         // 计算合计
         if (needSum) {
@@ -823,17 +813,15 @@ public class FormDataManagerImpl implements FormDataManager {
      * @return
      */
     private static List<QueryColumn> parseQueryColumn(List<QueryColumn> cols, String showType) {
-        if (null == showType)
+        if (null == showType) {
             return cols;
-
-        List<QueryColumn> list = new ArrayList<QueryColumn>();
-
+        }
+        List<QueryColumn> list = new ArrayList<>();
         for (QueryColumn col : cols) {
             if (showType.equals(col.getShowType())) {
                 list.add(col);
             }
         }
-
         return list;
     }
 

@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * 报表模块配置控制器
  */
-@Api(value = "报表模块配置", tags = "报表模块")
+//@Api(value = "报表模块配置", tags = "报表模块")
 @Controller
 @RequestMapping("/stat/querymodel")
 public class QueryModelControl extends BaseController {
@@ -40,7 +40,7 @@ public class QueryModelControl extends BaseController {
      * @param request
      * @param response
      */
-    @ApiOperation(value = "模块列表")
+    //@ApiOperation(value = "模块列表")
     @GetMapping
     public void list(PageDesc pageDesc, String[] field, String _search, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> searchColumn = convertSearchColumn(request);
@@ -65,7 +65,7 @@ public class QueryModelControl extends BaseController {
      * @param request
      * @param response
      */
-    @ApiOperation(value = "单个模块")
+    //@ApiOperation(value = "单个模块")
     @RequestMapping(value = "/{modelName}", method = {RequestMethod.GET})
     public void get(@PathVariable String modelName, HttpServletRequest request, HttpServletResponse response) {
         QueryModel qm = queryModelMag.getObjectWithReference(modelName);
@@ -78,7 +78,7 @@ public class QueryModelControl extends BaseController {
      * @param request
      * @param response
      */
-    @ApiOperation(value = "新增模块")
+    //@ApiOperation(value = "新增模块")
     @RequestMapping(method = {RequestMethod.POST})
     public void create(@Valid QueryModel qm, HttpServletRequest request, HttpServletResponse response) {
         qm.setQuerySql(dealPlusAndAnd(qm.getQuerySql()));
@@ -93,7 +93,7 @@ public class QueryModelControl extends BaseController {
      * @param request
      * @param response
      */
-    @ApiOperation(value = "修改模块")
+    //@ApiOperation(value = "修改模块")
     @RequestMapping(value = "/{modelName}", method = {RequestMethod.PUT})
     public void update(@Valid QueryModel qm, @PathVariable String modelName, HttpServletRequest request, HttpServletResponse response) {
         QueryModel dbqm = queryModelMag.getObjectById(modelName);
@@ -118,7 +118,7 @@ public class QueryModelControl extends BaseController {
      * @param sql      查询sql
      * @param response HttpServletResponse
      */
-    @ApiOperation(value = "根据sql获取列名和查询参数名")
+    //@ApiOperation(value = "根据sql获取列名和查询参数名")
     @RequestMapping(value = "/colandcond", method = {RequestMethod.POST})
     public void generateColAndConByQM(@RequestParam String sql, HttpServletResponse response) {
         try {
@@ -135,7 +135,7 @@ public class QueryModelControl extends BaseController {
      * @param modelName
      * @param response
      */
-    @ApiOperation(value = "删除模块")
+    //@ApiOperation(value = "删除模块")
     @RequestMapping(value = "/{modelName}", method = {RequestMethod.DELETE})
     public void delete(HttpServletRequest request, @PathVariable String modelName, HttpServletResponse response) {
         QueryModel dbqm = queryModelMag.getObjectById(modelName);

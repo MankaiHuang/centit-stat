@@ -1,13 +1,13 @@
-package com.centit.stat.list.dao;
+package com.centit.stat.chart.dao;
 
 import com.centit.framework.jdbc.dao.BaseDaoImpl;
-import com.centit.stat.list.po.ListModel;
+import com.centit.stat.chart.po.ChartModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 
 @Repository
-public class ListModelDao extends BaseDaoImpl<ListModel, String> {
+public class ChartModelDao extends BaseDaoImpl<ChartModel, String> {
 
 
     @Override

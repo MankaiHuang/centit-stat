@@ -20,7 +20,6 @@ import java.util.Properties;
 
 public class WebInitializer implements WebApplicationInitializer {
 
-
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
 
@@ -85,7 +84,6 @@ public class WebInitializer implements WebApplicationInitializer {
      * @param servletContext ServletContext
      */
     private void initializeH2Console(ServletContext servletContext){
-
         AnnotationConfigWebApplicationContext contextSer = new AnnotationConfigWebApplicationContext();
         contextSer.register(NormalSpringMvcConfig.class);
         contextSer.setServletContext(servletContext);
@@ -95,6 +93,4 @@ public class WebInitializer implements WebApplicationInitializer {
         h2console.setLoadOnStartup(1);
         h2console.setAsyncSupported(true);
     }
-
-
 }

@@ -39,13 +39,23 @@
             "created": "u0000000"
         },
         {
-            "databaseCode": "0000000001",
+            "databaseCode": "0000000063",
             "osId": "CONTRACT",
             "databaseName": "组织机构数据库",
             "databaseUrl": "jdbc:mysql://192.168.128.32/frameworkdb?useUnicode=true&characterEncoding=utf-8",
             "username": "framework",
             "password": "FxV/BjjWFkrKFar10wIU6Q==",
             "databaseDesc": "MySQL测试库",
+            "created": "u0000000"
+        },
+        {
+            "databaseCode": "0000000082",
+            "osId": "CONTRACT",
+            "databaseName": "材料表",
+            "databaseUrl": "jdbc:mysql://192.168.128.32/bim?useUnicode=true&characterEncoding=utf-8",
+            "username": "framework",
+            "password": "FxV/BjjWFkrKFar10wIU6Q==",
+            "databaseDesc": "材料表",
             "created": "u0000000"
         }
     ]
