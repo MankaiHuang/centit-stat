@@ -14,7 +14,7 @@
 		this.loadData = function(model) {
 			var vm = this;
 
-			return Core.ajax(Config.ContextPath + 'service/stat/querymodel/' + model.modelName, {
+			return Core.ajax(Config.ContextPath + 'stat/stat/querymodel/' + model.modelName, {
 				type: 'json',
 				method: 'get'
 			}).then(function(data) {

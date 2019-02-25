@@ -16,7 +16,7 @@
 		<a class="easyui-linkbutton btn-search" iconCls="icon-search">搜索</a>
 	</form>
 </div>
-<table url="service/stat/querymodel?_search=true&field=modelName&field=modelType&field=formNameFormat
+<table url="stat/stat/querymodel?_search=true&field=modelName&field=modelType&field=formNameFormat
 &field=resultName&field=databaseCode&field=databaseName&field=queryDesc"
 	id="quermodelTable"
 	layoutH=".search"
@@ -47,15 +47,15 @@
 <div class="temp-toolbar">
 	<a iconCls="icon-add" href="../../modules/stat/querymodel/querymodel-info.html" trigger="none"
 		target="tab" rel="querymodel_add" title="新增统计查询" width="320" height="420" >新增</a>
-		
+
 	<a iconCls="icon-edit" href="../../modules/stat/querymodel/querymodel-info.html" trigger="single"
 		target="tab" rel="querymodel_edit" title="编辑 {{modelName}}" width="800" height="600" >编辑</a>
-		
+
 	<hr>
-	
+
 	<a iconCls="icon-base icon-base-ban" trigger="single"
 		target="confirm" rel="querymodel_remove" title="是否确定删除 {{modelName}}？">删除</a>
-		
+
 	<a iconCls="icon-base icon-base-info" href="../../modules/stat/querymodel/twodimenform.html" trigger="single"
 		target="custom" rel="querymodel_view" title="预览{{modelName}}" width="800" height="600" >预览</a>
 </div>

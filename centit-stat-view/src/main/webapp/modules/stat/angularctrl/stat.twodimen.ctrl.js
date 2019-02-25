@@ -1,7 +1,7 @@
 
 	// var model=angular.module('statModel', ['restangular']);
-	
-	
+
+
 	//将带小数点的四舍五入只保留两位小数
 	model.filter('rounding', function() {
 	    return function(input) {
@@ -15,7 +15,7 @@
 		  $locationProvider.html5Mode(true);
 	}]);
 	model.factory("TwodimenForm", ['Restangular', function(Restangular) {
-		 var twodimen=Restangular.all("service/stat/twodimenform/");
+		 var twodimen=Restangular.all("stat/stat/twodimenform/");
 		 return twodimen;
 	}]);
 	model.directive('statChart', function() {
@@ -99,7 +99,7 @@
 		            		 chartData.series[i]=scope._chartcols[chartData.series[i].index];
 		            	 }
 		            	 chartData.xaxis=scope._chartcols[chartData.xaxis.index];
-		            	 
+
 		            },false);
 	           }else if(scope.statchart.charttype=='pie'){
 	        	   scope.chartData={
@@ -112,7 +112,7 @@
 			        		var piedata=[];
 			        		var legenddata=[];
 			        		$.each(legend.data,function(idx){
-			        			
+
 			        			var num=series.data[idx];
 			        			if(num==null)
 			        				num=0;
@@ -125,7 +125,7 @@
 			        				   seriesdata[leg]+=num;
 			        			   }
 			        				}
-			        			   
+
 			        		});
 			        		$.each(seriesdata,function(idx){
 			        			legenddata.push(idx);
@@ -183,16 +183,16 @@
 			            	 var chartData=scope.chartData;
 			            	 chartData.series=scope._chartcols[chartData.series.index];
 			            	 chartData.legend=scope._chartcols[chartData.legend.index];
-			            	 
+
 			            },false);
-	        		
-	        		
-	        		
+
+
+
 	        	}
 	        }
 	    };
 	});
-	
+
 	model.directive('chartPanel', function() {
 	    return {
 	        restrict: 'E',
@@ -216,9 +216,9 @@
 	        }
 	    };
 	});
-	
+
 	model.controller('TwoDimenFormController',['$scope','TwodimenForm','$location',function($scope,TwodimenForm,$location){
-			
+
 			var initParam=function(){
 				$scope.queryName=$location.search().queryName;
 				$scope.queryformshow=false;
@@ -229,11 +229,11 @@
 				$scope.queryParams={};
 			}
 			initParam();
-			
+
 			$scope.showChart=function(){
 				$scope.showchart=!$scope.showchart;
 			}
-			
+
 			//重置分页
 			$scope.resetPage=function(){
 				$scope.page.totablRows=0;
@@ -243,7 +243,7 @@
 			}
 			//页面大小切换选项
 		    $scope.pageSizeChoose=[{key:10,value:10},{key:15,value:15},{key:20,value:20},{key:30,value:30},{key:50,value:50},{key:100,value:100},{key:500,value:500}];
-			
+
 			//搜索查询
 			$scope.queryByParam=function(){
 				//console.log($scope.page);
@@ -258,18 +258,18 @@
 					var columns=result.data.columns;
 					var formData=result.data.formData;
 					$scope.conditions=result.data.conditions;
-					
-					
+
+
 					for(var i=0;i<$scope.conditions.length;i++){
 						var cond=$scope.conditions[i];
 						if(cond.condValue)
 							$scope.queryParams[cond.condName]=cond.condValue+'';
 						//console.log($scope.queryParams);
 					}
-					
+
 					$scope.page.totalRows=result.data.totalRowsAll;
 	                $scope.page.totalPage= Math.ceil($scope.page.totalRows/$scope.page.pageSize);
-	                
+
 	                //交叉报表不显示搜索栏
 	                if($scope.data.modelType!=5){
 	                	$scope.queryformshow=true;
@@ -284,7 +284,7 @@
 		                	}
 		                	columnDatas.push({name:columns[i].colName,data:data,type:'line',index:columnDatas.length+''});
 	                	}
-	                	
+
 	                }
 	                $scope.showchart=false;
 	                $scope.columnDatas=columnDatas;
@@ -292,16 +292,16 @@
 				})
 			}
 			$scope.queryByParam();
-			
+
 			//导入excel里
 			$scope.exportToExcel=function(){
 			   //TODO:这边不知道除了用form还有没有什么更好的办法实现后台推送一个下载到页面接受
 			   var form = $("<form>");
-			   form.attr('action', "/product-stat/service/stat/twodimenform/excels");
+			   form.attr('action', "/product-stat/stat/stat/twodimenform/excels");
 			   form.attr('style', 'display:none');
 			   form.attr('target', '');
 			   form.attr('method', 'post');
-			   
+
 			   /*------------------所有参数 --------------------------*/
 			   var input=$("<input type=text />");
 			   input.attr("name","modelName");
@@ -324,30 +324,30 @@
 				   form.append(input);}
 			   }
 			   /*---------------------- --------------------------*/
-			   
+
 			   $('body').append(form);
 			   form.submit();
 			   form.empty();
 			   form.remove();
-			} 
-			
-			
+			}
+
+
 			//打印表格
 			$scope.printTable=function(){
 				var style="table{width:100%;font-family:verdana,arial,sans-serif;font-size:11px;color:#333;border-width:1px;border-color:#666;border-collapse:collapse;text-align:center}.tableHead{background-color:lightgrey}.tableTitle{text-align:center;font-size:x-large}table th{border-width:1px;padding:8px;border-style:solid;border-color:#666;background-color:#dedede}table td{border-width:1px;padding:8px;border-style:solid;border-color:#666;background-color:#fff}";
 	            var head="<html><head><style>"+style+"</style></style></head>";
 	            var tail="</body></html>"
-	            	
+
 	            var copyPrintObj=$("#normalTableBody").clone();
 	            var newWindow=window.open("","_blank");
 	            var images=copyPrintObj.find('img');
-	            
+
 	            //打印对象中图表的隐藏图片设为显示用以打印
 	            for(var i=0;i<images.length;i++){
 	            	if("chartimg"==images[i].className&& images[i].hidden)
 	            		images[i].hidden=false;
 	            }
-	            
+
 	            var docStr = head+copyPrintObj[0].innerHTML+tail;
 	            newWindow.document.write(docStr);
 	            newWindow.document.close();
@@ -355,5 +355,5 @@
 	            newWindow.close();
 	            return false;
 			}
-			
+
 	  	}]);

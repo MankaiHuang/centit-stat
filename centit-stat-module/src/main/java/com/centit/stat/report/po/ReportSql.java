@@ -1,6 +1,5 @@
 package com.centit.stat.report.po;
 
-import com.centit.stat.report.service.ReportService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

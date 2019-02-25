@@ -8,7 +8,7 @@
 		
 		// @override
 		this.submit = function(table, data) {
-			Core.ajax(Config.ContextPath+'service/stat/querymodel/'+data.modelName, {
+			Core.ajax(Config.ContextPath+'stat/stat/querymodel/'+data.modelName, {
             	type: 'json',
                 method: 'post',
                 data: {

@@ -70,7 +70,7 @@
 		 */
 		this.analyzeSql = function(sql) {
 			var vm = this;
-			Core.ajax(Config.ContextPath + 'service/stat/querymodel/colandcond', {
+			Core.ajax(Config.ContextPath + 'stat/stat/querymodel/colandcond', {
 				method: 'post',
 				data: {
 					sql: sql
@@ -193,7 +193,7 @@
 								_method: vm.mode == 'edit' ? 'PUT' : undefined
 							});
 
-							var url = Config.ContextPath + 'service/stat/querymodel';
+							var url = Config.ContextPath + 'stat/stat/querymodel';
 							if ('edit' == vm.mode) {
 								url += '/' + subobject.modelName;
 							}

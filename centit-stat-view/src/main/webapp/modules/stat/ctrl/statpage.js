@@ -11,7 +11,7 @@ define(function(require){
 		  			panel.find('table').cdatagrid({
 		  				// 必须要加此项!!
 		  				controller: this,
-		  				url:Config.ContextPath+'service/stat/formdata/'+data.modelName+"/"
+		  				url:Config.ContextPath+'stat/stat/formdata/'+data.modelName+"/"
 		  			}).datagrid({
 		  				columns:[[
 		  				        {field:'code',title:'Code',width:100},
