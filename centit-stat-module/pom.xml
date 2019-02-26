@@ -63,6 +63,13 @@
             <artifactId>centit-persistence-jdbc</artifactId>
         </dependency>
 
+        <!-- 添加一个通用的 GraphQL 查询服务 -->
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java</artifactId>
+            <version>2019-02-20T00-59-31-9356c3d</version>
+        </dependency>
+
         <!-- server runtime library -->
         <dependency>
             <groupId>com.sun</groupId>
