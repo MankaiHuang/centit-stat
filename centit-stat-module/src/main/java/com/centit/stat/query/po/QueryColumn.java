@@ -11,7 +11,7 @@ import com.centit.support.json.JSONOpt;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-//@Table(name = "Q_QUERY_COLUMN")
+@Table(name = "Q_QUERY_COLUMN")
 public class QueryColumn implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 

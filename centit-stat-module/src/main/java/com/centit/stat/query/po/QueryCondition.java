@@ -13,7 +13,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-//@Table(name = "Q_QUERY_CONDITION")
+@Table(name = "Q_QUERY_CONDITION")
 public class QueryCondition implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
