@@ -5,15 +5,12 @@
 	
 	// 删除数据字典
 	var QueryModelRemove = Page.extend(function() {
-		
+
 		// @override
 		this.submit = function(table, data) {
 			Core.ajax(Config.ContextPath+'stat/stat/querymodel/'+data.modelName, {
             	type: 'json',
-                method: 'post',
-                data: {
-                    _method: 'delete'
-                }
+                method:'delete'
 			}).then(function(){
 				table.datagrid('reload');
 			});
