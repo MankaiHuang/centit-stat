@@ -1,6 +1,5 @@
 package com.centit.stat.resource.controller;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
@@ -9,7 +8,6 @@ import com.centit.stat.resource.po.DataResource;
 import com.centit.stat.resource.po.DataResourceColumn;
 import com.centit.stat.resource.po.DataResourceParam;
 import com.centit.stat.resource.service.DataResourceService;
-import com.centit.support.data.core.DataSet;
 import com.centit.support.database.utils.PageDesc;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -129,12 +127,4 @@ public class ResourceController extends BaseController {
         dataResourceService.updateResourceColumn(column);
     }
 
-    /**
-     * 一个数据包的数据 用一个DataSet来包装
-     * @return
-     */
-    public DataSet queryData(){
-
-        return null;
-    }
-}
+  }
