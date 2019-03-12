@@ -26,6 +26,8 @@ public class WebInitializer implements WebApplicationInitializer {
         initializeSpringConfig(servletContext);
         initializeSystemSpringMvcConfig(servletContext);
         initializeSpringMvcConfig(servletContext);
+        initializeMetaSpringMvcConfig(servletContext);
+
         WebConfig.registerRequestContextListener(servletContext);
         WebConfig.registerSingleSignOutHttpSessionListener(servletContext);
         WebConfig.registerCharacterEncodingFilter(servletContext);
@@ -78,6 +80,14 @@ public class WebInitializer implements WebApplicationInitializer {
         stat.setAsyncSupported(true);
     }
 
+    private void initializeMetaSpringMvcConfig(ServletContext servletContext) {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(MetaSpringMvcConfig.class, SwaggerConfig.class);
+        ServletRegistration.Dynamic meta  = servletContext.addServlet("meta", new DispatcherServlet(context));
+        meta.addMapping("/meta/*");
+        meta.setLoadOnStartup(1);
+        meta.setAsyncSupported(true);
+    }
 
     /**
      * 访问 h2 console
