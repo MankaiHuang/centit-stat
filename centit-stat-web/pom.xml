@@ -13,7 +13,7 @@
     <packaging>war</packaging>
 
     <dependencies>
-        
+
         <dependency>
             <groupId>com.centit.framework</groupId>
             <artifactId>framework-session</artifactId>
@@ -34,13 +34,13 @@
         <dependency>
             <groupId>com.centit.product</groupId>
             <artifactId>centit-stat-module</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.centit.product</groupId>
             <artifactId>centit-stat-view</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

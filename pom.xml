@@ -71,7 +71,6 @@
     </scm>
 
     <modules>
-        <module>centit-report-utils</module>
         <module>centit-stat-module</module>
         <module>centit-stat-view</module>
         <module>centit-stat-web</module>

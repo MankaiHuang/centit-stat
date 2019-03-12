@@ -2,6 +2,7 @@ package com.centit.stat.resource.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.centit.support.database.metadata.SimpleTableField;
+import com.centit.support.database.utils.FieldType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -57,6 +58,6 @@ public class DataResourceColumn implements Serializable {
 
     @ApiModelProperty(value = "字段属性名")
     public String getPropertyName(){
-        return SimpleTableField.mapPropName(getColumnCode());
+        return FieldType.mapPropName(getColumnCode());
     }
 }
