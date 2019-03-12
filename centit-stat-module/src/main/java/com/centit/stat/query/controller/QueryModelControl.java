@@ -94,7 +94,7 @@ public class QueryModelControl extends BaseController {
      * @param response
      */
     //@ApiOperation(value = "修改模块")
-    @RequestMapping(value = "/{modelName}", method = {RequestMethod.PUT})
+    @RequestMapping(value = "/{modelName}", method = {RequestMethod.POST})
     public void update(@Valid QueryModel qm, @PathVariable String modelName, HttpServletRequest request, HttpServletResponse response) {
         QueryModel dbqm = queryModelMag.getObjectById(modelName);
         qm.setQuerySql(dealPlusAndAnd(qm.getQuerySql()));
