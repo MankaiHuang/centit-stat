@@ -3,7 +3,7 @@ package com.centit.stat.query.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.ip.service.IntegrationEnvironment;
-import com.centit.stat.query.dao.DBCPDao;
+import com.centit.stat.utils.DBCPDao;
 import com.centit.stat.query.dao.QueryColumnDao;
 import com.centit.stat.query.dao.QueryConditionDao;
 import com.centit.stat.query.dao.QueryModelDao;

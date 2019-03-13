@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.common.JsonResultUtils;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.support.database.utils.PageDesc;
-import com.centit.stat.query.dao.DBCPDao;
+import com.centit.stat.utils.DBCPDao;
 import com.centit.stat.query.po.QueryCondition;
 import com.centit.stat.query.po.html.table.CTableCell;
 import com.centit.stat.query.po.html.table.CTableLine;
