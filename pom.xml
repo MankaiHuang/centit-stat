@@ -74,6 +74,7 @@
         <module>centit-stat-module</module>
         <module>centit-stat-view</module>
         <module>centit-stat-web</module>
+        <module>centit-stat-client</module>
     </modules>
 
     <build>
