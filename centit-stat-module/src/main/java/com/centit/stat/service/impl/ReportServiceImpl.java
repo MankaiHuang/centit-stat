@@ -11,6 +11,7 @@ import com.centit.stat.po.ReportModel;
 import com.centit.stat.po.ReportSql;
 import com.centit.stat.service.ReportService;
 import com.centit.support.database.utils.DatabaseAccess;
+import com.centit.support.database.utils.PageDesc;
 import com.centit.support.metadata.utils.JdbcConnect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,27 @@ public class ReportServiceImpl implements ReportService {
     public void createReportModel(ReportModel model) {
         reportDao.saveNewObject(model);
         reportDao.saveObjectReferences(model);
+    }
+
+    @Override
+    public  List<ReportModel> listReport(Map<String, Object> param, PageDesc pageDesc) {
+        return reportDao.listObjectsByProperties(param,pageDesc);
+    }
+
+    @Override
+    public ReportModel getReport(String modelName) {
+        return reportDao.getObjectWithReferences(modelName);
+    }
+
+    @Override
+    public void updateReport(ReportModel model) {
+        reportDao.updateObject(model);
+        reportDao.saveObjectReferences(model);
+    }
+
+    @Override
+    public void deleteReport(String modelName) {
+        reportDao.deleteObjectById(modelName);
     }
 
     @Override
