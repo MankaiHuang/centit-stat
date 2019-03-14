@@ -5,13 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.common.ObjectException;
 import com.centit.framework.ip.po.DatabaseInfo;
 import com.centit.framework.ip.service.IntegrationEnvironment;
-import com.centit.stat.utils.DBCPDao;
 import com.centit.stat.dao.ReportDao;
 import com.centit.stat.dao.ReportSqlDao;
 import com.centit.stat.po.ReportModel;
 import com.centit.stat.po.ReportSql;
 import com.centit.stat.service.ReportService;
 import com.centit.support.database.utils.DatabaseAccess;
+import com.centit.support.metadata.utils.JdbcConnect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class ReportServiceImpl implements ReportService {
             DatabaseInfo databaseInfo = integrationEnvironment.getDatabaseInfo(databaseCode);
             Connection connection = null;
             try{
-                connection = DBCPDao.getConn(databaseInfo);
+                connection = JdbcConnect.getConn(databaseInfo);
                 String sql = reportSql.getQuerySql();
                 String propertyName = reportSql.getPropertyName();
                 String type = reportSql.getQueryType();//S: 只有一个值 V：向量只有一行 T 表格
