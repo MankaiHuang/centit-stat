@@ -1,5 +1,7 @@
 package com.centit.stat.po;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.centit.support.database.orm.GeneratorCondition;
 import com.centit.support.database.orm.GeneratorTime;
 import com.centit.support.database.orm.GeneratorType;
@@ -7,6 +9,7 @@ import com.centit.support.database.orm.ValueGenerator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -51,10 +54,11 @@ public class ChartModel implements Serializable {
     @NotBlank
     private String chartType;
 
-    @Column(name = "CHART_DESIGN")
+    @JSONField(serialize=false)
+    @Column(name = "CHART_DESIGN_JSON")
     @ApiModelProperty(value = "图表自定义属性 json格式的图表自定义说明", required = true)
     @NotBlank
-    private String chartDesign;
+    private String chartDesignJson;
 
     @Column(name = "RECORDER")
     @ApiModelProperty(value = "更改人员", hidden = true)
@@ -69,4 +73,12 @@ public class ChartModel implements Serializable {
     @JoinColumn(name = "chartId", referencedColumnName = "chartId")
     @ApiModelProperty(value = "图表选择的列")
     private List<ChartResourceColumn> columns;
+
+
+    public JSONObject getChartDesign(){
+        if(StringUtils.isBlank(chartDesignJson)){
+            return null;
+        }
+        return JSONObject.parseObject(chartDesignJson);
+    }
 }
