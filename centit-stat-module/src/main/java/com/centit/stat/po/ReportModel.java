@@ -71,10 +71,6 @@ public class ReportModel implements Serializable {
     @NotBlank
     private String dataOptDescJson;
 
-    @OneToMany(targetEntity = ReportSql.class)
-    @JoinColumn(name = "modelName", referencedColumnName = "modelName")
-    public List<ReportSql> reportSqls;
-
     public JSONObject getDataOptDesc() {
         if(StringUtils.isBlank(dataOptDescJson)) {
             return null;

@@ -89,11 +89,6 @@ public class ChartModel implements Serializable {
     @NotBlank
     private String dataOptDescJson;
 
-    @OneToMany(targetEntity = ChartResourceColumn.class)
-    @JoinColumn(name = "chartId", referencedColumnName = "chartId")
-    @ApiModelProperty(value = "图表选择的列")
-    private List<ChartResourceColumn> columns;
-
     public JSONObject getChartDesign() {
         if(StringUtils.isBlank(chartDesignJson)) {
             return null;

@@ -1,7 +1,6 @@
 package com.centit.stat.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.centit.stat.po.ChartModel;
 import com.centit.stat.po.ReportModel;
 import com.centit.support.database.utils.PageDesc;
 
