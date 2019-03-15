@@ -44,6 +44,10 @@ public class ChartModel implements Serializable {
     @NotBlank
     private String packetId;
 
+    @ApiModelProperty(value = "数据查询ID", hidden = true)
+    @Column(name = "QUERY_ID")
+    private String queryId;
+
     @Column(name = "DATA_SET_NAME")
     @ApiModelProperty(value = "数据集名", required = true)
     @NotBlank

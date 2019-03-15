@@ -8,7 +8,6 @@ import com.centit.framework.ip.service.IntegrationEnvironment;
 import com.centit.stat.dao.ReportDao;
 import com.centit.stat.dao.ReportSqlDao;
 import com.centit.stat.po.ReportModel;
-import com.centit.stat.po.ReportSql;
 import com.centit.stat.service.ReportService;
 import com.centit.support.database.utils.DatabaseAccess;
 import com.centit.support.database.utils.PageDesc;
