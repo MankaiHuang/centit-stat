@@ -14,10 +14,15 @@
     <packaging>jar</packaging>
 
     <dependencies>
-
         <dependency>
             <groupId>com.centit.product</groupId>
             <artifactId>data-packet-define</artifactId>
+            <version>${metadata.commons.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.centit.product</groupId>
+            <artifactId>data-business-operation</artifactId>
             <version>${metadata.commons.version}</version>
         </dependency>
 
@@ -44,12 +49,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.centit.support</groupId>
-            <artifactId>centit-report-utils</artifactId>
-            <version>${common.module.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.centit.framework</groupId>
             <artifactId>centit-ip-adapter</artifactId>
         </dependency>
@@ -67,13 +66,6 @@
         <dependency>
             <groupId>com.centit.framework</groupId>
             <artifactId>centit-persistence-jdbc</artifactId>
-        </dependency>
-
-        <!-- 添加一个通用的 GraphQL 查询服务 -->
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java</artifactId>
-            <version>2019-02-20T00-59-31-9356c3d</version>
         </dependency>
 
         <!-- server runtime library -->
