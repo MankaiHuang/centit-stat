@@ -1,26 +1,16 @@
 package com.centit.stat.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.centit.framework.common.ObjectException;
-import com.centit.framework.ip.po.DatabaseInfo;
 import com.centit.framework.ip.service.IntegrationEnvironment;
 import com.centit.stat.dao.ReportDao;
-import com.centit.stat.dao.ReportSqlDao;
 import com.centit.stat.po.ReportModel;
-import com.centit.stat.po.ReportSql;
 import com.centit.stat.service.ReportService;
-import com.centit.support.database.utils.DatabaseAccess;
-import com.centit.support.metadata.utils.JdbcConnect;
+import com.centit.support.database.utils.PageDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,9 +23,6 @@ public class ReportServiceImpl implements ReportService {
     private ReportDao reportDao;
 
     @Autowired
-    private ReportSqlDao reportSqlDao;
-
-    @Autowired
     private IntegrationEnvironment integrationEnvironment;
 
     @Override
@@ -45,6 +32,31 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    public  List<ReportModel> listReport(Map<String, Object> param, PageDesc pageDesc) {
+        return reportDao.listObjectsByProperties(param,pageDesc);
+    }
+
+    @Override
+    public ReportModel getReport(String modelName) {
+        return reportDao.getObjectWithReferences(modelName);
+    }
+
+    @Override
+    public void updateReport(ReportModel model) {
+        reportDao.updateObject(model);
+        reportDao.saveObjectReferences(model);
+    }
+
+    @Override
+    public void deleteReport(String modelName) {
+        reportDao.deleteObjectById(modelName);
+    }
+
+    @Override
+    public JSONObject queryData(String modelName) {
+        return  null;
+    }
+    /*@Override
     public JSONObject queryData(String modelName) {
         ReportModel model = reportDao.getObjectWithReferences(modelName);
         List<ReportSql> reportSqls = model.getReportSqls();
@@ -122,5 +134,5 @@ public class ReportServiceImpl implements ReportService {
             logger.error("查询数据出错", e);
         }
         return result;
-    }
+    }*/
 }

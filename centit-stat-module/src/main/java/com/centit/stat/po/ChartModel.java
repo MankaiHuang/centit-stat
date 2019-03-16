@@ -39,10 +39,19 @@ public class ChartModel implements Serializable {
     @ValueGenerator(strategy = GeneratorType.UUID)
     private String chartId;
 
-    @Column(name = "RESOURCE_ID")
+    @Column(name = "PACKET_ID")
     @ApiModelProperty(value = "包ID", required = true)
     @NotBlank
-    private String resourceId;
+    private String packetId;
+
+    @ApiModelProperty(value = "数据查询ID", hidden = true)
+    @Column(name = "QUERY_ID")
+    private String queryId;
+
+    @Column(name = "DATA_SET_NAME")
+    @ApiModelProperty(value = "数据集名", required = true)
+    @NotBlank
+    private String dataSetName;
 
     @Column(name = "CHART_NAME_FORMAT")
     @ApiModelProperty(value = "图表名称模板", required = true)
@@ -69,16 +78,28 @@ public class ChartModel implements Serializable {
     @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
     private Date recordDate;
 
-    @OneToMany(targetEntity = ChartResourceColumn.class)
-    @JoinColumn(name = "chartId", referencedColumnName = "chartId")
-    @ApiModelProperty(value = "图表选择的列")
-    private List<ChartResourceColumn> columns;
+    @Column(name = "HAS_DATA_OPT")
+    @ApiModelProperty(value = "是否有数据预处理", required = true)
+    @NotBlank
+    private String hasDataOpt;
 
+    @JSONField(serialize=false)
+    @Column(name = "DATA_OPT_DESC_JSON")
+    @ApiModelProperty(value = "数据预处理描述 json格式的数据预处理说明", required = true)
+    @NotBlank
+    private String dataOptDescJson;
 
-    public JSONObject getChartDesign(){
-        if(StringUtils.isBlank(chartDesignJson)){
+    public JSONObject getChartDesign() {
+        if(StringUtils.isBlank(chartDesignJson)) {
             return null;
         }
         return JSONObject.parseObject(chartDesignJson);
+    }
+
+    public JSONObject getDataOptDesc() {
+        if(StringUtils.isBlank(dataOptDescJson)) {
+            return null;
+        }
+        return JSONObject.parseObject(dataOptDescJson);
     }
 }

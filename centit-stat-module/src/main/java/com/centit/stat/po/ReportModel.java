@@ -1,12 +1,16 @@
 package com.centit.stat.po;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.List;
 
@@ -30,9 +34,14 @@ public class ReportModel implements Serializable {
     @Column(name = "MODEL_NAME")
     public String modelName;
 
+    @Column(name = "PACKET_ID")
+    @ApiModelProperty(value = "包ID", required = true)
+    @NotBlank
+    private String packetId;
+
     @ApiModelProperty(value = "格式报表名称模板")
-    @Column(name = "MODEL_TITLE_FORMAT")
-    public String modelTitleFormat;
+    @Column(name = "REPORT_TITLE_FORMAT")
+    public String reportTitleFormat;
 
     @Column(name = "OWNER_TYPE")
     @ApiModelProperty(value = "属主类别")
@@ -43,15 +52,29 @@ public class ReportModel implements Serializable {
     @ApiModelProperty(value = "属主代码")
     public String ownerCode;
 
-    @Column(name = "MODEL_DESC")
+    @Column(name = "REPROT_DESC")
     @ApiModelProperty(value = "报表文书描述")
-    public String modelDesc;
+    public String reportDesc;
 
     @Column(name = "REPORT_DOC_FILEID")
     @ApiModelProperty(value = "报表文书ID")
     public String reportDocFileId;
 
-    @OneToMany(targetEntity = ReportSql.class)
-    @JoinColumn(name = "modelName", referencedColumnName = "modelName")
-    public List<ReportSql> reportSqls;
+    @Column(name = "HAS_DATA_OPT")
+    @ApiModelProperty(value = "是否有数据预处理", required = true)
+    @NotBlank
+    private String hasDataOpt;
+
+    @JSONField(serialize=false)
+    @Column(name = "DATA_OPT_DESC_JSON")
+    @ApiModelProperty(value = "数据预处理描述 json格式的数据预处理说明", required = true)
+    @NotBlank
+    private String dataOptDescJson;
+
+    public JSONObject getDataOptDesc() {
+        if(StringUtils.isBlank(dataOptDescJson)) {
+            return null;
+        }
+        return JSONObject.parseObject(dataOptDescJson);
+    }
 }

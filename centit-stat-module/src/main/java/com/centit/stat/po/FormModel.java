@@ -1,11 +1,21 @@
 package com.centit.stat.po;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.centit.support.database.orm.GeneratorCondition;
+import com.centit.support.database.orm.GeneratorTime;
+import com.centit.support.database.orm.GeneratorType;
+import com.centit.support.database.orm.ValueGenerator;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,6 +30,7 @@ import java.util.Date;
 */
 @Data
 @Entity
+@ApiModel
 @Table(name = "Q_FORM_MODEL")
 public class FormModel implements Serializable {
 
@@ -27,20 +38,59 @@ public class FormModel implements Serializable {
 
     @Id
     @Column(name = "FORM_ID")
+    @ApiModelProperty(value = "报表ID", hidden = true)
+    @ValueGenerator(strategy = GeneratorType.UUID)
     private String formId;
 
-    @Column(name = "RESOURCE_ID")
-    private String resourceId;
+    @Column(name = "PACKET_ID")
+    @ApiModelProperty(value = "包ID", required = true)
+    @NotBlank
+    private String packetId;
+
+    @ApiModelProperty(value = "数据查询ID", hidden = true)
+    @Column(name = "QUERY_ID")
+    private String queryId;
+
+    @Column(name = "DATA_SET_NAME")
+    @ApiModelProperty(value = "数据集名", required = true)
+    @NotBlank
+    private String dataSetName;
 
     @Column(name = "FROM_NAME_FORMAT")
+    @ApiModelProperty(value = "报表名称模板", required = true)
+    @NotBlank
     private String formNameFormat;
 
     @Column(name = "FORM_TYPE")
+    @ApiModelProperty(value = "报表类型", required = true)
+    @NotBlank
     private String formType;
 
     @Column(name = "RECORDER")
+    @ApiModelProperty(value = "更改人员", hidden = true)
     private String recorder;
 
     @Column(name = "RECORDER_DATE")
+    @ApiModelProperty(value = "更改时间", hidden = true)
+    @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
     private Date recorderDate;
+
+    @Column(name = "HAS_DATA_OPT")
+    @ApiModelProperty(value = "是否有数据预处理", required = true)
+    @NotBlank
+    private String hasDataOpt;
+
+    @JSONField(serialize=false)
+    @Column(name = "DATA_OPT_DESC_JSON")
+    @ApiModelProperty(value = "数据预处理描述 json格式的数据预处理说明", required = true)
+    @NotBlank
+    private String dataOptDescJson;
+
+    public JSONObject getDataOptDesc() {
+        if(StringUtils.isBlank(dataOptDescJson)) {
+            return null;
+        }
+        return JSONObject.parseObject(dataOptDescJson);
+    }
+
 }
