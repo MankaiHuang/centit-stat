@@ -27,6 +27,7 @@ public class WebInitializer implements WebApplicationInitializer {
         initializeSystemSpringMvcConfig(servletContext);
         initializeSpringMvcConfig(servletContext);
         initializeMetaSpringMvcConfig(servletContext);
+        initializeDataPacketSpringMvcConfig(servletContext);
 
         WebConfig.registerRequestContextListener(servletContext);
         WebConfig.registerSingleSignOutHttpSessionListener(servletContext);
@@ -82,11 +83,20 @@ public class WebInitializer implements WebApplicationInitializer {
 
     private void initializeMetaSpringMvcConfig(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.register(MetaSpringMvcConfig.class, SwaggerConfig.class);
-        ServletRegistration.Dynamic meta  = servletContext.addServlet("meta", new DispatcherServlet(context));
-        meta.addMapping("/meta/*");
-        meta.setLoadOnStartup(1);
-        meta.setAsyncSupported(true);
+        context.register(MetaDataSpringMvcConfig.class, SwaggerConfig.class);
+        ServletRegistration.Dynamic metadata  = servletContext.addServlet("metadata", new DispatcherServlet(context));
+        metadata.addMapping("/metadata/*");
+        metadata.setLoadOnStartup(1);
+        metadata.setAsyncSupported(true);
+    }
+
+    private void initializeDataPacketSpringMvcConfig(ServletContext servletContext) {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(DataPacketSpringMvcConfig.class, SwaggerConfig.class);
+        ServletRegistration.Dynamic datapacket  = servletContext.addServlet("datapacket", new DispatcherServlet(context));
+        datapacket.addMapping("/datapacket/*");
+        datapacket.setLoadOnStartup(1);
+        datapacket.setAsyncSupported(true);
     }
 
     /**
