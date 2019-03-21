@@ -70,10 +70,10 @@ public class FormModel implements Serializable {
     @ApiModelProperty(value = "更改人员", hidden = true)
     private String recorder;
 
-    @Column(name = "RECORDER_DATE")
+    @Column(name = "RECORDDATE")
     @ApiModelProperty(value = "更改时间", hidden = true)
     @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
-    private Date recorderDate;
+    private Date recordDate;
 
     @Column(name = "HAS_DATA_OPT")
     @ApiModelProperty(value = "是否有数据预处理", required = true)
