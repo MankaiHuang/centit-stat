@@ -52,7 +52,7 @@ public class ReportModel implements Serializable {
     @ApiModelProperty(value = "属主代码")
     public String ownerCode;
 
-    @Column(name = "REPROT_DESC")
+    @Column(name = "REPORT_DESC")
     @ApiModelProperty(value = "报表文书描述")
     public String reportDesc;
 
