@@ -98,7 +98,7 @@ public class DataPacketOptCtroller extends BaseController {
         return sqlDSR.load(modelTag);
     }
 
-    @ApiOperation(value = "获取数据库查询数据")
+    @ApiOperation(value = "获取数据包数据并对数据进行业务处理")
     @ApiImplicitParams({@ApiImplicitParam(
         name = "queryId", value="数据查询ID",
         required=true, paramType = "path", dataType ="String"
