@@ -17,6 +17,8 @@ import com.centit.support.dataopt.core.BizModel;
 import com.centit.support.dataopt.core.SimpleDataSet;
 import com.centit.support.dataopt.dataset.SQLDataSetReader;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,12 @@ public class DataPacketOptCtroller extends BaseController {
     }
 
     @ApiOperation(value = "获取数据包数据")
+    @ApiImplicitParams({@ApiImplicitParam(
+        name = "packetId", value="数据包ID",
+        required=true, paramType = "path", dataType ="String"
+    ), @ApiImplicitParam(
+        name = "params", value="查询参数，map的json格式字符串"
+    )})
     @GetMapping(value = "/packet/{packetId}")
     @WrapUpResponseBody
     public BizModel fetchDataPacketData(@PathVariable String packetId, String params){
@@ -62,6 +70,12 @@ public class DataPacketOptCtroller extends BaseController {
     }
 
     @ApiOperation(value = "获取数据库查询数据")
+    @ApiImplicitParams({@ApiImplicitParam(
+        name = "queryId", value="数据查询ID",
+        required=true, paramType = "path", dataType ="String"
+    ), @ApiImplicitParam(
+        name = "params", value="查询参数，map的json格式字符串"
+    )})
     @GetMapping(value = "/dbquery/{queryId}")
     @WrapUpResponseBody
     public SimpleDataSet fetchDBQueryData(@PathVariable String queryId, String params){
@@ -85,6 +99,14 @@ public class DataPacketOptCtroller extends BaseController {
     }
 
     @ApiOperation(value = "获取数据库查询数据")
+    @ApiImplicitParams({@ApiImplicitParam(
+        name = "queryId", value="数据查询ID",
+        required=true, paramType = "path", dataType ="String"
+    ), @ApiImplicitParam(
+        name = "optsteps", value="数据操作，steps的json格式字符串，参见js代码中的说明"
+    ), @ApiImplicitParam(
+        name = "params", value="查询参数，map的json格式字符串"
+    )})
     @GetMapping(value = "/dataopts/{packetId}")
     @WrapUpResponseBody
     public BizModel fetchDataPacketDataWithOpt(@PathVariable String packetId, String optsteps, String params){
