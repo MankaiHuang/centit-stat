@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "chart")
+@RequestMapping(value = "data")
 @Api(value = "数据包数据获取接口", tags = "获取数据包中的数据")
 public class DataPacketOptCtroller extends BaseController {
 
