@@ -75,22 +75,16 @@ public class FormModel implements Serializable {
     @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
     private Date recordDate;
 
-    @Column(name = "HAS_DATA_OPT")
-    @ApiModelProperty(value = "是否有数据预处理", required = true)
-    @NotBlank
-    private String hasDataOpt;
-
     @JSONField(serialize=false)
-    @Column(name = "DATA_OPT_DESC_JSON")
-    @ApiModelProperty(value = "数据预处理描述 json格式的数据预处理说明", required = true)
-    @NotBlank
-    private String dataOptDescJson;
+    @Column(name = "FORM_DESIGN_JSON")
+    @ApiModelProperty(value = "图表自定义属性 json格式的图表自定义说明", required = true)
+    private String formDesignJson;
 
-    public JSONObject getDataOptDesc() {
-        if(StringUtils.isBlank(dataOptDescJson)) {
+
+    public JSONObject getFormDesign() {
+        if(StringUtils.isBlank(formDesignJson)) {
             return null;
         }
-        return JSONObject.parseObject(dataOptDescJson);
+        return JSONObject.parseObject(formDesignJson);
     }
-
 }

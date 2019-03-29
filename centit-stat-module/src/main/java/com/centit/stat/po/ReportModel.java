@@ -1,18 +1,17 @@
 package com.centit.stat.po;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Name	Code	Data Type	Length	Precision	Primary	Foreign Key	Mandatory
@@ -60,21 +59,4 @@ public class ReportModel implements Serializable {
     @ApiModelProperty(value = "报表文书ID")
     public String reportDocFileId;
 
-    @Column(name = "HAS_DATA_OPT")
-    @ApiModelProperty(value = "是否有数据预处理", required = true)
-    @NotBlank
-    private String hasDataOpt;
-
-    @JSONField(serialize=false)
-    @Column(name = "DATA_OPT_DESC_JSON")
-    @ApiModelProperty(value = "数据预处理描述 json格式的数据预处理说明", required = true)
-    @NotBlank
-    private String dataOptDescJson;
-
-    public JSONObject getDataOptDesc() {
-        if(StringUtils.isBlank(dataOptDescJson)) {
-            return null;
-        }
-        return JSONObject.parseObject(dataOptDescJson);
-    }
 }

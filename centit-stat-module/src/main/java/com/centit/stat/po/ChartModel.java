@@ -11,11 +11,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /*Name	Code	Comment	Data Type	Length	Precision	Primary	Foreign Key	Mandatory
 图表ID	chart_ID		VARCHAR2(64)	64		TRUE	FALSE	TRUE
@@ -66,7 +68,6 @@ public class ChartModel implements Serializable {
     @JSONField(serialize=false)
     @Column(name = "CHART_DESIGN_JSON")
     @ApiModelProperty(value = "图表自定义属性 json格式的图表自定义说明", required = true)
-    @NotBlank
     private String chartDesignJson;
 
     @Column(name = "RECORDER")
@@ -78,28 +79,10 @@ public class ChartModel implements Serializable {
     @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
     private Date recordDate;
 
-    @Column(name = "HAS_DATA_OPT")
-    @ApiModelProperty(value = "是否有数据预处理", required = true)
-    @NotBlank
-    private String hasDataOpt;
-
-    @JSONField(serialize=false)
-    @Column(name = "DATA_OPT_DESC_JSON")
-    @ApiModelProperty(value = "数据预处理描述 json格式的数据预处理说明", required = true)
-    @NotBlank
-    private String dataOptDescJson;
-
     public JSONObject getChartDesign() {
         if(StringUtils.isBlank(chartDesignJson)) {
             return null;
         }
         return JSONObject.parseObject(chartDesignJson);
-    }
-
-    public JSONObject getDataOptDesc() {
-        if(StringUtils.isBlank(dataOptDescJson)) {
-            return null;
-        }
-        return JSONObject.parseObject(dataOptDescJson);
     }
 }
