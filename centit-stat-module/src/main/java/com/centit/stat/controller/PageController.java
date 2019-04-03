@@ -33,7 +33,7 @@ public class PageController {
     @ApiImplicitParam(name = "pageCode", value = "页面代码")
     @PutMapping(value = "/{pageCode}")
     @WrapUpResponseBody
-    public void updatePage(@PathVariable String pageCode, PageModel pageModel){
+    public void updatePage(@PathVariable String pageCode, @RequestBody PageModel pageModel){
         pageModel.setPageCode(pageCode);
         pageService.updatePage(pageModel);
     }

@@ -33,7 +33,7 @@ public class ChartController {
     @ApiImplicitParam(name = "chartId", value = "图表ID")
     @PutMapping(value = "/{chartId}")
     @WrapUpResponseBody
-    public void updateChart(@PathVariable String chartId, ChartModel chartModel){
+    public void updateChart(@PathVariable String chartId, @RequestBody ChartModel chartModel){
         chartModel.setChartId(chartId);
         chartService.updateChart(chartModel);
     }

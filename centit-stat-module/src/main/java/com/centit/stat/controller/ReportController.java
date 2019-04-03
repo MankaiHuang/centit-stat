@@ -46,7 +46,7 @@ public class ReportController {
     @ApiImplicitParam(name = "modelName", value = "图表名称")
     @PutMapping(value = "/{modelName}")
     @WrapUpResponseBody
-    public void updateReport(@PathVariable String modelName, ReportModel reportModel){
+    public void updateReport(@PathVariable String modelName, @RequestBody ReportModel reportModel){
         reportModel.setModelName(modelName);
         reportService.updateReport(reportModel);
     }

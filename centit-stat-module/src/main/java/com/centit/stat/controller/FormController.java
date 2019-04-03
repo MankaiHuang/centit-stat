@@ -29,7 +29,7 @@ public class FormController extends BaseController {
     @ApiOperation(value = "编辑报表模块")
     @ApiImplicitParam(name = "formId", value = "报表模块ID")
     @WrapUpResponseBody
-    public void updateForm(@PathVariable String formId, FormModel formModel){
+    public void updateForm(@PathVariable String formId, @RequestBody FormModel formModel){
         formModel.setFormId(formId);
         formService.updateForm(formModel);
     }
