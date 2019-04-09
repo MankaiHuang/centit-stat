@@ -1,7 +1,7 @@
-package com.centit.stat.dao;
+package com.centit.pagedesign.dao;
 
 import com.centit.framework.jdbc.dao.BaseDaoImpl;
-import com.centit.stat.po.PageModel;
+import com.centit.pagedesign.po.PageModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;

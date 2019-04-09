@@ -1,6 +1,6 @@
-package com.centit.stat.service;
+package com.centit.pagedesign.service;
 
-import com.centit.stat.po.PageModel;
+import com.centit.pagedesign.po.PageModel;
 import com.centit.support.database.utils.PageDesc;
 
 import java.util.List;

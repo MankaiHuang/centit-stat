@@ -1,4 +1,4 @@
-package com.centit.stat.po;
+package com.centit.pagedesign.po;
 
 import com.alibaba.fastjson.JSONObject;
 import com.centit.support.database.orm.GeneratorCondition;

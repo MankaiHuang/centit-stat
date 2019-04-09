@@ -27,6 +27,7 @@ public class WebInitializer implements WebApplicationInitializer {
         initializeSystemSpringMvcConfig(servletContext);
         initializeSpringMvcConfig(servletContext);
         initializeMetaSpringMvcConfig(servletContext);
+        initializePageSpringMvcConfig(servletContext);
         initializeDataPacketSpringMvcConfig(servletContext);
 
         WebConfig.registerRequestContextListener(servletContext);
@@ -88,6 +89,15 @@ public class WebInitializer implements WebApplicationInitializer {
         metadata.addMapping("/metadata/*");
         metadata.setLoadOnStartup(1);
         metadata.setAsyncSupported(true);
+    }
+
+    private void initializePageSpringMvcConfig(ServletContext servletContext) {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(PageDesignSpringMvcConfig.class, SwaggerConfig.class);
+        ServletRegistration.Dynamic page  = servletContext.addServlet("page", new DispatcherServlet(context));
+        page.addMapping("/page/*");
+        page.setLoadOnStartup(1);
+        page.setAsyncSupported(true);
     }
 
     private void initializeDataPacketSpringMvcConfig(ServletContext servletContext) {

@@ -1,8 +1,8 @@
-package com.centit.stat.service.impl;
+package com.centit.pagedesign.service.impl;
 
-import com.centit.stat.dao.PageModelDao;
-import com.centit.stat.po.PageModel;
-import com.centit.stat.service.PageService;
+import com.centit.pagedesign.dao.PageModelDao;
+import com.centit.pagedesign.po.PageModel;
+import com.centit.pagedesign.service.PageService;
 import com.centit.support.database.utils.PageDesc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

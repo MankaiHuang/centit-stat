@@ -1,9 +1,9 @@
-package com.centit.stat.controller;
+package com.centit.pagedesign.controller;
 
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
-import com.centit.stat.po.PageModel;
-import com.centit.stat.service.PageService;
+import com.centit.pagedesign.po.PageModel;
+import com.centit.pagedesign.service.PageService;
 import com.centit.support.database.utils.PageDesc;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
