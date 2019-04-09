@@ -74,7 +74,7 @@ public class ChartModel implements Serializable {
     @ApiModelProperty(value = "更改人员", hidden = true)
     private String recorder;
 
-    @Column(name = "RECORDDATE")
+    @Column(name = "RECORD_DATE")
     @ApiModelProperty(value = "更改时间", hidden = true)
     @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
     private Date recordDate;

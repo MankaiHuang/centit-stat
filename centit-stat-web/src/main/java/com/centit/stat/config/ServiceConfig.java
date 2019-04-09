@@ -12,6 +12,9 @@ import com.centit.framework.security.model.CentitPasswordEncoder;
 import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * Created by codefan on 17-7-18.
@@ -28,9 +31,25 @@ public class ServiceConfig {
     @Value("${app.home:./}")
     private String appHome;
 
+    @Value("${redis.home:127.0.0.1}")
+    private String redisHost;
+
+    @Value("${redis.port:6379}")
+    private int redisPort;
+
     @Bean(name = "passwordEncoder")
     public CentitPasswordEncoder centitPasswordEncoder(){
         return new StandardPasswordEncoderImpl();
+    }
+
+    @Bean
+    public JedisPool jedisPool(){
+        JedisPoolConfig config = new JedisPoolConfig();
+        config.setMaxTotal(1024);
+        config.setMaxIdle(200);
+        config.setMaxWaitMillis(10000);
+        config.setTestOnBorrow(true);
+        return new JedisPool(config, redisHost, redisPort, 10000);
     }
 
     @Bean

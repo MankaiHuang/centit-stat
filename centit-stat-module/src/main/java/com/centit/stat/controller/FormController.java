@@ -1,7 +1,10 @@
 package com.centit.stat.controller;
 
+import com.centit.framework.common.ObjectException;
+import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
+import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.stat.po.FormModel;
 import com.centit.stat.service.FormService;
 import io.swagger.annotations.Api;
@@ -9,6 +12,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "form")
@@ -21,7 +26,12 @@ public class FormController extends BaseController {
     @PostMapping
     @ApiOperation(value = "新建报表模块")
     @WrapUpResponseBody
-    public void createForm(FormModel formModel){
+    public void createForm(FormModel formModel, HttpServletRequest request){
+        CentitUserDetails userDetails = WebOptUtils.getLoginUser(request);
+        if(userDetails == null){
+            throw new ObjectException("未登录");
+        }
+        formModel.setRecorder(userDetails.getUserCode());
         formService.createForm(formModel);
     }
 

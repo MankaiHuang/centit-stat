@@ -1,6 +1,7 @@
 package com.centit.pagedesign.po;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.centit.support.database.orm.GeneratorCondition;
 import com.centit.support.database.orm.GeneratorTime;
 import com.centit.support.database.orm.GeneratorType;
@@ -54,6 +55,7 @@ public class PageModel implements Serializable {
     @NotBlank
     private String pageType;
 
+    @JSONField(serialize=false)
     @Column(name = "PAGE_DESIGN_JSON")
     @ApiModelProperty(value = "页面模板", required = true)
     @NotBlank
