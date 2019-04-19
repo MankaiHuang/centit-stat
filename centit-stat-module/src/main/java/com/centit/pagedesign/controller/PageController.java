@@ -1,23 +1,29 @@
 package com.centit.pagedesign.controller;
 
+import com.centit.framework.common.ObjectException;
+import com.centit.framework.common.WebOptUtils;
+import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
+import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.pagedesign.po.PageModel;
 import com.centit.pagedesign.service.PageService;
 import com.centit.support.database.utils.PageDesc;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "page")
 @Api(value = "自定义页面", tags = "自定义页面")
-public class PageController {
+public class PageController extends BaseController {
 
     @Autowired
     private PageService pageService;
@@ -25,7 +31,13 @@ public class PageController {
     @ApiOperation(value = "新增页面")
     @PostMapping
     @WrapUpResponseBody
-    public void createPage(PageModel pageModel){
+    public void createPage(PageModel pageModel, HttpServletRequest request){
+        CentitUserDetails userDetails = WebOptUtils.getLoginUser(request);
+        if(userDetails == null){
+            throw new ObjectException("未登录");
+        }
+        pageModel.setRecorder(userDetails.getUserCode());
+        pageModel.setPageDesignJson(StringEscapeUtils.unescapeHtml4(pageModel.getPageDesignJson()));
         pageService.createPage(pageModel);
     }
 
@@ -35,6 +47,7 @@ public class PageController {
     @WrapUpResponseBody
     public void updatePage(@PathVariable String pageCode, @RequestBody PageModel pageModel){
         pageModel.setPageCode(pageCode);
+        pageModel.setPageDesignJson(StringEscapeUtils.unescapeHtml4(pageModel.getPageDesignJson()));
         pageService.updatePage(pageModel);
     }
 
