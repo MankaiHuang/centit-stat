@@ -12,6 +12,7 @@ import com.centit.support.database.utils.PageDesc;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,7 @@ public class ChartController extends BaseController {
             throw new ObjectException("未登录");
         }
         chartModel.setRecorder(userDetails.getUserCode());
+        chartModel.setChartDesignJson(StringEscapeUtils.unescapeHtml4(chartModel.getChartDesignJson()));
         chartService.createChartModel(chartModel);
     }
 
@@ -45,6 +47,7 @@ public class ChartController extends BaseController {
     @WrapUpResponseBody
     public void updateChart(@PathVariable String chartId, @RequestBody ChartModel chartModel){
         chartModel.setChartId(chartId);
+        chartModel.setChartDesignJson(StringEscapeUtils.unescapeHtml4(chartModel.getChartDesignJson()));
         chartService.updateChart(chartModel);
     }
 
