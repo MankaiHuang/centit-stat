@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.centit.framework</groupId>
-        <artifactId>framework-snapshot-dependencies</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <artifactId>framework-release-dependencies</artifactId>
+        <version>1.2.1901</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,6 +17,11 @@
     <packaging>pom</packaging>
     <description>统计报表服务，分两部分：一、根据sql语句生成统计结果，二、根据结果用各种图表展示数据。</description>
     <url>https://github.com/ndxt/centit-stat</url>
+
+    <properties>
+        <metadata.commons.version>1.0-SNAPSHOT</metadata.commons.version>
+        <common.module.version>1.0-SNAPSHOT</common.module.version>
+    </properties>
 
     <licenses>
         <license>
@@ -67,11 +72,10 @@
     </scm>
 
     <modules>
-        <module>centit-report-utils</module>
-
         <module>centit-stat-module</module>
         <module>centit-stat-view</module>
         <module>centit-stat-web</module>
+        <module>centit-stat-client</module>
     </modules>
 
     <build>
