@@ -21,8 +21,14 @@
         </dependency>
 
         <dependency>
+            <groupId>com.centit.support</groupId>
+            <artifactId>centit-report-utils</artifactId>
+            <version>${common.module.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.centit.product</groupId>
-            <artifactId>data-business-operation</artifactId>
+            <artifactId>business-operation-core</artifactId>
             <version>${metadata.commons.version}</version>
         </dependency>
 
