@@ -28,6 +28,12 @@
 
         <dependency>
             <groupId>com.centit.product</groupId>
+            <artifactId>database-design</artifactId>
+            <version>${metadata.commons.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.centit.product</groupId>
             <artifactId>database-metadata</artifactId>
             <version>${metadata.commons.version}</version>
         </dependency>
