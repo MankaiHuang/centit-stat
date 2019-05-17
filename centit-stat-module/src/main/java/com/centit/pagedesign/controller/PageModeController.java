@@ -7,7 +7,7 @@ import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.pagedesign.po.PageModel;
-import com.centit.pagedesign.service.PageService;
+import com.centit.pagedesign.service.PageModeService;
 import com.centit.support.database.utils.PageDesc;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,10 +23,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "page")
 @Api(value = "自定义页面", tags = "自定义页面")
-public class PageController extends BaseController {
+public class PageModeController extends BaseController {
 
     @Autowired
-    private PageService pageService;
+    private PageModeService pageService;
 
     @ApiOperation(value = "新增页面")
     @PostMapping
@@ -38,7 +38,7 @@ public class PageController extends BaseController {
         }
         pageModel.setRecorder(userDetails.getUserCode());
         pageModel.setPageDesignJson(StringEscapeUtils.unescapeHtml4(pageModel.getPageDesignJson()));
-        pageService.createPage(pageModel);
+        pageService.createPageMode(pageModel);
     }
 
     @ApiOperation(value = "修改页面")
@@ -48,7 +48,7 @@ public class PageController extends BaseController {
     public void updatePage(@PathVariable String pageCode, @RequestBody PageModel pageModel){
         pageModel.setPageCode(pageCode);
         pageModel.setPageDesignJson(StringEscapeUtils.unescapeHtml4(pageModel.getPageDesignJson()));
-        pageService.updatePage(pageModel);
+        pageService.updatePageMode(pageModel);
     }
 
     @ApiOperation(value = "删除页面")
@@ -56,14 +56,14 @@ public class PageController extends BaseController {
     @DeleteMapping(value = "/{pageCode}")
     @WrapUpResponseBody
     public void deletePage(@PathVariable String pageCode){
-        pageService.deletePage(pageCode);
+        pageService.deletePageMode(pageCode);
     }
 
     @ApiOperation(value = "查询页面")
     @GetMapping
     @WrapUpResponseBody
     public PageQueryResult<PageModel> listPage(PageDesc pageDesc){
-        List<PageModel> list = pageService.listPage(new HashMap<String, Object>(), pageDesc);
+        List<PageModel> list = pageService.listPageMode(new HashMap<>(), pageDesc);
         return PageQueryResult.createResult(list, pageDesc);
     }
 
@@ -71,7 +71,7 @@ public class PageController extends BaseController {
     @GetMapping(value = "/{pageCode}")
     @WrapUpResponseBody
     public PageModel getPage(@PathVariable String pageCode){
-        PageModel page = pageService.getPage(pageCode);
+        PageModel page = pageService.getPageMode(pageCode);
         return page;
     }
 }

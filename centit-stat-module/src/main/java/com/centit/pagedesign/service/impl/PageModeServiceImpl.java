@@ -2,7 +2,7 @@ package com.centit.pagedesign.service.impl;
 
 import com.centit.pagedesign.dao.PageModelDao;
 import com.centit.pagedesign.po.PageModel;
-import com.centit.pagedesign.service.PageService;
+import com.centit.pagedesign.service.PageModeService;
 import com.centit.support.database.utils.PageDesc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,33 +13,33 @@ import java.util.Map;
 
 @Service
 @Transactional
-public class PageServiceImpl implements PageService {
+public class PageModeServiceImpl implements PageModeService {
 
     @Autowired
     private PageModelDao pageModelDao;
 
     @Override
-    public void createPage(PageModel pageModel) {
+    public void createPageMode(PageModel pageModel) {
         pageModelDao.saveNewObject(pageModel);
     }
 
     @Override
-    public List<PageModel> listPage(Map<String, Object> param, PageDesc pageDesc) {
+    public List<PageModel> listPageMode(Map<String, Object> param, PageDesc pageDesc) {
         return pageModelDao.listObjectsByProperties(param, pageDesc);
     }
 
     @Override
-    public PageModel getPage(String pageCode) {
+    public PageModel getPageMode(String pageCode) {
         return pageModelDao.getObjectWithReferences(pageCode);
     }
 
     @Override
-    public void deletePage(String pageCode) {
+    public void deletePageMode(String pageCode) {
         pageModelDao.deleteObjectById(pageCode);
     }
 
     @Override
-    public void updatePage(PageModel pageModel) {
+    public void updatePageMode(PageModel pageModel) {
         pageModelDao.updateObject(pageModel);
     }
 }

@@ -41,7 +41,7 @@ public class PageModel implements Serializable {
     @ValueGenerator(strategy = GeneratorType.UUID)
     private String pageCode;
 
-    @Column(name = "PAGE_Name")
+    @Column(name = "PAGE_NAME")
     @ApiModelProperty(value = "页面名称", required = true)
     @NotBlank
     private String pageName;
