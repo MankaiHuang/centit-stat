@@ -60,6 +60,13 @@ public class ChartModel implements Serializable {
     @NotBlank
     private String chartNameFormat;
 
+    // C chart F form R report  default:C
+    @Column(name = "CHART_CATALOG")
+    @ApiModelProperty(value = "图表类型", required = true)
+    @NotBlank
+    private String chartCatalog;
+
+
     @Column(name = "CHART_TYPE")
     @ApiModelProperty(value = "图表类型", required = true)
     @NotBlank
@@ -69,6 +76,13 @@ public class ChartModel implements Serializable {
     @Column(name = "CHART_DESIGN_JSON")
     @ApiModelProperty(value = "图表自定义属性 json格式的图表自定义说明", required = true)
     private String chartDesignJson;
+
+    /**
+     * report 模板文件id
+     */
+    @Column(name = "REPORT_DOC_FILEID")
+    @ApiModelProperty(value = "报表文书ID")
+    public String reportDocFileId;
 
     @Column(name = "RECORDER")
     @ApiModelProperty(value = "更改人员", hidden = true)
