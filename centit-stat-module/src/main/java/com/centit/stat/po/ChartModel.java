@@ -62,7 +62,7 @@ public class ChartModel implements Serializable {
 
     // C chart F form R report  default:C
     @Column(name = "CHART_CATALOG")
-    @ApiModelProperty(value = "图表类型", required = true)
+    @ApiModelProperty(value = "统计类型 C：图表；F：报表；R：文书", required = true)
     @NotBlank
     private String chartCatalog;
 

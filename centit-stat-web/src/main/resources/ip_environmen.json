@@ -29,12 +29,13 @@
             "created": "u0000000"
         },
         {
-            "databaseCode": "0000001316",
+            "databaseCode": "0000000124",
             "osId": "CONTRACT",
-            "databaseName": "经营数据管理数据库",
+            "databaseName": "公司经营数据管理/bizdata",
             "databaseUrl": "jdbc:mysql://192.168.137.95/bizdata?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=UTC",
             "username": "bizdata",
-            "password": "zbL/mjeJY/kAhH/Wu8QMEQ==",
+            //"password": "zbL/mjeJY/kAhH/Wu8QMEQ==",
+            "password": "cipher:pzS0Vd7iuzB2C+pdhEjVzw==1111",
             "databaseDesc": "经营数据管理数据库",
             "created": "u0000000"
         },
@@ -44,7 +45,8 @@
             "databaseName": "组织机构数据库",
             "databaseUrl": "jdbc:mysql://192.168.128.32/frameworkdb?useUnicode=true&characterEncoding=utf-8",
             "username": "framework",
-            "password": "FxV/BjjWFkrKFar10wIU6Q==",
+            "password": "cipher:FxV/BjjWFkrKFar10wIU6Q==",
+            //"password": "FxV/BjjWFkrKFar10wIU6Q==",
             "databaseDesc": "MySQL测试库",
             "created": "u0000000"
         },
