@@ -28,6 +28,9 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 public class ServiceConfig {
 
+    @Value("${datapacket.buff.enabled:true}")
+    private boolean dataBuffEnable;
+
     @Value("${app.home:./}")
     private String appHome;
 
@@ -44,6 +47,9 @@ public class ServiceConfig {
 
     @Bean
     public JedisPool jedisPool(){
+        if(!dataBuffEnable){
+            return null;
+        }
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(1024);
         config.setMaxIdle(200);
