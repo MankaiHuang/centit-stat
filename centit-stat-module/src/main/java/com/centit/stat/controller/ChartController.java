@@ -5,7 +5,6 @@ import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
-import com.centit.framework.security.model.CentitUserDetails;
 import com.centit.product.dataopt.core.BizModel;
 import com.centit.product.datapacket.service.DataPacketService;
 import com.centit.stat.po.ChartModel;
@@ -21,6 +20,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,11 +49,11 @@ public class ChartController extends BaseController {
     @PostMapping
     @WrapUpResponseBody
     public void createChart(ChartModel chartModel, HttpServletRequest request){
-        CentitUserDetails userDetails = WebOptUtils.getLoginUser(request);
-        if(userDetails == null){
+        String userCode = WebOptUtils.getCurrentUserCode(request);
+        if(StringUtils.isBlank(userCode)){
             throw new ObjectException("未登录");
         }
-        chartModel.setRecorder(userDetails.getUserCode());
+        chartModel.setRecorder(userCode);
         chartModel.setChartDesignJson(StringEscapeUtils.unescapeHtml4(chartModel.getChartDesignJson()));
         chartService.createChartModel(chartModel);
     }
