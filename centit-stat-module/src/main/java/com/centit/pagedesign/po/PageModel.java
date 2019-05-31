@@ -74,6 +74,11 @@ public class PageModel implements Serializable {
         if(StringUtils.isBlank(pageDesignJson)) {
             return null;
         }
-        return JSONObject.parseObject(pageDesignJson);
+        try {
+            return JSONObject.parseObject(pageDesignJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  null;
+        }
     }
 }

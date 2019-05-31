@@ -97,6 +97,11 @@ public class ChartModel implements Serializable {
         if(StringUtils.isBlank(chartDesignJson)) {
             return null;
         }
-        return JSONObject.parseObject(chartDesignJson);
+        try {
+            return JSONObject.parseObject(chartDesignJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  null;
+        }
     }
 }
