@@ -34,7 +34,7 @@ public class ServiceConfig {
     @Value("${app.home:./}")
     private String appHome;
 
-    @Value("${redis.home:127.0.0.1}")
+    @Value("${redis.home:192.168.134.9}")
     private String redisHost;
 
     @Value("${redis.port:6379}")
