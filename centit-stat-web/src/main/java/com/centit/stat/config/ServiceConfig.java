@@ -28,7 +28,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 public class ServiceConfig {
 
-    @Value("${datapacket.buff.enabled:true}")
+    @Value("${datapacket.buff.enabled:false}")
     private boolean dataBuffEnable;
 
     @Value("${app.home:./}")
