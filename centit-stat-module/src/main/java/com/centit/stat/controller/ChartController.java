@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,8 +78,9 @@ public class ChartController extends BaseController {
     @ApiOperation(value = "查询图表模块")
     @GetMapping
     @WrapUpResponseBody
-    public PageQueryResult<ChartModel> listChart(PageDesc pageDesc){
-        List<ChartModel> list = chartService.listChart(new HashMap<>(), pageDesc);
+    public PageQueryResult<ChartModel> listChart(HttpServletRequest request,PageDesc pageDesc){
+        Map<String, Object> searchColumn = collectRequestParameters(request);
+        List<ChartModel> list = chartService.listChart(searchColumn, pageDesc);
         return PageQueryResult.createResult(list, pageDesc);
     }
 
