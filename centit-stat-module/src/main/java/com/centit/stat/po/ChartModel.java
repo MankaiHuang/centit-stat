@@ -92,7 +92,9 @@ public class ChartModel implements Serializable {
     @ApiModelProperty(value = "更改时间", hidden = true)
     @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
     private Date recordDate;
-
+    @ApiModelProperty(value = "业务模块代码")
+    @Column(name = "APPLICATION_ID")
+    private String  applicationId;
     public JSONObject getChartDesign() {
         if(StringUtils.isBlank(chartDesignJson)) {
             return null;

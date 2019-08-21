@@ -69,7 +69,9 @@ public class PageModel implements Serializable {
     @ApiModelProperty(value = "更改时间", hidden = true)
     @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
     private Date lastModifyDate;
-
+    @ApiModelProperty(value = "业务模块代码")
+    @Column(name = "APPLICATION_ID")
+    private String  applicationId;
     public JSONObject getPageDesign() {
         if(StringUtils.isBlank(pageDesignJson)) {
             return null;
