@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "page")
@@ -62,8 +62,9 @@ public class PageModeController extends BaseController {
     @ApiOperation(value = "查询页面")
     @GetMapping
     @WrapUpResponseBody
-    public PageQueryResult<PageModel> listPage(PageDesc pageDesc){
-        List<PageModel> list = pageService.listPageMode(new HashMap<>(), pageDesc);
+    public PageQueryResult<PageModel> listPage(HttpServletRequest request,PageDesc pageDesc){
+        Map<String, Object> searchColumn = collectRequestParameters(request);
+        List<PageModel> list = pageService.listPageMode(searchColumn, pageDesc);
         return PageQueryResult.createResult(list, pageDesc);
     }
 
