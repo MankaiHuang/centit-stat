@@ -31,13 +31,15 @@ public class WebInitializer implements WebApplicationInitializer {
         initializeDataPacketSpringMvcConfig(servletContext);
         initializeDbDesignSpringMvcConfig(servletContext);
 
+        String [] servletUrlPatterns = {"/system/*","/metadata/*","/datapacket/*","/stat/*","/page/*","/dbdesign/*"};
+
         WebConfig.registerRequestContextListener(servletContext);
         WebConfig.registerSingleSignOutHttpSessionListener(servletContext);
-        WebConfig.registerCharacterEncodingFilter(servletContext);
-        WebConfig.registerHttpPutFormContentFilter(servletContext);
-        WebConfig.registerHiddenHttpMethodFilter(servletContext);
+        WebConfig.registerCharacterEncodingFilter(servletContext, servletUrlPatterns);
+        WebConfig.registerHttpPutFormContentFilter(servletContext, servletUrlPatterns);
+        WebConfig.registerHiddenHttpMethodFilter(servletContext, servletUrlPatterns);
         WebConfig.registerRequestThreadLocalFilter(servletContext);
-        WebConfig.registerSpringSecurityFilter(servletContext);
+        WebConfig.registerSpringSecurityFilter(servletContext, servletUrlPatterns);
 
         Properties properties = PropertiesReader.getClassPathProperties("/system.properties");
         String jdbcUrl = properties.getProperty("jdbc.url");
