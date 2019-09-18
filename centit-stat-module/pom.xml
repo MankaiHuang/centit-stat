@@ -34,7 +34,7 @@
 
         <dependency>
             <groupId>com.centit.product</groupId>
-            <artifactId>database-design</artifactId>
+            <artifactId>database-metadata</artifactId>
             <version>${metadata.commons.version}</version>
         </dependency>
 

@@ -26,12 +26,12 @@ public class WebInitializer implements WebApplicationInitializer {
         initializeSpringConfig(servletContext);
         initializeSystemSpringMvcConfig(servletContext);
         initializeSpringMvcConfig(servletContext);
-        initializeMetaSpringMvcConfig(servletContext);
+        //initializeMetaSpringMvcConfig(servletContext);
         initializePageSpringMvcConfig(servletContext);
         initializeDataPacketSpringMvcConfig(servletContext);
-        initializeDbDesignSpringMvcConfig(servletContext);
+        //initializeDbDesignSpringMvcConfig(servletContext);
 
-        String [] servletUrlPatterns = {"/system/*","/metadata/*","/datapacket/*","/stat/*","/page/*","/dbdesign/*"};
+        String [] servletUrlPatterns = {"/system/*","/datapacket/*","/stat/*","/page/*"};
 
         WebConfig.registerRequestContextListener(servletContext);
         WebConfig.registerSingleSignOutHttpSessionListener(servletContext);
@@ -85,14 +85,14 @@ public class WebInitializer implements WebApplicationInitializer {
         stat.setAsyncSupported(true);
     }
 
-    private void initializeMetaSpringMvcConfig(ServletContext servletContext) {
+    /*private void initializeMetaSpringMvcConfig(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.register(MetaDataSpringMvcConfig.class, SwaggerConfig.class);
         ServletRegistration.Dynamic metadata  = servletContext.addServlet("metadata", new DispatcherServlet(context));
         metadata.addMapping("/metadata/*");
         metadata.setLoadOnStartup(1);
         metadata.setAsyncSupported(true);
-    }
+    }*/
 
     private void initializePageSpringMvcConfig(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
@@ -112,14 +112,14 @@ public class WebInitializer implements WebApplicationInitializer {
         datapacket.setAsyncSupported(true);
     }
 
-    private void initializeDbDesignSpringMvcConfig(ServletContext servletContext) {
+    /*private void initializeDbDesignSpringMvcConfig(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.register(DataBaseDesignSpringMvcConfig.class, SwaggerConfig.class);
         ServletRegistration.Dynamic metadata  = servletContext.addServlet("dbdesign", new DispatcherServlet(context));
         metadata.addMapping("/dbdesign/*");
         metadata.setLoadOnStartup(1);
         metadata.setAsyncSupported(true);
-    }
+    }*/
     /**
      * 访问 h2 console
      * @param servletContext ServletContext
