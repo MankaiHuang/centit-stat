@@ -34,7 +34,7 @@ public class PageModeController extends BaseController {
     public void createPage(PageModel pageModel, HttpServletRequest request){
         String userCode = WebOptUtils.getCurrentUserCode(request);
         if(StringUtils.isBlank(userCode)){
-            throw new ObjectException("未登录");
+            userCode="";
         }
         pageModel.setRecorder(userCode);
         pageModel.setPageDesignJson(StringEscapeUtils.unescapeHtml4(pageModel.getPageDesignJson()));
