@@ -1,6 +1,6 @@
 package com.centit.pagedesign.controller;
 
-import com.centit.framework.common.ObjectException;
+import com.centit.support.common.ObjectException;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
@@ -34,7 +34,7 @@ public class PageModeController extends BaseController {
     public void createPage(PageModel pageModel, HttpServletRequest request){
         String userCode = WebOptUtils.getCurrentUserCode(request);
         if(StringUtils.isBlank(userCode)){
-            throw new ObjectException("未登录");
+            userCode="";
         }
         pageModel.setRecorder(userCode);
         pageModel.setPageDesignJson(StringEscapeUtils.unescapeHtml4(pageModel.getPageDesignJson()));

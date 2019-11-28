@@ -1,6 +1,6 @@
 package com.centit.stat.controller;
 
-import com.centit.framework.common.ObjectException;
+import com.centit.support.common.ObjectException;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
@@ -53,7 +53,7 @@ public class ChartController extends BaseController {
     public void createChart(ChartModel chartModel, HttpServletRequest request){
         String userCode = WebOptUtils.getCurrentUserCode(request);
         if(StringUtils.isBlank(userCode)){
-            throw new ObjectException("未登录");
+            userCode="";
         }
         chartModel.setRecorder(userCode);
         chartModel.setChartDesignJson(StringEscapeUtils.unescapeHtml4(chartModel.getChartDesignJson()));
