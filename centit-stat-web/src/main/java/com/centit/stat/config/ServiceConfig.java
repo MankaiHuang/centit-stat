@@ -1,5 +1,6 @@
 package com.centit.stat.config;
 
+import com.centit.framework.common.SysParametersUtils;
 import com.centit.framework.components.impl.NotificationCenterImpl;
 import com.centit.framework.components.impl.TextOperationLogWriterImpl;
 import com.centit.framework.config.SpringSecurityCasConfig;
@@ -10,6 +11,7 @@ import com.centit.framework.model.adapter.NotificationCenter;
 import com.centit.framework.model.adapter.OperationLogWriter;
 import com.centit.framework.security.model.CentitPasswordEncoder;
 import com.centit.framework.security.model.StandardPasswordEncoderImpl;
+import com.centit.product.dataopt.dataset.FileDataSet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import redis.clients.jedis.Jedis;
@@ -39,6 +41,8 @@ public class ServiceConfig {
 
     @Value("${redis.port:6379}")
     private int redisPort;
+    @Value("${fileserver.url}")
+    private String fileserver;
 
     @Bean(name = "passwordEncoder")
     public CentitPasswordEncoder centitPasswordEncoder(){
@@ -78,6 +82,10 @@ public class ServiceConfig {
     @Bean
     public InstantiationServiceBeanPostProcessor instantiationServiceBeanPostProcessor() {
         return new InstantiationServiceBeanPostProcessor();
+    }
+    @Bean
+    public void fileInit(){
+        FileDataSet.init(fileserver);
     }
 }
 
