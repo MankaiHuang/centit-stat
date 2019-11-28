@@ -33,10 +33,10 @@ import java.util.List;
 public class ReportModel implements Serializable {
 
     @Id
-    @Column(name = "CHART_ID")
+    @Column(name = "REPORT_ID")
     @ApiModelProperty(value = "图表ID", hidden = true)
     @ValueGenerator(strategy = GeneratorType.UUID)
-    private String chartId;
+    private String reportId;
 
     @Column(name = "PACKET_ID")
     @ApiModelProperty(value = "包ID", required = true)
