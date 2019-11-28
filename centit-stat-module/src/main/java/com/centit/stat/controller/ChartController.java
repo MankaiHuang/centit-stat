@@ -9,7 +9,9 @@ import com.centit.product.dataopt.core.BizModel;
 import com.centit.product.datapacket.service.DataPacketService;
 import com.centit.stat.po.ChartModel;
 import com.centit.stat.service.ChartService;
+import com.centit.support.compiler.Pretreatment;
 import com.centit.support.database.utils.PageDesc;
+import com.centit.support.file.FileType;
 import com.centit.support.report.JsonDocxContext;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import fr.opensagres.xdocreport.document.IXDocReport;
@@ -30,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -114,15 +117,15 @@ public class ChartController extends BaseController {
             // 2) Create Java model context
             IContext context = new JsonDocxContext(dataModel);
             // 生成新的文件 到响应流
+            String fileName = URLEncoder.encode(
+                Pretreatment.mapTemplateString(chart.getChartNameFormat(),params), "UTF-8") + ".docx";
             response.reset();
-            response.setContentType("application/x-msdownload");
-            response.setHeader("Content-Disposition", "attachment; filename=report.docx");
+            response.setContentType(FileType.mapExtNameToMimeType("docx"));
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName);
             report.process(context, response.getOutputStream());
             //XDocReportRegistry.getRegistry().unregisterReport(report);
-        } catch (IOException e) {
+        } catch (IOException | XDocReportException e) {
             e.printStackTrace();
-        } catch (XDocReportException e) {
-            //
         }
     }
 }
