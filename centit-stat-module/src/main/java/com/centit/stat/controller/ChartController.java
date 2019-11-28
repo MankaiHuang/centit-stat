@@ -1,39 +1,21 @@
 package com.centit.stat.controller;
 
-import com.centit.framework.common.ResponseData;
-import com.centit.support.common.ObjectException;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
-import com.centit.product.dataopt.core.BizModel;
-import com.centit.product.datapacket.service.DataPacketService;
 import com.centit.stat.po.ChartModel;
 import com.centit.stat.service.ChartService;
-import com.centit.support.compiler.Pretreatment;
 import com.centit.support.database.utils.PageDesc;
-import com.centit.support.file.FileType;
-import com.centit.support.report.JsonDocxContext;
-import fr.opensagres.xdocreport.core.XDocReportException;
-import fr.opensagres.xdocreport.document.IXDocReport;
-import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
-import fr.opensagres.xdocreport.template.IContext;
-import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -44,9 +26,6 @@ public class ChartController extends BaseController {
 
     @Autowired
     private ChartService chartService;
-
-    @Autowired
-    private DataPacketService dataPacketService;
 
     @ApiOperation(value = "新增图表模块")
     @PostMapping
@@ -96,37 +75,4 @@ public class ChartController extends BaseController {
         return chart;
     }
 
-    @ApiOperation(value = "报表文书数据")
-    @GetMapping(value = "/data/{chartId}")
-    @WrapUpResponseBody()
-    public BizModel reportData(@PathVariable String chartId, HttpServletRequest request){
-        Map<String, Object> params = BaseController.collectRequestParameters(request);
-        ChartModel chart = chartService.getChart(chartId);
-        return dataPacketService.fetchDataPacketData(chart.getPacketId(), params);
-    }
-
-    @ApiOperation(value = "下载报表文书")
-    @GetMapping(value = "/download/{chartId}")
-    public void downLoadReport(@PathVariable String chartId, HttpServletRequest request, HttpServletResponse response){
-        Map<String, Object> params = BaseController.collectRequestParameters(request);
-        ChartModel chart = chartService.getChart(chartId);
-        BizModel dataModel = dataPacketService.fetchDataPacketData(chart.getPacketId(), params);
-
-        try (InputStream in = new FileInputStream(new File(this.getClass().getClassLoader().getResource("report/report.docx").getPath()))) {
-            // 1) Load ODT file and set Velocity template engine and cache it to the registry
-            IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
-            // 2) Create Java model context
-            IContext context = new JsonDocxContext(dataModel.getBizData());
-            // 生成新的文件 到响应流
-            String fileName = URLEncoder.encode(
-                Pretreatment.mapTemplateString(chart.getChartNameFormat(),params), "UTF-8") + ".docx";
-            response.reset();
-            response.setContentType(FileType.mapExtNameToMimeType("docx"));
-            response.setHeader("Content-disposition", "attachment; filename=" + fileName);
-            report.process(context, response.getOutputStream());
-            //XDocReportRegistry.getRegistry().unregisterReport(report);
-        } catch (IOException | XDocReportException e) {
-            throw new ObjectException(ResponseData.ERROR_PROCESS_FAILED, e.getMessage());
-        }
-    }
 }

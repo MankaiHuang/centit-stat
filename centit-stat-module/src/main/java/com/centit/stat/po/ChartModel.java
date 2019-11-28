@@ -76,13 +76,6 @@ public class ChartModel implements Serializable {
     @ApiModelProperty(value = "图表自定义属性 json格式的图表自定义说明", required = true)
     private String chartDesignJson;
 
-    /**
-     * report 模板文件id
-     */
-    @Column(name = "REPORT_DOC_FILEID")
-    @ApiModelProperty(value = "报表文书ID")
-    public String reportDocFileId;
-
     @Column(name = "RECORDER")
     @ApiModelProperty(value = "更改人员", hidden = true)
     private String recorder;
@@ -91,9 +84,11 @@ public class ChartModel implements Serializable {
     @ApiModelProperty(value = "更改时间", hidden = true)
     @ValueGenerator(strategy = GeneratorType.FUNCTION, occasion = GeneratorTime.NEW_UPDATE, condition = GeneratorCondition.ALWAYS, value = "today()")
     private Date recordDate;
+
     @ApiModelProperty(value = "业务模块代码")
     @Column(name = "APPLICATION_ID")
     private String  applicationId;
+
     public JSONObject getChartDesign() {
         if(StringUtils.isBlank(chartDesignJson)) {
             return null;
