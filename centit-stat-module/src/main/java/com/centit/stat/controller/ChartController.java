@@ -1,5 +1,6 @@
 package com.centit.stat.controller;
 
+import com.centit.framework.common.ResponseData;
 import com.centit.support.common.ObjectException;
 import com.centit.framework.common.WebOptUtils;
 import com.centit.framework.core.controller.BaseController;
@@ -115,7 +116,7 @@ public class ChartController extends BaseController {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
             // 2) Create Java model context
-            IContext context = new JsonDocxContext(dataModel);
+            IContext context = new JsonDocxContext(dataModel.getBizData());
             // 生成新的文件 到响应流
             String fileName = URLEncoder.encode(
                 Pretreatment.mapTemplateString(chart.getChartNameFormat(),params), "UTF-8") + ".docx";
@@ -125,7 +126,7 @@ public class ChartController extends BaseController {
             report.process(context, response.getOutputStream());
             //XDocReportRegistry.getRegistry().unregisterReport(report);
         } catch (IOException | XDocReportException e) {
-            e.printStackTrace();
+            throw new ObjectException(ResponseData.ERROR_PROCESS_FAILED, e.getMessage());
         }
     }
 }
