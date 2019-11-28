@@ -46,6 +46,11 @@ public class ChartModel implements Serializable {
     @NotBlank
     private String packetId;
 
+    @Column(name = "CHART_NAME_FORMAT")
+    @ApiModelProperty(value = "图表名称模板", required = true)
+    @NotBlank
+    private String chartNameFormat;
+
     // C chart F form R report  default:C
     @Column(name = "CHART_CATALOG")
     @ApiModelProperty(value = "统计类型 C：图表；F：报表；R：文书", required = true)
@@ -65,11 +70,6 @@ public class ChartModel implements Serializable {
     @ApiModelProperty(value = "数据集名", required = true)
     @NotBlank
     private String dataSetName;
-
-    @Column(name = "CHART_NAME_FORMAT")
-    @ApiModelProperty(value = "图表名称模板", required = true)
-    @NotBlank
-    private String chartNameFormat;
 
     @JSONField(serialize=false)
     @Column(name = "CHART_DESIGN_JSON")
