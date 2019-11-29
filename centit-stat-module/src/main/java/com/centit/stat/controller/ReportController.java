@@ -1,5 +1,6 @@
 package com.centit.stat.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.common.ResponseData;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
@@ -62,12 +63,13 @@ public class ReportController {
         Map<String, Object> params = BaseController.collectRequestParameters(request);
         ReportModel reportModel = reportService.getReportModel(reportId);
         BizModel dataModel = dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params);
-
+        JSONObject docData = dataModel.toJSONObject(true);
+        docData.put("queryParams", params);
         try (InputStream in = new FileInputStream(new File(this.getClass().getClassLoader().getResource("report/report.docx").getPath()))) {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
             // 2) Create Java model context
-            IContext context = new JsonDocxContext(dataModel.getBizData());
+            IContext context = new JsonDocxContext(docData);
             // 生成新的文件 到响应流
             String fileName = URLEncoder.encode(
                 Pretreatment.mapTemplateString(reportModel.getReportNameFormat(),params), "UTF-8") + ".docx";
