@@ -6,6 +6,7 @@ import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.product.dataopt.core.BizModel;
+import com.centit.product.dataopt.dataset.FileDataSet;
 import com.centit.product.datapacket.service.DataPacketService;
 import com.centit.stat.po.ChartModel;
 import com.centit.stat.po.ReportModel;
@@ -82,10 +83,12 @@ public class ReportController {
     @ApiOperation(value = "报表文书数据")
     @GetMapping(value = "/data/{reportId}")
     @WrapUpResponseBody()
-    public BizModel reportData(@PathVariable String reportId, HttpServletRequest request){
+    public JSONObject reportData(@PathVariable String reportId, HttpServletRequest request){
         Map<String, Object> params = BaseController.collectRequestParameters(request);
         ReportModel reportModel = reportService.getReportModel(reportId);
-        return dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params);
+        JSONObject json = dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params).toJSONObject(true);
+        json.put("queryParams", params);
+        return json;
     }
     @ApiOperation(value = "下载报表文书")
     @GetMapping(value = "/download/{reportId}")
@@ -95,7 +98,8 @@ public class ReportController {
         BizModel dataModel = dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params);
         JSONObject docData = dataModel.toJSONObject(true);
         docData.put("queryParams", params);
-        try (InputStream in = new FileInputStream(new File(this.getClass().getClassLoader().getResource("report/report.docx").getPath()))) {
+
+        try (InputStream in = new FileInputStream(new File(FileDataSet.downFile(reportModel.getReportDocFileId())))) {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
             // 2) Create Java model context
