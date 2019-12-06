@@ -1,5 +1,6 @@
 package com.centit.stat.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.centit.framework.common.ResponseData;
 import com.centit.framework.core.controller.BaseController;
@@ -8,7 +9,6 @@ import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.product.dataopt.core.BizModel;
 import com.centit.product.dataopt.dataset.FileDataSet;
 import com.centit.product.datapacket.service.DataPacketService;
-import com.centit.stat.po.ChartModel;
 import com.centit.stat.po.ReportModel;
 import com.centit.stat.service.ReportService;
 import com.centit.support.common.ObjectException;
@@ -24,7 +24,6 @@ import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +36,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
+
 
 @Api(value = "报表文书", tags = "报表文书")
 @RestController
@@ -90,15 +90,16 @@ public class ReportController {
         json.put("queryParams", params);
         return json;
     }
+
     @ApiOperation(value = "下载报表文书")
     @GetMapping(value = "/download/{reportId}")
     public void downLoadReport(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response){
+
         Map<String, Object> params = BaseController.collectRequestParameters(request);
         ReportModel reportModel = reportService.getReportModel(reportId);
         BizModel dataModel = dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params);
         JSONObject docData = dataModel.toJSONObject(true);
         docData.put("queryParams", params);
-
         try (InputStream in = new FileInputStream(new File(FileDataSet.downFile(reportModel.getReportDocFileId())))) {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
@@ -111,6 +112,7 @@ public class ReportController {
             response.setContentType(FileType.mapExtNameToMimeType("docx"));
             response.setHeader("Content-disposition", "attachment; filename=" + fileName);
             report.process(context, response.getOutputStream());
+            //report.
             //XDocReportRegistry.getRegistry().unregisterReport(report);
         } catch (IOException | XDocReportException e) {
             throw new ObjectException(ResponseData.ERROR_PROCESS_FAILED, e.getMessage());
