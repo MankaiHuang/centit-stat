@@ -114,22 +114,14 @@ public class ReportController {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String fileFieldPath = jsonObject.getString("fieldName");
                 Object fieldValue = ReflectionOpt.attainExpressionValue(docData, fileFieldPath);
+                metadata.addFieldAsImage(jsonObject.getString("imageName"), "image_" + i);
                 //书签，数据集+img_+图片字段
                 if (fieldValue instanceof byte[]) {
-                    int lastIndex = fileFieldPath.lastIndexOf(".");
-                    if (lastIndex > 0) {
-                        String newName = fileFieldPath.substring(lastIndex + 1);
-                        if (!newName.startsWith("img_")) {
-                            fileFieldPath = fileFieldPath.substring(0, lastIndex + 1) + "img_" + newName;
-                        }
-                    }
-                    metadata.addFieldAsImage(jsonObject.getString("imageName"), fileFieldPath);
+                    docData.put("image_" + i, new ByteArrayImageProvider((byte[]) fieldValue));
                 } else if (fieldValue instanceof String) {
                     String fileId = StringBaseOpt.castObjectToString(ReflectionOpt.attainExpressionValue(docData, fileFieldPath));
                     try {
-                        String fileName = FileDataSet.downFile(fileId);
-                        metadata.addFieldAsImage(jsonObject.getString("imageName"), "image" + i);
-                        docData.put("image" + i, new ByteArrayImageProvider(FileIOOpt.readBytesFromFile(fileName)));
+                        docData.put("image_" + i, new ByteArrayImageProvider(FileIOOpt.readBytesFromFile(FileDataSet.downFile(fileId))));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
