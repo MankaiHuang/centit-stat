@@ -11,19 +11,24 @@ import com.centit.product.dataopt.dataset.FileDataSet;
 import com.centit.product.datapacket.service.DataPacketService;
 import com.centit.stat.po.ReportModel;
 import com.centit.stat.service.ReportService;
+import com.centit.support.algorithm.CollectionsOpt;
 import com.centit.support.common.ObjectException;
 import com.centit.support.compiler.Pretreatment;
 import com.centit.support.database.utils.PageDesc;
+import com.centit.support.file.FileIOOpt;
 import com.centit.support.file.FileType;
+import com.centit.support.json.JSONOpt;
 import com.centit.support.report.JsonDocxContext;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import fr.opensagres.xdocreport.document.IXDocReport;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
+import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,12 +99,33 @@ public class ReportController {
     @ApiOperation(value = "下载报表文书")
     @GetMapping(value = "/download/{reportId}")
     public void downLoadReport(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response){
-
         Map<String, Object> params = BaseController.collectRequestParameters(request);
         ReportModel reportModel = reportService.getReportModel(reportId);
         BizModel dataModel = dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params);
         JSONObject docData = dataModel.toJSONObject(true);
         docData.put("queryParams", params);
+        FieldsMetadata metadata = new FieldsMetadata();
+        if (reportModel.getPhotoJs()!=null && StringUtils.isNotBlank(reportModel.getPhotoJs())) {
+            JSONArray jsonArray=JSONArray.parseArray(reportModel.getPhotoJs());
+            for (int i=0;i<jsonArray.size();i++) {
+                JSONObject jsonObject=jsonArray.getJSONObject(i);
+                //书签，数据集+img_+图片字段
+                if ("blob".equalsIgnoreCase(jsonObject.getString("type")))
+                  metadata.addFieldAsImage(jsonObject.getString("imageName"), jsonObject.getString("fieldName"));
+                else if("fileid".equalsIgnoreCase(jsonObject.getString("type"))){
+                    try {
+                        String fileName= StringUtils.replace(jsonObject.getString("fieldName"),"img_","");
+                        String[] skeys = fileName.split("\\x2E");
+                        fileName=docData.getJSONObject(skeys[0]).getString(skeys[1]);
+                        fileName=FileDataSet.downFile(fileName);
+                        docData.getJSONObject(skeys[0]).replace(skeys[1],FileIOOpt.readBytesFromFile(fileName));
+                        metadata.addFieldAsImage(jsonObject.getString("imageName"), jsonObject.getString("fieldName"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
         try (InputStream in = new FileInputStream(new File(FileDataSet.downFile(reportModel.getReportDocFileId())))) {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
@@ -111,6 +137,7 @@ public class ReportController {
             response.reset();
             response.setContentType(FileType.mapExtNameToMimeType("docx"));
             response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+            report.setFieldsMetadata(metadata);
             report.process(context, response.getOutputStream());
             //report.
             //XDocReportRegistry.getRegistry().unregisterReport(report);

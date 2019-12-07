@@ -67,4 +67,7 @@ public class ReportModel implements Serializable {
     @ApiModelProperty(value = "业务模块代码")
     @Column(name = "APPLICATION_ID")
     private String  applicationId;
+    @ApiModelProperty(value = "图片json")
+    @Column(name = "PHOTO_JS")
+    private String  photoJs;
 }
