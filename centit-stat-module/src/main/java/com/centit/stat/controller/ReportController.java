@@ -11,16 +11,17 @@ import com.centit.product.dataopt.dataset.FileDataSet;
 import com.centit.product.datapacket.service.DataPacketService;
 import com.centit.stat.po.ReportModel;
 import com.centit.stat.service.ReportService;
-import com.centit.support.algorithm.CollectionsOpt;
+import com.centit.support.algorithm.ReflectionOpt;
+import com.centit.support.algorithm.StringBaseOpt;
 import com.centit.support.common.ObjectException;
 import com.centit.support.compiler.Pretreatment;
 import com.centit.support.database.utils.PageDesc;
 import com.centit.support.file.FileIOOpt;
 import com.centit.support.file.FileType;
-import com.centit.support.json.JSONOpt;
 import com.centit.support.report.JsonDocxContext;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import fr.opensagres.xdocreport.document.IXDocReport;
+import fr.opensagres.xdocreport.document.images.ByteArrayImageProvider;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.template.IContext;
 import fr.opensagres.xdocreport.template.TemplateEngineKind;
@@ -56,15 +57,16 @@ public class ReportController {
 
     @ApiOperation(value = "创建报表文书配置")
     @PostMapping
-    public ResponseData createReportModel(ReportModel model){
+    public ResponseData createReportModel(ReportModel model) {
         reportService.createReportModel(model);
         return ResponseData.makeSuccessResponse();
     }
+
     @ApiOperation(value = "修改报表文书配置")
     @ApiImplicitParam(name = "reportId", value = "文书ID")
     @PutMapping(value = "/{reportId}")
     @WrapUpResponseBody
-    public void updateReport(@PathVariable String reportId, @RequestBody ReportModel reportModel){
+    public void updateReport(@PathVariable String reportId, @RequestBody ReportModel reportModel) {
         reportModel.setReportId(reportId);
         reportService.updateReportModel(reportModel);
     }
@@ -73,22 +75,23 @@ public class ReportController {
     @ApiImplicitParam(name = "reportId", value = "文书ID")
     @DeleteMapping(value = "/{reportId}")
     @WrapUpResponseBody
-    public void deleteReport(@PathVariable String reportId){
+    public void deleteReport(@PathVariable String reportId) {
         reportService.deleteReportModel(reportId);
     }
 
     @ApiOperation(value = "查询报表文书配置")
     @GetMapping
     @WrapUpResponseBody
-    public PageQueryResult<ReportModel> listChart(HttpServletRequest request, PageDesc pageDesc){
+    public PageQueryResult<ReportModel> listChart(HttpServletRequest request, PageDesc pageDesc) {
         Map<String, Object> searchColumn = BaseController.collectRequestParameters(request);
         List<ReportModel> list = reportService.listReportModel(searchColumn, pageDesc);
         return PageQueryResult.createResult(list, pageDesc);
     }
+
     @ApiOperation(value = "报表文书数据")
     @GetMapping(value = "/data/{reportId}")
     @WrapUpResponseBody()
-    public JSONObject reportData(@PathVariable String reportId, HttpServletRequest request){
+    public JSONObject reportData(@PathVariable String reportId, HttpServletRequest request) {
         Map<String, Object> params = BaseController.collectRequestParameters(request);
         ReportModel reportModel = reportService.getReportModel(reportId);
         JSONObject json = dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params).toJSONObject(true);
@@ -98,28 +101,35 @@ public class ReportController {
 
     @ApiOperation(value = "下载报表文书")
     @GetMapping(value = "/download/{reportId}")
-    public void downLoadReport(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response){
+    public void downLoadReport(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> params = BaseController.collectRequestParameters(request);
         ReportModel reportModel = reportService.getReportModel(reportId);
         BizModel dataModel = dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params);
         JSONObject docData = dataModel.toJSONObject(true);
         docData.put("queryParams", params);
         FieldsMetadata metadata = new FieldsMetadata();
-        if (reportModel.getPhotoJs()!=null && StringUtils.isNotBlank(reportModel.getPhotoJs())) {
-            JSONArray jsonArray=JSONArray.parseArray(reportModel.getPhotoJs());
-            for (int i=0;i<jsonArray.size();i++) {
-                JSONObject jsonObject=jsonArray.getJSONObject(i);
+        if (reportModel.getPhotoJs() != null && StringUtils.isNotBlank(reportModel.getPhotoJs())) {
+            JSONArray jsonArray = JSONArray.parseArray(reportModel.getPhotoJs());
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String fileFieldPath = jsonObject.getString("fieldName");
+                Object fieldValue = ReflectionOpt.attainExpressionValue(docData, fileFieldPath);
                 //书签，数据集+img_+图片字段
-                if ("blob".equalsIgnoreCase(jsonObject.getString("type")))
-                  metadata.addFieldAsImage(jsonObject.getString("imageName"), jsonObject.getString("fieldName"));
-                else if("fileid".equalsIgnoreCase(jsonObject.getString("type"))){
+                if (fieldValue instanceof byte[]) {
+                    int lastIndex = fileFieldPath.lastIndexOf(".");
+                    if (lastIndex > 0) {
+                        String newName = fileFieldPath.substring(lastIndex + 1);
+                        if (!newName.startsWith("img_")) {
+                            fileFieldPath = fileFieldPath.substring(0, lastIndex + 1) + "img_" + newName;
+                        }
+                    }
+                    metadata.addFieldAsImage(jsonObject.getString("imageName"), fileFieldPath);
+                } else if (fieldValue instanceof String) {
+                    String fileId = StringBaseOpt.castObjectToString(ReflectionOpt.attainExpressionValue(docData, fileFieldPath));
                     try {
-                        String fileName= StringUtils.replace(jsonObject.getString("fieldName"),"img_","");
-                        String[] skeys = fileName.split("\\x2E");
-                        fileName=docData.getJSONObject(skeys[0]).getString(skeys[1]);
-                        fileName=FileDataSet.downFile(fileName);
-                        docData.getJSONObject(skeys[0]).replace(skeys[1],FileIOOpt.readBytesFromFile(fileName));
-                        metadata.addFieldAsImage(jsonObject.getString("imageName"), jsonObject.getString("fieldName"));
+                        String fileName = FileDataSet.downFile(fileId);
+                        metadata.addFieldAsImage(jsonObject.getString("imageName"), "image" + i);
+                        docData.put("image" + i, new ByteArrayImageProvider(FileIOOpt.readBytesFromFile(fileName)));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -133,7 +143,7 @@ public class ReportController {
             IContext context = new JsonDocxContext(docData);
             // 生成新的文件 到响应流
             String fileName = URLEncoder.encode(
-                Pretreatment.mapTemplateString(reportModel.getReportNameFormat(),params), "UTF-8") + ".docx";
+                Pretreatment.mapTemplateString(reportModel.getReportNameFormat(), params), "UTF-8") + ".docx";
             response.reset();
             response.setContentType(FileType.mapExtNameToMimeType("docx"));
             response.setHeader("Content-disposition", "attachment; filename=" + fileName);
