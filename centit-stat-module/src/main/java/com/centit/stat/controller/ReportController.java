@@ -99,6 +99,23 @@ public class ReportController {
         return json;
     }
 
+    private void addImageMeta(FieldsMetadata metadata, JSONObject docData, Object fieldValue,
+                              String imageName, String placeholder){
+        metadata.addFieldAsImage(imageName, placeholder);
+        //书签，数据集+img_+图片字段
+        if (fieldValue instanceof byte[]) {
+            docData.put(placeholder , new ByteArrayImageProvider((byte[]) fieldValue));
+        } else if (fieldValue instanceof String) {
+            String fileId = StringBaseOpt.castObjectToString(fieldValue);
+            try {
+                docData.put(placeholder, new ByteArrayImageProvider(
+                    FileIOOpt.readBytesFromFile(FileDataSet.downFile(fileId))));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @ApiOperation(value = "下载报表文书")
     @GetMapping(value = "/download/{reportId}")
     public void downLoadReport(@PathVariable String reportId, HttpServletRequest request, HttpServletResponse response) {
@@ -107,27 +124,40 @@ public class ReportController {
         BizModel dataModel = dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params);
         JSONObject docData = dataModel.toJSONObject(true);
         docData.put("queryParams", params);
+        // 准备图片元数据
         FieldsMetadata metadata = new FieldsMetadata();
         if (reportModel.getPhotoJs() != null && StringUtils.isNotBlank(reportModel.getPhotoJs())) {
             JSONArray jsonArray = JSONArray.parseArray(reportModel.getPhotoJs());
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String imageName = jsonObject.getString("imageName");
                 String fileFieldPath = jsonObject.getString("fieldName");
-                Object fieldValue = ReflectionOpt.attainExpressionValue(docData, fileFieldPath);
-                metadata.addFieldAsImage(jsonObject.getString("imageName"), "image_" + i);
-                //书签，数据集+img_+图片字段
-                if (fieldValue instanceof byte[]) {
-                    docData.put("image_" + i, new ByteArrayImageProvider((byte[]) fieldValue));
-                } else if (fieldValue instanceof String) {
-                    String fileId = StringBaseOpt.castObjectToString(ReflectionOpt.attainExpressionValue(docData, fileFieldPath));
-                    try {
-                        docData.put("image_" + i, new ByteArrayImageProvider(FileIOOpt.readBytesFromFile(FileDataSet.downFile(fileId))));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                int namePos = imageName.indexOf("[*]");
+                int pathPos = fileFieldPath.indexOf("[*]");
+                if(namePos>0 && pathPos>0){
+                    //数组通配符; 目前只能做一维数组，也就是只有一个通配符
+                    String nameH = imageName.substring(0, namePos);
+                    String nameT = imageName.substring(namePos+3);
+                    String pathH = fileFieldPath.substring(0, pathPos);
+                    String pathT = fileFieldPath.substring(pathPos+3);
+                    int j = 0;
+                    while(true){
+                        Object fieldValue = ReflectionOpt.attainExpressionValue(docData, pathH+"["+j+"]"+pathT);
+                        if(fieldValue == null){
+                            break;
+                        }
+                        addImageMeta(metadata, docData, fieldValue, nameH+"_"+j+"_"+nameT, "image_" + i +"_" + j);
+                        j++;
+                    }
+                } else {
+                    Object fieldValue = ReflectionOpt.attainExpressionValue(docData, fileFieldPath);
+                    if (fieldValue != null) {
+                        addImageMeta(metadata, docData, fieldValue, imageName, "image_" + i);
                     }
                 }
             }
         }
+
         try (InputStream in = new FileInputStream(new File(FileDataSet.downFile(reportModel.getReportDocFileId())))) {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
