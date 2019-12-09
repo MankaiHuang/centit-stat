@@ -1,6 +1,5 @@
 package com.centit.stat.config;
 
-import com.centit.framework.common.SysParametersUtils;
 import com.centit.framework.components.impl.NotificationCenterImpl;
 import com.centit.framework.components.impl.TextOperationLogWriterImpl;
 import com.centit.framework.config.SpringSecurityCasConfig;
@@ -14,7 +13,6 @@ import com.centit.framework.security.model.StandardPasswordEncoderImpl;
 import com.centit.product.dataopt.dataset.FileDataSet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
