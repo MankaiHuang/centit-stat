@@ -122,7 +122,7 @@ public class ReportController {
         Map<String, Object> params = BaseController.collectRequestParameters(request);
         ReportModel reportModel = reportService.getReportModel(reportId);
         BizModel dataModel = dataPacketService.fetchDataPacketData(reportModel.getPacketId(), params);
-        JSONObject docData = dataModel.toJSONObject(true);
+        JSONObject docData = dataModel.toJSONObject(false);
         docData.put("queryParams", params);
         // 准备图片元数据
         FieldsMetadata metadata = new FieldsMetadata();
@@ -132,8 +132,8 @@ public class ReportController {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String imageName = jsonObject.getString("imageName");
                 String fileFieldPath = jsonObject.getString("fieldName");
-                int namePos = imageName.indexOf("[*]");
-                int pathPos = fileFieldPath.indexOf("[*]");
+                int namePos = imageName.indexOf("[*]"); //image[*]c
+                int pathPos = fileFieldPath.indexOf("[*]"); //a.b[*].c
                 if(namePos>0 && pathPos>0){
                     //数组通配符; 目前只能做一维数组，也就是只有一个通配符
                     String nameH = imageName.substring(0, namePos);
