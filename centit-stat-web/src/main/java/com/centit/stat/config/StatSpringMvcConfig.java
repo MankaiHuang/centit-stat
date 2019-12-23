@@ -9,6 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"com.centit.stat.controller"},
         includeFilters = {@ComponentScan.Filter(value= org.springframework.stereotype.Controller.class)},
         useDefaultFilters = false)
-public class NormalSpringMvcConfig extends BaseSpringMvcConfig {
+public class StatSpringMvcConfig extends BaseSpringMvcConfig {
 
 }
