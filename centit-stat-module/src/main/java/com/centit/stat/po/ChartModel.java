@@ -11,10 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
@@ -74,6 +71,7 @@ public class ChartModel implements Serializable {
     @JSONField(serialize=false)
     @Column(name = "CHART_DESIGN_JSON")
     @ApiModelProperty(value = "图表自定义属性 json格式的图表自定义说明", required = true)
+    @Basic(fetch = FetchType.LAZY)
     private String chartDesignJson;
 
     @Column(name = "RECORDER")
