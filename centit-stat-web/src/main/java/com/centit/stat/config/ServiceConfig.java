@@ -1,5 +1,8 @@
 package com.centit.stat.config;
 
+import com.centit.fileserver.client.ClientAsFileStore;
+import com.centit.fileserver.client.FileClientImpl;
+import com.centit.fileserver.common.FileStore;
 import com.centit.framework.components.impl.NotificationCenterImpl;
 import com.centit.framework.components.impl.TextOperationLogWriterImpl;
 import com.centit.framework.config.SpringSecurityCasConfig;
@@ -82,8 +85,12 @@ public class ServiceConfig {
         return new InstantiationServiceBeanPostProcessor();
     }
     @Bean
-    public void fileInit(){
-        FileDataSet.init(fileserver);
+    public FileStore fileInit(){
+        FileClientImpl fileClient = new FileClientImpl();
+        fileClient.init(fileserver,fileserver,"u0000000", "000000",fileserver);
+        ClientAsFileStore fileStore = new ClientAsFileStore();
+        fileStore.setFileClient(fileClient);
+        return fileStore;
     }
 }
 
