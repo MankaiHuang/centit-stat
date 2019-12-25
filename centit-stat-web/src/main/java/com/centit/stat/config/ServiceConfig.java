@@ -79,10 +79,6 @@ public class ServiceConfig {
         return operationLog;
     }
 
-    @Bean
-    public InstantiationServiceBeanPostProcessor instantiationServiceBeanPostProcessor() {
-        return new InstantiationServiceBeanPostProcessor();
-    }
 
     @Bean
     public FileClientImpl fileClient() {
@@ -98,5 +94,11 @@ public class ServiceConfig {
         fileStoreBean.setFileClient(fileClient);
         return fileStoreBean;
     }
+
+    @Bean
+    public InstantiationServiceBeanPostProcessor instantiationServiceBeanPostProcessor() {
+        return new InstantiationServiceBeanPostProcessor();
+    }
+
 }
 
