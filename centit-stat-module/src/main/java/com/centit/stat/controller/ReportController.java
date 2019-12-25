@@ -2,12 +2,12 @@ package com.centit.stat.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.centit.fileserver.common.FileStore;
 import com.centit.framework.common.ResponseData;
 import com.centit.framework.core.controller.BaseController;
 import com.centit.framework.core.controller.WrapUpResponseBody;
 import com.centit.framework.core.dao.PageQueryResult;
 import com.centit.product.dataopt.core.BizModel;
-import com.centit.product.dataopt.dataset.FileDataSet;
 import com.centit.product.datapacket.service.DataPacketService;
 import com.centit.stat.po.ReportModel;
 import com.centit.stat.service.ReportService;
@@ -41,7 +41,6 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
-import com.centit.fileserver.common.FileStore;
 
 @Api(value = "报表文书", tags = "报表文书")
 @RestController
