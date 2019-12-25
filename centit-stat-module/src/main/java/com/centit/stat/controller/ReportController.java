@@ -35,19 +35,21 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
-
+import com.centit.fileserver.common.FileStore;
 
 @Api(value = "报表文书", tags = "报表文书")
 @RestController
 @RequestMapping("report")
 public class ReportController {
+
+    @Autowired(required = false)
+    private FileStore fileStore;
 
     @Autowired
     private ReportService reportService;
@@ -109,7 +111,7 @@ public class ReportController {
             String fileId = StringBaseOpt.castObjectToString(fieldValue);
             try {
                 docData.put(placeholder, new ByteArrayImageProvider(
-                    FileIOOpt.readBytesFromFile(FileDataSet.downFile(fileId))));
+                    FileIOOpt.readBytesFromFile(fileStore.getFile(fileId))));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -158,7 +160,7 @@ public class ReportController {
             }
         }
 
-        try (InputStream in = new FileInputStream(new File(FileDataSet.downFile(reportModel.getReportDocFileId())))) {
+        try (InputStream in = new FileInputStream(fileStore.getFile(reportModel.getReportDocFileId()))) {
             // 1) Load ODT file and set Velocity template engine and cache it to the registry
             IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker, false);
             // 2) Create Java model context
